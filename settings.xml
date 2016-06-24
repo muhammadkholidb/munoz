@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <localRepository>/media/eatonmunoz/Data/Repository/maven</localRepository>
+  <servers>
+    <server>
+      <id>munoz-maven-repo</id>
+      <username>u401830229</username>
+      <password>{ffOHn/FcGskHhagKl+VNfI3BvnL28yOib69ALR/sqgk=}</password>
+    </server>
+    <server>
+      <id>tomcat-local</id>
+      <username>tomcat</username>
+      <password>tomcat</password>
+    </server>
+  </servers>
+</settings>
