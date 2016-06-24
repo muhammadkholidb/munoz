@@ -1,0 +1,11 @@
+[
+	{
+		"name" : "Menu Settings",
+		"description" : "",
+		"code" : "menu.settings",
+		"label" : {
+			"in": "Pengaturan",
+			"en": "Settings"
+		}
+	}
+]

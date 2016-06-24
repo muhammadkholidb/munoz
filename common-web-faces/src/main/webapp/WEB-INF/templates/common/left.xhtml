@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <p:panelMenu>
+        <c:forEach items="#{menuBean.menus}" var="menu" >
+        	<p:submenu label="#{menu['label'][applicationBean.languageCode]}" rendered="#{loginBean.isViewAllowed(menu.code)}">
+                <c:forEach items="#{menu['submenus']}" var="submenu" >
+                    <p:menuitem value="#{submenu['label'][applicationBean.languageCode]}" icon="#{submenu.faIcon}" outcome="#{submenu.page}" rendered="#{(submenu.faIcon ne '') and (loginBean.isViewAllowed(submenu.code))}" />
+                    <p:menuitem value="#{submenu['label'][applicationBean.languageCode]}" outcome="#{submenu.page}" rendered="#{(submenu.faIcon eq '') and (loginBean.isViewAllowed(submenu.code))}" />
+                </c:forEach>
+            </p:submenu>
+        </c:forEach>
+    </p:panelMenu>
+
+</ui:composition>

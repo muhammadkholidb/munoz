@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/#{applicationBean.templateCode}/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="title">#{lang['title.system']}</ui:define>
+
+	<ui:define name="inner">
+		
+		<h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" >
+			<p:commandButton value="#{lang['button.save']}" styleClass="button-green" action="#{systemBean.saveForm()}" ajax="false" />
+			<p:commandButton value="#{lang['button.cancel']}" styleClass="button-grey" action="#{systemBean.cancelForm()}" ajax="false" />
+		</h:panelGroup>
+
+		<p:panel header="#{lang['label.editSystemSetting']}">
+
+			<div class="ui-fluid">
+				<p:panelGrid columns="2"
+					columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-4"
+					layout="grid" styleClass="ui-panelgrid-blank">
+
+					<h:outputText value="#{lang['label.logoImage']}" />
+					<p:inputText value="#{systemBean.image}" />
+
+					<h:outputText value="#{lang['label.language']}" />
+					<p:selectOneMenu value="#{systemBean.languageCode}" > 
+						<f:selectItems value="#{systemBean.supportedLanguages}" var="language" itemLabel="#{language.name}" itemValue="#{language.code}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{lang['label.online']}" />
+					<p:selectOneMenu value="#{systemBean.online}" >
+						<f:selectItem itemValue="y" itemLabel="#{lang['label.yes']}" /> 
+						<f:selectItem itemValue="n" itemLabel="#{lang['label.no']}" />
+					</p:selectOneMenu>
+
+				</p:panelGrid>
+			</div>
+
+		</p:panel>
+		
+		<h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block" >
+			<p:commandButton value="#{lang['button.save']}" styleClass="button-green" action="#{systemBean.saveForm()}" ajax="false" />
+			<p:commandButton value="#{lang['button.cancel']}" styleClass="button-grey" action="#{systemBean.cancelForm()}" ajax="false" />
+		</h:panelGroup>
+
+	</ui:define>
+
+</ui:composition>

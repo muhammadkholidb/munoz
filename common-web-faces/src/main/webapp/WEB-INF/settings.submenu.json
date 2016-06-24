@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Menu System",
+        "description": "",
+        "code": "menu.settings.system",
+        "label": {
+        	"in": "Sistem",
+        	"en": "System"
+        },
+        "parentCode" : "menu.settings",
+        "faIcon": "fa fa-gear",
+        "page": "/settings/system/list.xhtml"
+    },
+    {
+        "name": "Menu User",
+        "description": "",
+        "code": "menu.settings.user",
+        "label": {
+        	"en": "User",
+        	"in": "Pengguna"
+        },
+        "parentCode" : "menu.settings",
+        "faIcon": "fa fa-user",
+        "page": "/settings/user/list.xhtml"
+    },
+    {
+        "name": "Menu User Group",
+        "description": "",
+        "code": "menu.settings.usergroup",
+        "label": {
+        	"en": "User Group",
+        	"in": "Kelompok Pengguna"
+        },
+        "parentCode" : "menu.settings",
+        "faIcon": "fa fa-users",
+        "page": "/settings/user-group/list.xhtml"
+    }
+]

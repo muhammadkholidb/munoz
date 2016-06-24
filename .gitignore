@@ -1,0 +1,8 @@
+.directory
+.project
+.metadata
+.classpath
+**/.settings/
+**/target/
+**/logs/
+**/bin/
