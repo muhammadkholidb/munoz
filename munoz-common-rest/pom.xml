@@ -6,68 +6,59 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>common-web-faces</artifactId>
+	<artifactId>munoz-common-rest</artifactId>
 	<packaging>war</packaging>
-	<name>Munoz Common Web Faces</name>
-	<description>Munoz Common Web Faces</description>
+	<name>Munoz Common REST</name>
+	<description>Munoz Common REST</description>
 
 	<dependencies>
 
 		<!-- Munoz -->
 		<dependency>
 			<groupId>hu.pe.munoz</groupId>
-			<artifactId>munoz-common</artifactId>
+			<artifactId>munoz-common-data</artifactId>
 		</dependency>
 
-		<!-- JSF -->
+		<!-- Spring 4 dependencies -->
 		<dependency>
-			<groupId>com.sun.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.faces</groupId>
-			<artifactId>jsf-impl</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.omnifaces</groupId>
-			<artifactId>omnifaces</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>all-themes</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
 		</dependency>
 
 		<dependency>
@@ -80,6 +71,19 @@
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 
+		<!-- Testing dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>net.sf.dozer</groupId>
+		    <artifactId>dozer</artifactId>
+		    <version>5.4.0</version> 
+		</dependency>
+		
 	</dependencies>
 
 	<repositories>
@@ -105,7 +109,7 @@
 	</repositories>
 
 	<build>
-		<finalName>munoz-common-web-faces</finalName>
+		<finalName>munoz-common-rest</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -114,9 +118,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<attachClasses>true</attachClasses>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
@@ -124,10 +125,10 @@
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>
-						<contextPath>/munoz-common-web-faces</contextPath>
+						<contextPath>/munoz-common-rest</contextPath>
 					</webApp>
 					<httpConnector>
-						<port>8888</port>
+						<port>8889</port>
 					</httpConnector>
 				</configuration>
 			</plugin>
@@ -138,7 +139,7 @@
 				<configuration>
 					<url>http://localhost:8080/manager/text</url>
 					<server>tomcat-local</server>
-					<path>/munoz-common-web-faces</path>
+					<path>/munoz-common-rest</path>
 				</configuration>
 			</plugin>
 		</plugins>

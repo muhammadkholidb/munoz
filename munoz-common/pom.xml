@@ -6,7 +6,7 @@
 		<version>1.0-SNAPSHOT</version> 
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>common</artifactId>
+	<artifactId>munoz-common</artifactId>
 	<name>Munoz Common</name>
 	<description>Munoz Common</description>
 

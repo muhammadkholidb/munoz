@@ -9,10 +9,10 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>common</module>
-		<module>common-data</module>
-		<module>common-rest</module>
-		<module>common-web-faces</module>
+		<module>munoz-common</module>
+		<module>munoz-common-data</module>
+		<module>munoz-common-rest</module>
+		<module>munoz-common-web-faces</module>
 	</modules>
 	
 	<properties>

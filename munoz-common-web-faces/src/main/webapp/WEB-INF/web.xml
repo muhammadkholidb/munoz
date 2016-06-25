@@ -3,13 +3,10 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
-
 	<display-name>munoz-common-web-faces</display-name>
-
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-
 	<servlet>
 		<servlet-name>FacesServlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -19,18 +16,14 @@
 		<servlet-name>FacesServlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-
-	<!-- Login filter -->
 	<filter>
 		<filter-name>LoginFilter</filter-name>
 		<filter-class>hu.pe.munoz.commonwebfaces.filter.LoginFilter</filter-class>
 	</filter>
-	<!-- Set the login filter to all the pages of the application -->
 	<filter-mapping>
 		<filter-name>LoginFilter</filter-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</filter-mapping>
-
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Development</param-value>
@@ -43,7 +36,6 @@
 		<param-name>primefaces.FONT_AWESOME</param-name>
 		<param-value>true</param-value>
 	</context-param>
-
 	<mime-mapping>
 		<extension>eot</extension>
 		<mime-type>application/vnd.ms-fontobject</mime-type>
@@ -72,5 +64,4 @@
 		<extension>ico</extension>
 		<mime-type>image/x-icon</mime-type>
 	</mime-mapping>
-	
 </web-app>
