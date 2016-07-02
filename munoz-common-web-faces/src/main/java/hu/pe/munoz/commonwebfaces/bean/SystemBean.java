@@ -4,19 +4,27 @@ import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_IMAGE;
 import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_LANGUAGE_CODE;
 import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_ONLINE;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.util.Faces;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +33,7 @@ import hu.pe.munoz.common.rest.RESTResponse;
 
 @ManagedBean
 @ViewScoped
-public class SystemBean extends RESTBean implements Serializable {
+public class SystemBean extends DefaultBehaviorBean implements Serializable {
     
     /**
      * 
@@ -37,6 +45,8 @@ public class SystemBean extends RESTBean implements Serializable {
     private String languageCode;
     private String image;
     private String online;
+    
+    private UploadedFile imageUpload;
     
     private List<JSONObject> supportedLanguages;
 
@@ -72,17 +82,24 @@ public class SystemBean extends RESTBean implements Serializable {
         }
     }
     
-    public String editSystem() {
-        return "edit?faces-redirect=true";
-    }
-    
-    public String cancelForm() {
-        return "list?faces-redirect=true";
-    }
-    
     @SuppressWarnings("unchecked")
 	public String saveForm() {
 
+    	// http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
+    	InputStream input = null;
+    	OutputStream output = null;
+    	try {
+    		String filename = UUID.randomUUID().toString() + ".jpg";
+			input = imageUpload.getInputstream();
+			output = new FileOutputStream(new File("/home/eatonmunoz/", filename));
+			IOUtils.copy(input, output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(input);
+			IOUtils.closeQuietly(output);
+		}
+    	
     	JSONArray systems = applicationBean.getSystems();
 
     	for (Object object : systems) {
@@ -115,7 +132,7 @@ public class SystemBean extends RESTBean implements Serializable {
     		return "";
     	}
         
-        return "list?faces-redirect=true";
+        return gotoIndex();
     }
     
     public String getLanguageCode() {
@@ -148,6 +165,24 @@ public class SystemBean extends RESTBean implements Serializable {
 
 	public void setSupportedLanguages(List<JSONObject> supportedLanguages) {
 		this.supportedLanguages = supportedLanguages;
+	}
+
+	public UploadedFile getImageUpload() {
+		return imageUpload;
+	}
+
+	public void setImageUpload(UploadedFile imageUpload) {
+		this.imageUpload = imageUpload;
+	}
+
+	@Override
+	protected String getIndexPath() {
+		return "/settings/system/index.xhtml";
+	}
+
+	@Override
+	protected String getMenuCode() {
+		return "menu.settings.system";
 	}
     
 }

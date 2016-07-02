@@ -38,7 +38,7 @@ public class UserBean extends AbstractBreadCrumbSupport implements Serializable 
     private String inputActive;
     private String inputPassword;
     
-    private int mode = PageMode.LIST;
+    private int mode = PageMode.INDEX;
     
     @PostConstruct
     public void init() {

@@ -71,17 +71,16 @@
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 
+		<dependency>
+		    <groupId>net.sf.dozer</groupId>
+		    <artifactId>dozer</artifactId>
+		</dependency>
+		
 		<!-- Testing dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>net.sf.dozer</groupId>
-		    <artifactId>dozer</artifactId>
-		    <version>5.4.0</version> 
 		</dependency>
 		
 	</dependencies>
@@ -93,12 +92,6 @@
 			<name>Central Repository</name>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
-
-		<repository>
-			<id>primefaces</id>
-			<name>Primefaces Repository</name>
-			<url>http://repository.primefaces.org</url>
-		</repository>
 
 		<repository>
 			<id>munoz</id>

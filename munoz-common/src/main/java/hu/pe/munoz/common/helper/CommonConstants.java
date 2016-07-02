@@ -28,6 +28,4 @@ public class CommonConstants {
     public static final String SYSTEM_KEY_ONLINE = "online";
     public static final String SYSTEM_KEY_IMAGE = "image";
 
-	public static final String ROLE_SUPERADMIN = "superadmin";
-
 }

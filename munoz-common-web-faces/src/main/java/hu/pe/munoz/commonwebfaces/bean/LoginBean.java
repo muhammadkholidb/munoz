@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.helper.SuperAdmin;
 import hu.pe.munoz.common.rest.RESTResponse;
 
 @ManagedBean
@@ -27,7 +28,7 @@ public class LoginBean extends RESTBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private String inputUsername;
 
@@ -71,10 +72,10 @@ public class LoginBean extends RESTBean implements Serializable {
         		String redirect = Faces.getSessionAttribute(CommonConstants.SESSKEY_REDIRECT);
                 if (redirect != null) {
                 	Faces.removeSessionAttribute(CommonConstants.SESSKEY_REDIRECT);
-                	Faces.redirect(redirect, new String[] {});
+                	Faces.redirect(redirect);
                 	return;
                 }
-                Faces.redirect("home.xhtml", new String[] {});
+                Faces.redirect("home.xhtml");
                 return;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -89,13 +90,14 @@ public class LoginBean extends RESTBean implements Serializable {
     	try {
     		String hash = DigestUtils.sha1Hex(password);
         	Faces.login(username, hash);
-			if(Faces.isUserInRole(CommonConstants.ROLE_SUPERADMIN)) {
+			if(Faces.isUserInRole(SuperAdmin.USER_GROUP_NAME)) {
 				userGroup = new JSONObject();
-				userGroup.put("id", -1L);
+				userGroup.put("id", SuperAdmin.USER_GROUP_ID);
+				userGroup.put("name", SuperAdmin.USER_GROUP_NAME);
 				user = new JSONObject();
 				user.put("username", Faces.getRemoteUser());
-				user.put("firstName", "Super");
-				user.put("lastName", "Admin");
+				user.put("firstName", SuperAdmin.FIRST_NAME);
+				user.put("lastName", SuperAdmin.LAST_NAME);
 				user.put("userGroup", userGroup);
 			}
 		} catch (ServletException e) {
@@ -113,9 +115,7 @@ public class LoginBean extends RESTBean implements Serializable {
     }
 
     private boolean checkPermission(String menuCode, String type) {
-    	log.debug("Check permission " + type + ": " + menuCode);
-    	if ((Long) userGroup.get("id") == -1) {
-    		// User from servlet login (Super Admin)
+    	if ((Long) userGroup.get("id") == SuperAdmin.USER_GROUP_ID) {
     		return true;
     	}
     	switch (type) {
@@ -126,6 +126,7 @@ public class LoginBean extends RESTBean implements Serializable {
 					return true;
 				}
 			}
+			break;
 		case "modify":
 			for (int i = 0; i < menuPermissions.size(); i++) {
 				JSONObject permission = (JSONObject) menuPermissions.get(i);

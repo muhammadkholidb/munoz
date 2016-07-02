@@ -111,12 +111,6 @@
         </repository>
 
 		<repository>
-			<id>primefaces</id>
-			<name>Primefaces Repository</name>
-			<url>http://repository.primefaces.org</url>
-		</repository>
-
-		<repository>
 			<id>munoz</id>
 			<name>Munoz Maven Repository</name>
 			<url>http://munoz.pe.hu/maven-repo</url>

@@ -80,15 +80,20 @@
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<repositories>
-		
+
 		<repository>
-            <id>maven-central</id>
+			<id>maven-central</id>
 			<name>Central Repository</name>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
 
 		<repository>
 			<id>primefaces</id>

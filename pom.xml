@@ -7,14 +7,14 @@
 	<name>Munoz</name>
 	<description>Munoz Top Level Project</description>
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>munoz-common</module>
 		<module>munoz-common-data</module>
 		<module>munoz-common-rest</module>
 		<module>munoz-common-web-faces</module>
 	</modules>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
@@ -39,6 +39,8 @@
 		<version.cdi>1.2</version.cdi>
 		<version.h2database>1.4.191</version.h2database>
 		<version.omnifaces>1.13</version.omnifaces>
+		<version.dozer>5.4.0</version.dozer>
+		<version.commons-io>2.5</version.commons-io>
 
 		<version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
 		<version.maven-war-plugin>2.6</version.maven-war-plugin>
@@ -221,11 +223,22 @@
 				<version>${version.slf4j}</version>
 			</dependency>
 
-			<!-- http://mvnrepository.com/artifact/org.omnifaces/omnifaces -->
 			<dependency>
 				<groupId>org.omnifaces</groupId>
 				<artifactId>omnifaces</artifactId>
 				<version>${version.omnifaces}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sf.dozer</groupId>
+				<artifactId>dozer</artifactId>
+				<version>${version.dozer}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${version.commons-io}</version>
 			</dependency>
 
 			<!-- Testing dependencies -->
@@ -241,7 +254,7 @@
 
 	<distributionManagement>
 		<repository>
-			<id>munoz-maven-repo</id>
+			<id>munoz</id>
 			<url>ftp://munoz.pe.hu/public_html/maven-repo</url>
 		</repository>
 	</distributionManagement>

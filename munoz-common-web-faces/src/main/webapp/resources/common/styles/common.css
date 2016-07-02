@@ -186,7 +186,7 @@ ul.top-nav > li div ul li a {
 
 .page-title {
     text-transform: uppercase;
-    margin-top: 5px;
+    margin-top: 0;
     font-weight: normal;
 }
 
@@ -367,4 +367,14 @@ th.ui-state-default {
 
 .ui-datatable-odd {
     background: none repeat scroll 0 0 #F2F5F9;
+}
+
+.ui-fileupload-simple .ui-fileupload-filename {
+    float: left;
+    margin: 5px !important;
+}
+
+.ui-fileupload-simple .ui-button {
+    width: unset !important;
+    float: left;
 }

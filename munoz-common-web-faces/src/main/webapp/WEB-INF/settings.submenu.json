@@ -9,7 +9,7 @@
         },
         "parentCode" : "menu.settings",
         "faIcon": "fa fa-gear",
-        "page": "/settings/system/list.xhtml"
+        "page": "/settings/system/index.xhtml"
     },
     {
         "name": "Menu User",
@@ -21,7 +21,7 @@
         },
         "parentCode" : "menu.settings",
         "faIcon": "fa fa-user",
-        "page": "/settings/user/list.xhtml"
+        "page": "/settings/user/index.xhtml"
     },
     {
         "name": "Menu User Group",
@@ -33,6 +33,6 @@
         },
         "parentCode" : "menu.settings",
         "faIcon": "fa fa-users",
-        "page": "/settings/user-group/list.xhtml"
+        "page": "/settings/user-group/index.xhtml"
     }
 ]
