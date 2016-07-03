@@ -32,7 +32,7 @@
 						layout="grid" styleClass="ui-panelgrid-blank">
 
 						<h:outputText value="#{lang['label.logoImage']}" />
-						<p:graphicImage library="common" name="images/#{systemBean.image}" height="30px" />
+						<p:graphicImage value="/resources.image/#{systemBean.image}" height="30px" />
 
 						<h:outputText value="#{lang['label.language']}" />
 						<p:selectOneMenu value="#{systemBean.languageCode}"

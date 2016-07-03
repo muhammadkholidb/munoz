@@ -25,36 +25,29 @@ public abstract class DefaultBehaviorBean extends RESTBean {
     }
     
     public void pageCheck() {
-    	log.debug("Page check ...");
     	String path = Faces.getRequestServletPath();
-    	log.debug("Path: " + path);
-    	for (String page : LIST_PAGE_FOR_MODIFY) {
-    		if (path.endsWith(page)) {
-    			log.debug("Accessing page for modify ...");
-    			if (!isModifyAllowed()) {
-    				log.debug("Not allowed to modify ...");
-    				try {
-						Faces.redirect("error.xhtml");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					return;
-    			}
-    		}
+    	String pathLastPart = path.substring(path.lastIndexOf("/") + 1);
+    	if (LIST_PAGE_FOR_MODIFY.contains(pathLastPart)) {
+    		if (!isModifyAllowed()) {
+				log.debug("Not allowed to modify ...");
+				try {
+					Faces.redirect("error.xhtml");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
     	}
-    	for (String page : LIST_PAGE_FOR_VIEW) {
-    		if (path.endsWith(page)) {
-    			log.debug("Accessing page for view ...");
-    			if (!isViewAllowed()) {
-    				log.debug("Not allowed to view ...");
-    				try {
-						Faces.redirect("error.xhtml");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					return;
-    			}
-    		}
+    	if (LIST_PAGE_FOR_VIEW.contains(pathLastPart)) {
+    		if (!isViewAllowed()) {
+				log.debug("Not allowed to view ...");
+				try {
+					Faces.redirect("error.xhtml");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
     	}
     }
 
@@ -78,8 +71,6 @@ public abstract class DefaultBehaviorBean extends RESTBean {
     	return loginBean.isModifyAllowed(getMenuCode());
     }
     
-	abstract protected String getIndexPath();
-	
 	abstract protected String getMenuCode();
 	
 }

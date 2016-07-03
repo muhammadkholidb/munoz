@@ -85,20 +85,29 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     @SuppressWarnings("unchecked")
 	public String saveForm() {
 
+    	String imageDir = applicationProperties.getProperty("directory.Images");
+		String filename = UUID.randomUUID().toString() + ".jpg";
+    	
+		boolean uploaded = false;
+		
     	// http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
     	InputStream input = null;
     	OutputStream output = null;
     	try {
-    		String filename = UUID.randomUUID().toString() + ".jpg";
 			input = imageUpload.getInputstream();
-			output = new FileOutputStream(new File("/home/eatonmunoz/", filename));
+			output = new FileOutputStream(new File(imageDir, filename));
 			IOUtils.copy(input, output);
+			uploaded = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			IOUtils.closeQuietly(input);
 			IOUtils.closeQuietly(output);
 		}
+    	
+    	if (!uploaded) {
+    		return "";
+    	}
     	
     	JSONArray systems = applicationBean.getSystems();
 
@@ -113,7 +122,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 				system.put("value", online);
 				break;
 			case SYSTEM_KEY_IMAGE:
-				system.put("value", image);
+				system.put("value", filename);
 				break;
 			default:
 				break;
@@ -123,7 +132,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     	JSONObject params = new JSONObject();
     	params.put("systems", systems);
     	
-        RESTResponse response = restClient.doPost("localhost:8080/munoz-common-rest", "/settings/system/edit", params);
+        RESTResponse response = restClient.doPost(hostUrl, "/settings/system/edit", params);
         log.debug("Response: " + response);
     	if (CommonConstants.SUCCESS.equals(response.getStatus())) {
     		applicationBean.setSystems((JSONArray) response.getData());
@@ -173,11 +182,6 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 
 	public void setImageUpload(UploadedFile imageUpload) {
 		this.imageUpload = imageUpload;
-	}
-
-	@Override
-	protected String getIndexPath() {
-		return "/settings/system/index.xhtml";
 	}
 
 	@Override
