@@ -60,7 +60,7 @@ public class LoginBean extends RESTBean implements Serializable {
     		// Try servlet login
     		doServletLogin(inputUsername.trim(), inputPassword);
     		if (user == null) {    			
-    			Messages.addGlobalError(message, new Object[] {});
+    			Messages.addGlobalError(message);
         		return;
     		}
     	}

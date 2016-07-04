@@ -2,7 +2,6 @@ package hu.pe.munoz.commondata.bo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class UserGroupBoImpl implements UserGroupBo {
     }
     
     @Override
-    public UserGroupEntity addUserGroup(UserGroupEntity userGroupEntity, List<Map<String, String>> listMenuPermission) throws DataException {
+    public UserGroupEntity addUserGroup(UserGroupEntity userGroupEntity, List<UserGroupMenuPermissionEntity> listMenuPermission) throws DataException {
     	
     	// Find other user group with name
         UserGroupEntity findUserGroup = userGroupDao.findByName(userGroupEntity.getName());
@@ -68,11 +67,7 @@ public class UserGroupBoImpl implements UserGroupBo {
         
 		// Save menus
 		List<UserGroupMenuPermissionEntity> listAdded = new ArrayList<UserGroupMenuPermissionEntity>();
-		for (Map<String, String> map : listMenuPermission) {
-			UserGroupMenuPermissionEntity entity = new UserGroupMenuPermissionEntity();
-			entity.setMenuCode(map.get("menuCode"));
-			entity.setView(map.get("view"));
-			entity.setModify(map.get("modify"));
+		for (UserGroupMenuPermissionEntity entity : listMenuPermission) {
 			entity.setUserGroup(inserted);
 			listAdded.add(userGroupMenuPermissionDao.insert(entity));
 		}
@@ -81,7 +76,7 @@ public class UserGroupBoImpl implements UserGroupBo {
     }
  
     @Override
-    public UserGroupEntity editUserGroup(UserGroupEntity userGroupEntity, List<Map<String, String>> listMenuPermission) throws DataException {
+    public UserGroupEntity editUserGroup(UserGroupEntity userGroupEntity, List<UserGroupMenuPermissionEntity> listMenuPermission) throws DataException {
         
         // Find by ID
         UserGroupEntity findUserGroupById = userGroupDao.findById(userGroupEntity.getId());
@@ -108,11 +103,7 @@ public class UserGroupBoImpl implements UserGroupBo {
 
 		// Save menus
 		List<UserGroupMenuPermissionEntity> listAdded = new ArrayList<UserGroupMenuPermissionEntity>();
-		for (Map<String, String> map : listMenuPermission) {
-			UserGroupMenuPermissionEntity entity = new UserGroupMenuPermissionEntity();
-			entity.setMenuCode(map.get("menuCode"));
-			entity.setView(map.get("view"));
-			entity.setModify(map.get("modify"));
+		for (UserGroupMenuPermissionEntity entity : listMenuPermission) {
 			entity.setUserGroup(updated);
 			listAdded.add(userGroupMenuPermissionDao.insert(entity));
 		}

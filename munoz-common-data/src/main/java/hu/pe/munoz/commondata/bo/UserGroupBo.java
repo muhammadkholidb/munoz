@@ -1,10 +1,10 @@
 package hu.pe.munoz.commondata.bo;
 
 import java.util.List;
-import java.util.Map;
 
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.commondata.entity.UserGroupEntity;
+import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 
 public interface UserGroupBo {
 
@@ -16,8 +16,8 @@ public interface UserGroupBo {
 
 	UserGroupEntity getOneUserGroupWithMenuPermissions(Long id) throws DataException;
 
-	UserGroupEntity editUserGroup(UserGroupEntity userGroupEntity, List<Map<String, String>> listMenuPermission) throws DataException;
+	UserGroupEntity editUserGroup(UserGroupEntity userGroupEntity, List<UserGroupMenuPermissionEntity> listMenuPermission) throws DataException;
 
-	UserGroupEntity addUserGroup(UserGroupEntity userGroupEntity, List<Map<String, String>> listMenuPermission) throws DataException;
+	UserGroupEntity addUserGroup(UserGroupEntity userGroupEntity, List<UserGroupMenuPermissionEntity> listMenuPermission) throws DataException;
 
 }

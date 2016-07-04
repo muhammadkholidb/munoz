@@ -21,12 +21,14 @@
 	                        <ul>
 	                            <li>
 	                                <h:commandLink >
-	                                	<i class="fa fa-user" style="margin-right: 10px; display: none;" /><h:outputText value="#{lang['menu.profile']}" />
+	                                	<i class="fa fa-user" style="margin-right: 10px; display: none;" />
+	                                	<h:outputText value="#{lang['label.Profile']}" />
 	                                </h:commandLink>
 	                            </li>
 	                            <li>
 	                                <h:commandLink action="#{loginBean.doLogout()}" >
-	                                	<i class="fa fa-times" style="margin-right: 10px; display: none;" /><h:outputText value="#{lang['menu.logout']}" />
+	                                	<i class="fa fa-times" style="margin-right: 10px; display: none;" />
+	                                	<h:outputText value="#{lang['label.Logout']}" />
 	                                </h:commandLink>
 	                            </li>
 	                        </ul>

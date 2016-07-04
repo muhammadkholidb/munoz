@@ -20,7 +20,7 @@ import hu.pe.munoz.commonrest.helper.MessageString;
 
 public abstract class BaseController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	protected Mapper mapper;
@@ -60,14 +60,14 @@ public abstract class BaseController {
 
 	@ExceptionHandler(DataException.class)
 	public ResponseWrapper<Object> handleDataException(DataException e) {
-		LOGGER.debug("Data exception caught!");
+		log.debug("Data exception caught!");
 		String message = messageString.get(e.getMessage(), e.getData(), getCurrentLocale()).toString();
 		return new ResponseWrapper<Object>(CommonConstants.FAIL, null, e.getCode() + ": " + message);	
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseWrapper<Object> handleOtherException(Exception e) {
-		LOGGER.debug("Other exception caught!", e);
+		log.debug("Other exception caught!", e);
 		return new ResponseWrapper<Object>(CommonConstants.FAIL, null, e.toString());
 	}
 	

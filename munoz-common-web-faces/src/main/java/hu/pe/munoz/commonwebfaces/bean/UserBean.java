@@ -20,14 +20,12 @@ import hu.pe.munoz.commonwebfaces.helper.PageMode;
 
 @ManagedBean
 @ViewScoped
-public class UserBean extends AbstractBreadCrumbSupport implements Serializable {
+public class UserBean implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserBean.class);
     
     private List<HashMap> userList;
     
@@ -81,22 +79,6 @@ public class UserBean extends AbstractBreadCrumbSupport implements Serializable 
         return "list?faces-redirect=true";
     }
     
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void addCrumbs(List<JSONObject> crumbs, String languageCode) {
-        if (CommonConstants.LANGUAGE_CODE_ENGLISH.equals(languageCode)) {
-            JSONObject crumb = new JSONObject();
-            crumb.put("label", "User");
-            crumb.put("page", "/settings/user/list.xhtml");
-            crumbs.add(crumb);
-        } else if (CommonConstants.LANGUAGE_CODE_INDONESIA.equals(languageCode)) {
-            JSONObject crumb = new JSONObject();
-            crumb.put("label", "Pengguna");
-            crumb.put("page", "/settings/user/list.xhtml");
-            crumbs.add(crumb);
-        }
-    }
-
     public List<HashMap> getUserList() {
         return userList;
     }

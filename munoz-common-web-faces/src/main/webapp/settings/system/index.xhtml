@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <ui:composition
 	template="/WEB-INF/templates/#{applicationBean.templateCode}/layout.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
@@ -12,29 +11,29 @@
 		<f:viewAction action="#{systemBean.pageCheck()}" />
 	</f:metadata>
 
-	<ui:define name="title">#{lang['title.system']}</ui:define>
+	<ui:define name="title">#{lang['title.System']}</ui:define>
 
 	<ui:define name="inner">
 	
 		<h:form>
 	
 			<h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" rendered="#{systemBean.isModifyAllowed()}">
-				<p:commandButton value="#{lang['button.edit']}"
+				<p:commandButton value="#{lang['button.Edit']}"
 					styleClass="button-green" action="#{systemBean.gotoEdit()}"
 					ajax="false" />
 			</h:panelGroup>
 
-			<p:panel header="#{lang['label.systemSetting']}">
+			<p:panel header="#{lang['label.SystemSetting']}">
 
 				<div class="ui-fluid">
 					<p:panelGrid columns="2"
 						columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-4"
 						layout="grid" styleClass="ui-panelgrid-blank">
 
-						<h:outputText value="#{lang['label.logoImage']}" />
+						<h:outputText value="#{lang['label.LogoImage']}" />
 						<p:graphicImage value="/resources.image/#{systemBean.image}" height="30px" />
 
-						<h:outputText value="#{lang['label.language']}" />
+						<h:outputText value="#{lang['label.Language']}" />
 						<p:selectOneMenu value="#{systemBean.languageCode}"
 							disabled="true">
 							<f:selectItems value="#{systemBean.supportedLanguages}"
@@ -42,10 +41,10 @@
 								itemValue="#{language.code}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="#{lang['label.online']}" />
+						<h:outputText value="#{lang['label.Online']}" />
 						<p:selectOneMenu value="#{systemBean.online}" disabled="true">
-							<f:selectItem itemValue="y" itemLabel="#{lang['label.yes']}" />
-							<f:selectItem itemValue="n" itemLabel="#{lang['label.no']}" />
+							<f:selectItem itemValue="y" itemLabel="#{lang['label.Yes']}" />
+							<f:selectItem itemValue="n" itemLabel="#{lang['label.No']}" />
 						</p:selectOneMenu>
 
 					</p:panelGrid>
@@ -54,7 +53,7 @@
 			</p:panel>
 
 			<h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block" rendered="#{systemBean.isModifyAllowed()}">
-				<p:commandButton value="#{lang['button.edit']}"
+				<p:commandButton value="#{lang['button.Edit']}"
 					styleClass="button-green" action="#{systemBean.gotoEdit()}"
 					ajax="false" />
 			</h:panelGroup>

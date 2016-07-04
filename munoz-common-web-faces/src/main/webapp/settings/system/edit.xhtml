@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <ui:composition template="/WEB-INF/templates/#{applicationBean.templateCode}/layout.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -11,45 +10,47 @@
         <f:viewAction action="#{systemBean.pageCheck()}" /> 
     </f:metadata>
 
-	<ui:define name="title">#{lang['title.system']}</ui:define>
+	<ui:define name="title">#{lang['title.System']}</ui:define>
 
 	<ui:define name="inner">
 			
 	    <h:form enctype="multipart/form-data">
+            
+            <p:messages id="messages" closable="true" />
 	    
 	        <h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block">
-	            <p:commandButton value="#{lang['button.save']}"
+	            <p:commandButton value="#{lang['button.Save']}"
 	                styleClass="button-green" action="#{systemBean.saveForm()}"
 	                ajax="false" />
-	            <p:commandButton value="#{lang['button.cancel']}"
+	            <p:commandButton value="#{lang['button.Cancel']}"
 	                styleClass="button-grey" action="#{systemBean.gotoIndex()}"
 	                ajax="false" />
 	        </h:panelGroup>
 	    
-	        <p:panel header="#{lang['label.editSystemSetting']}">
+	        <p:panel header="#{lang['label.EditSystemSetting']}">
 	    
 	            <div class="ui-fluid">
 	                <p:panelGrid columns="2"
 	                    columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-4"
 	                    layout="grid" styleClass="ui-panelgrid-blank">
 	    
-	                    <h:outputText value="#{lang['label.logoImage']}" />
+	                    <h:outputText value="#{lang['label.LogoImage']}" />
 	                    <p:graphicImage value="/resources.image/#{systemBean.image}" height="30px" />
 	    
 	                    <h:outputText />
-	                    <p:fileUpload value="#{systemBean.imageUpload}" mode="simple" skinSimple="true" />
+	                    <p:fileUpload value="#{systemBean.imageUpload}" mode="simple" skinSimple="true" label="#{lang['button.ChooseFile']}" />
 	    
-	                    <h:outputText value="#{lang['label.language']}" />
+	                    <h:outputText value="#{lang['label.Language']}" />
 	                    <p:selectOneMenu value="#{systemBean.languageCode}">
 	                        <f:selectItems value="#{systemBean.supportedLanguages}"
 	                            var="language" itemLabel="#{language.name}"
 	                            itemValue="#{language.code}" />
 	                    </p:selectOneMenu>
 	    
-	                    <h:outputText value="#{lang['label.online']}" />
+	                    <h:outputText value="#{lang['label.Online']}" />
 	                    <p:selectOneMenu value="#{systemBean.online}">
-	                        <f:selectItem itemValue="y" itemLabel="#{lang['label.yes']}" />
-	                        <f:selectItem itemValue="n" itemLabel="#{lang['label.no']}" />
+	                        <f:selectItem itemValue="y" itemLabel="#{lang['label.Yes']}" />
+	                        <f:selectItem itemValue="n" itemLabel="#{lang['label.No']}" />
 	                    </p:selectOneMenu>
 	    
 	                </p:panelGrid>
@@ -58,10 +59,10 @@
 	        </p:panel>
 	    
 	        <h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block">
-	            <p:commandButton value="#{lang['button.save']}"
+	            <p:commandButton value="#{lang['button.Save']}"
 	                styleClass="button-green" action="#{systemBean.saveForm()}"
 	                ajax="false" />
-	            <p:commandButton value="#{lang['button.cancel']}"
+	            <p:commandButton value="#{lang['button.Cancel']}"
 	                styleClass="button-grey" action="#{systemBean.gotoIndex()}"
 	                ajax="false" />
 	        </h:panelGroup>

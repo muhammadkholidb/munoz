@@ -12,9 +12,23 @@ body {
 }
 
 .ui-corner-top {
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-top-right-radius: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.ui-corner-bottom {
+    -moz-border-radius-bottomleft: 0;
+    -moz-border-radius-bottomright: 0;
+    -webkit-border-bottom-left-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .sidebar {
     padding-left: 10px;
 }
@@ -366,7 +380,16 @@ th.ui-state-default {
 }
 
 .ui-datatable-odd {
-    background: none repeat scroll 0 0 #F2F5F9;
+    background: none repeat scroll 0 0 #F2F5F9 !important;
+}
+
+.ui-datatable .ui-widget-content {
+	border: 1px solid #a6c9e2 !important;
+}
+
+.ui-datatable tbody td.wrap {
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .ui-fileupload-simple .ui-fileupload-filename {
@@ -377,4 +400,44 @@ th.ui-state-default {
 .ui-fileupload-simple .ui-button {
     width: unset !important;
     float: left;
+}
+
+.ui-chkbox .ui-state-default, 
+.ui-chkbox .ui-widget-content .ui-state-default, 
+.ui-chkbox .ui-widget-header .ui-state-default {
+    background: #0078ae;
+    border: 1px solid #0078ae;
+}
+
+.ui-chkbox .ui-state-hover, 
+.ui-chkbox .ui-widget-content .ui-state-hover, 
+.ui-chkbox .ui-widget-header .ui-state-hover, 
+.ui-chkbox .ui-state-focus, 
+.ui-chkbox .ui-widget-content .ui-state-focus, 
+.ui-chkbox .ui-widget-header .ui-state-focus {
+    border: 1px solid #79c9ec;
+    background: #79c9ec;
+}
+
+.ui-chkbox .ui-state-active, 
+.ui-chkbox .ui-widget-content .ui-state-active, 
+.ui-chkbox .ui-widget-header .ui-state-active {
+    border: 1px solid #6eac2c;
+    background: #6eac2c;
+}
+
+.ui-chkbox .ui-chkbox-box {
+    border-radius: 0 !important;
+}
+
+.ui-paginator.ui-widget-header {
+    border: 1px solid #4297d7;
+    background: #2191c0;
+}
+
+.ui-paginator .ui-state-active, 
+.ui-paginator .ui-widget-content .ui-state-active, 
+.ui-paginator .ui-widget-header .ui-state-active {
+    border: 1px solid #acdd4a;
+    background: #6eac2c;
 }

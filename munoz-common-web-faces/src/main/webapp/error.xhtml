@@ -35,15 +35,12 @@
                     <div class="ui-grid-row"
                         style="padding-top: 100px; padding-bottom: 100px; background: #79c9ec;">
                         <div class="ui-grid-col-4"></div>
-                        <div class="ui-grid-col-4"
-                            style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
+                        <div class="ui-grid-col-4" style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
                             <div class="ui-fluid">
-                                <p:panelGrid columns="1" columnClasses="ui-grid-col-12"
-                                    layout="grid" styleClass="ui-panelgrid-blank">
+                                <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
                                     <h1 class="page-title" style="margin-bottom: 5px; text-transform: uppercase;">#{lang['title.Error']}</h1>
                                     <h:outputText value="#{lang['label.PageErrorMessage']}" escape="false" />
-                                    <p:commandButton value="#{lang['button.BackToHome']}"
-                                        action="home?faces-redirect=true" />
+                                    <p:commandButton value="#{lang['button.BackToHome']}" action="home?faces-redirect=true" />
                                 </p:panelGrid>
                             </div>
                         </div>

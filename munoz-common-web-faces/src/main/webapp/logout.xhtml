@@ -16,7 +16,7 @@
 			<link rel="icon" href="favicon.ico" />
 		</f:facet>
 		<h:outputStylesheet library="common" name="styles/common.css" />
-		<title>#{lang['title.logout']}</title>
+		<title>#{lang['title.Logout']}</title>
 	</h:head>
 	
 	<h:body>
@@ -36,15 +36,12 @@
 					<div class="ui-grid-row"
 						style="padding-top: 100px; padding-bottom: 100px; background: #79c9ec;">
 						<div class="ui-grid-col-4"></div>
-						<div class="ui-grid-col-4"
-							style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
+						<div class="ui-grid-col-4" style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
 							<div class="ui-fluid">
-								<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
-									layout="grid" styleClass="ui-panelgrid-blank">
-									<h1 class="page-title" style="margin-bottom: 5px; text-transform: uppercase;">#{lang['title.logout']}</h1>
-									<h:outputText value="#{lang['label.logoutSuccessMessage']}" />
-									<p:commandButton value="#{lang['button.backToLogin']}"
-										action="login?faces-redirect=true" />
+								<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+									<h1 class="page-title" style="margin-bottom: 5px; text-transform: uppercase;">#{lang['title.Logout']}</h1>
+									<h:outputText value="#{lang['label.LogoutSuccessMessage']}" />
+									<p:commandButton value="#{lang['button.BackToLogin']}" action="login?faces-redirect=true" />
 								</p:panelGrid>
 							</div>
 						</div>

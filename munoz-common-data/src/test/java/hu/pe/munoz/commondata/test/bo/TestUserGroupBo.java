@@ -3,9 +3,7 @@ package hu.pe.munoz.commondata.test.bo;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,7 +29,7 @@ import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTests {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestUserGroupBo.class);
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     
     @Autowired
     private UserGroupBo userGroupBo;
@@ -47,20 +45,20 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
     
     @Test
     public void testGetAllUserGroup() {
-        LOGGER.debug("TEST get all user group ...");
+        log.debug("TEST get all user group ...");
         List<UserGroupEntity> list = userGroupBo.getAllUserGroup();
         assertEquals(3, list.size());
     }
     
     @Test
     public void testFindOneUserGroupFail() {
-        LOGGER.debug("TEST FAIL find one user group ...");
+        log.debug("TEST FAIL find one user group ...");
         Long userGroupId = 123L;
         try {
             userGroupBo.getOneUserGroup(userGroupId);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            log.debug(e.toString());
             assertEquals(ExceptionCode.E0001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
@@ -71,7 +69,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void testFindOneUserGroupSuccess() {
-        LOGGER.debug("TEST SUCCESS find one user group ...");
+        log.debug("TEST SUCCESS find one user group ...");
         Long userGroupId = 1L;
         try {
             UserGroupEntity userGroup = userGroupBo.getOneUserGroup(userGroupId);
@@ -86,7 +84,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void testFindOneUserGroupWithMenuPermissions() {
-        LOGGER.debug("TEST SUCCESS find one user group with menu permissions ...");
+        log.debug("TEST SUCCESS find one user group with menu permissions ...");
         Long userGroupId = 1L;
         try {
             UserGroupEntity userGroup = userGroupBo.getOneUserGroup(userGroupId);
@@ -105,36 +103,36 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
     
     @Test
     public void testAddUserGroupSuccess() {
-        LOGGER.debug("TEST SUCCESS add user group ...");
+        log.debug("TEST SUCCESS add user group ...");
         UserGroupEntity userGroupEntity = new UserGroupEntity();
         userGroupEntity.setName("Report Group");
         userGroupEntity.setActive(CommonConstants.YES);
 
-    	Map<String, String> map1 = new HashMap<String, String>();
-    	map1.put("menuCode", "menu.settings");
-    	map1.put("view", CommonConstants.YES);
-    	map1.put("modify", CommonConstants.NO);
-    	
-    	Map<String, String> map2 = new HashMap<String, String>();
-    	map2.put("menuCode", "menu.settings.system");
-    	map2.put("view", CommonConstants.YES);
-    	map2.put("modify", CommonConstants.NO);
-    	
-    	Map<String, String> map3 = new HashMap<String, String>();
-    	map3.put("menuCode", "menu.settings.user");
-    	map3.put("view", CommonConstants.YES);
-    	map3.put("modify", CommonConstants.NO);
-    	
-    	Map<String, String> map4 = new HashMap<String, String>();
-    	map4.put("menuCode", "menu.settings.userGroup");
-    	map4.put("view", CommonConstants.YES);
-    	map4.put("modify", CommonConstants.NO);
+        UserGroupMenuPermissionEntity menu1 = new UserGroupMenuPermissionEntity();
+        menu1.setMenuCode("menu.settings");
+        menu1.setView(CommonConstants.YES);
+        menu1.setModify(CommonConstants.NO);
 
-    	List<Map<String, String>> listMenuPermission = new ArrayList<Map<String, String>>();
-    	listMenuPermission.add(map1);
-    	listMenuPermission.add(map2);
-    	listMenuPermission.add(map3);
-    	listMenuPermission.add(map4);
+        UserGroupMenuPermissionEntity menu2 = new UserGroupMenuPermissionEntity();
+        menu2.setMenuCode("menu.settings.system");
+        menu2.setView(CommonConstants.YES);
+        menu2.setModify(CommonConstants.NO);
+
+        UserGroupMenuPermissionEntity menu3 = new UserGroupMenuPermissionEntity();
+        menu3.setMenuCode("menu.settings.user");
+        menu3.setView(CommonConstants.YES);
+        menu3.setModify(CommonConstants.NO);
+
+        UserGroupMenuPermissionEntity menu4 = new UserGroupMenuPermissionEntity();
+        menu4.setMenuCode("menu.settings.usergroup");
+        menu4.setView(CommonConstants.YES);
+        menu4.setModify(CommonConstants.NO);
+        
+    	List<UserGroupMenuPermissionEntity> listMenuPermission = new ArrayList<UserGroupMenuPermissionEntity>();
+    	listMenuPermission.add(menu1);
+    	listMenuPermission.add(menu2);
+    	listMenuPermission.add(menu3);
+    	listMenuPermission.add(menu4);
 
         try {
             UserGroupEntity created = userGroupBo.addUserGroup(userGroupEntity, listMenuPermission);
@@ -157,7 +155,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void testAddUserGroupFail() {
-        LOGGER.debug("TEST FAIL add user group ...");
+        log.debug("TEST FAIL add user group ...");
         UserGroupEntity userGroupEntity = new UserGroupEntity();
         userGroupEntity.setName("Administrator");
         userGroupEntity.setActive(CommonConstants.YES);
@@ -166,7 +164,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             userGroupBo.addUserGroup(userGroupEntity, null);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            log.debug(e.toString());
             assertEquals(ExceptionCode.E0003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, e.getMessage());
         } catch (Exception e) {
@@ -177,37 +175,37 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
     
     @Test
     public void testEditUserGroupSuccess() {
-        LOGGER.debug("TEST SUCCESS edit user group ...");
+        log.debug("TEST SUCCESS edit user group ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
         userGroup.setName("Super Administrator");
         userGroup.setActive(CommonConstants.NO);
 
-    	Map<String, String> map1 = new HashMap<String, String>();
-    	map1.put("menuCode", "menu.settings");
-    	map1.put("view", CommonConstants.YES);
-    	map1.put("modify", CommonConstants.NO);
-    	
-    	Map<String, String> map2 = new HashMap<String, String>();
-    	map2.put("menuCode", "menu.settings.system");
-    	map2.put("view", CommonConstants.YES);
-    	map2.put("modify", CommonConstants.NO);
-    	
-    	Map<String, String> map3 = new HashMap<String, String>();
-    	map3.put("menuCode", "menu.settings.user");
-    	map3.put("view", CommonConstants.YES);
-    	map3.put("modify", CommonConstants.NO);
-    	
-    	Map<String, String> map4 = new HashMap<String, String>();
-    	map4.put("menuCode", "menu.settings.userGroup");
-    	map4.put("view", CommonConstants.YES);
-    	map4.put("modify", CommonConstants.NO);
+        UserGroupMenuPermissionEntity menu1 = new UserGroupMenuPermissionEntity();
+        menu1.setMenuCode("menu.settings");
+        menu1.setView(CommonConstants.YES);
+        menu1.setModify(CommonConstants.NO);
 
-    	List<Map<String, String>> listMenuPermission = new ArrayList<Map<String, String>>();
-    	listMenuPermission.add(map1);
-    	listMenuPermission.add(map2);
-    	listMenuPermission.add(map3);
-    	listMenuPermission.add(map4);
+        UserGroupMenuPermissionEntity menu2 = new UserGroupMenuPermissionEntity();
+        menu2.setMenuCode("menu.settings.system");
+        menu2.setView(CommonConstants.YES);
+        menu2.setModify(CommonConstants.NO);
+
+        UserGroupMenuPermissionEntity menu3 = new UserGroupMenuPermissionEntity();
+        menu3.setMenuCode("menu.settings.user");
+        menu3.setView(CommonConstants.YES);
+        menu3.setModify(CommonConstants.NO);
+
+        UserGroupMenuPermissionEntity menu4 = new UserGroupMenuPermissionEntity();
+        menu4.setMenuCode("menu.settings.usergroup");
+        menu4.setView(CommonConstants.YES);
+        menu4.setModify(CommonConstants.NO);
+        
+    	List<UserGroupMenuPermissionEntity> listMenuPermission = new ArrayList<UserGroupMenuPermissionEntity>();
+    	listMenuPermission.add(menu1);
+    	listMenuPermission.add(menu2);
+    	listMenuPermission.add(menu3);
+    	listMenuPermission.add(menu4);
 
         try {
             UserGroupEntity updated = userGroupBo.editUserGroup(userGroup, listMenuPermission);
@@ -222,7 +220,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void testEditUserGroupFail1() {
         // Test fail cause ID not foud
-        LOGGER.debug("TEST FAIL 1 edit user group ...");
+        log.debug("TEST FAIL 1 edit user group ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(123L);
         userGroup.setName("Administrator");
@@ -232,7 +230,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             userGroupBo.editUserGroup(userGroup, null);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            log.debug(e.toString());
             assertEquals(ExceptionCode.E0001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
@@ -244,7 +242,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void testEditUserGroupFail2() {
         // Test fail cause name already exists
-        LOGGER.debug("TEST FAIL 2 edit user group ...");
+        log.debug("TEST FAIL 2 edit user group ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
         userGroup.setName("User");
@@ -254,7 +252,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             userGroupBo.editUserGroup(userGroup, null);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            log.debug(e.toString());
             assertEquals(ExceptionCode.E0003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, e.getMessage());
         } catch (Exception e) {
@@ -265,13 +263,13 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
     
     @Test
     public void testRemoveUserGroupFail() {
-        LOGGER.debug("TEST FAIL remove user group ...");
+        log.debug("TEST FAIL remove user group ...");
         Long userGroupId = 1L;
         try {
             userGroupBo.removeUserGroup(userGroupId);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            log.debug(e.toString());
             assertEquals(ExceptionCode.E0002, e.getCode());
             assertEquals(ErrorMessageConstants.CANT_REMOVE_USER_GROUP_CAUSE_USER_EXISTS, e.getMessage());
         } catch (Exception e) {
@@ -283,7 +281,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void testRemoveUserGroupSuccess() {
-        LOGGER.debug("TEST SUCCESS remove user group ...");
+        log.debug("TEST SUCCESS remove user group ...");
         Long userGroupId = 3L;
         try {
             userGroupBo.removeUserGroup(userGroupId);
@@ -296,7 +294,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             userGroupBo.getOneUserGroup(userGroupId);
             fail();
         } catch (DataException e) {
-        	LOGGER.debug(e.toString());
+        	log.debug(e.toString());
         	assertEquals(ExceptionCode.E0001, e.getCode());
         	assertEquals(ErrorMessageConstants.USER_GROUP_NOT_FOUND, e.getMessage());
         } catch (Exception e) {

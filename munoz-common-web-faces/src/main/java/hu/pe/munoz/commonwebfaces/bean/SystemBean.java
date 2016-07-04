@@ -24,12 +24,14 @@ import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.util.Faces;
+import org.omnifaces.util.Messages;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.rest.RESTResponse;
+import hu.pe.munoz.commonwebfaces.helper.MessageHelper;
 
 @ManagedBean
 @ViewScoped
@@ -85,29 +87,38 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     @SuppressWarnings("unchecked")
 	public String saveForm() {
 
-    	String imageDir = applicationProperties.getProperty("directory.Images");
-		String filename = UUID.randomUUID().toString() + ".jpg";
-    	
-		boolean uploaded = false;
+    	boolean uploaded = false;
+		String newFileName = null;
 		
-    	// http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
-    	InputStream input = null;
-    	OutputStream output = null;
-    	try {
-			input = imageUpload.getInputstream();
-			output = new FileOutputStream(new File(imageDir, filename));
-			IOUtils.copy(input, output);
-			uploaded = true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			IOUtils.closeQuietly(input);
-			IOUtils.closeQuietly(output);
+		if (imageUpload != null && imageUpload.getSize() > 0) {
+		
+			if (!imageUpload.getContentType().startsWith("image/")) {
+				Messages.addGlobalError(MessageHelper.getStringByEL("lang", "error.FileTypeNotSupported"));
+				return "";
+			}
+			
+			String uploadedFileName = imageUpload.getFileName();
+			String imageDir = applicationProperties.getProperty("directory.Images");
+			
+			newFileName = UUID.randomUUID().toString() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
+
+			// http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
+	    	InputStream input = null;
+	    	OutputStream output = null;
+	    	try {
+				input = imageUpload.getInputstream();
+				log.debug("Input stream: " + input);
+				output = new FileOutputStream(new File(imageDir, newFileName));
+				IOUtils.copy(input, output);
+				uploaded = true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				Messages.addGlobalError(e.toString());
+			} finally {
+				IOUtils.closeQuietly(input);
+				IOUtils.closeQuietly(output);
+			}				
 		}
-    	
-    	if (!uploaded) {
-    		return "";
-    	}
     	
     	JSONArray systems = applicationBean.getSystems();
 
@@ -122,7 +133,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 				system.put("value", online);
 				break;
 			case SYSTEM_KEY_IMAGE:
-				system.put("value", filename);
+				system.put("value", uploaded ? newFileName : image);
 				break;
 			default:
 				break;
@@ -138,6 +149,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     		applicationBean.setSystems((JSONArray) response.getData());
     	} else {
     		log.debug(response.getMessage());
+    		Messages.addGlobalError(response.getMessage());
     		return "";
     	}
         

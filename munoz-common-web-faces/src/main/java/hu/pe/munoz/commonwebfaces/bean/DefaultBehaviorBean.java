@@ -7,29 +7,47 @@ import java.util.List;
 import javax.faces.bean.ManagedProperty;
 
 import org.omnifaces.util.Faces;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import hu.pe.munoz.commonwebfaces.helper.PageMode;
 
 public abstract class DefaultBehaviorBean extends RESTBean {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	// private Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private final List<String> LIST_PAGE_FOR_VIEW = Arrays.asList("index.xhtml", "view.xhtml");
-	private final List<String> LIST_PAGE_FOR_MODIFY = Arrays.asList("edit.xhtml", "add.xhtml");
+	private final List<String> LIST_PATH_FOR_VIEW = Arrays.asList("/index.xhtml", "/view.xhtml");
+	private final List<String> LIST_PATH_FOR_MODIFY = Arrays.asList("/edit.xhtml", "/add.xhtml");
 
+	private final String PATH_INDEX = "/index.xhtml";
+	
     @ManagedProperty(value = "#{loginBean}")
     protected LoginBean loginBean;
 
     public void setLoginBean(LoginBean loginBean) {
         this.loginBean = loginBean;
     }
+
+    protected int mode = PageMode.INDEX;
+    
+    public DefaultBehaviorBean() {
+    	if (Faces.getFlash().get("mode") != null) {
+    		mode = (int) Faces.getFlash().get("mode");
+    	}
+    }
     
     public void pageCheck() {
     	String path = Faces.getRequestServletPath();
-    	String pathLastPart = path.substring(path.lastIndexOf("/") + 1);
-    	if (LIST_PAGE_FOR_MODIFY.contains(pathLastPart)) {
+    	String pathFirstPart = path.substring(1, path.lastIndexOf("/"));
+    	String pathLastPart = path.substring(path.lastIndexOf("/"));
+    	if (!PATH_INDEX.equals(pathLastPart) && mode == PageMode.INDEX) { // Page mode is not set yet, so it is PageMode.INDEX
+    		try {
+				Faces.redirect(pathFirstPart + "/index.xhtml");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    		return;
+    	}
+    	if (LIST_PATH_FOR_MODIFY.contains(pathLastPart)) {
     		if (!isModifyAllowed()) {
-				log.debug("Not allowed to modify ...");
 				try {
 					Faces.redirect("error.xhtml");
 				} catch (IOException e) {
@@ -38,9 +56,8 @@ public abstract class DefaultBehaviorBean extends RESTBean {
 				return;
 			}
     	}
-    	if (LIST_PAGE_FOR_VIEW.contains(pathLastPart)) {
+    	if (LIST_PATH_FOR_VIEW.contains(pathLastPart)) {
     		if (!isViewAllowed()) {
-				log.debug("Not allowed to view ...");
 				try {
 					Faces.redirect("error.xhtml");
 				} catch (IOException e) {
@@ -52,14 +69,17 @@ public abstract class DefaultBehaviorBean extends RESTBean {
     }
 
 	public String gotoEdit() {
+		Faces.getFlash().put("mode", PageMode.EDIT);
 		return "edit?faces-redirect=true";
 	}
 
 	public String gotoAdd() {
+		Faces.getFlash().put("mode", PageMode.ADD);
 		return "add?faces-redirect=true";
 	}
 
 	public String gotoIndex() {
+		Faces.getFlash().put("mode", PageMode.INDEX);
 		return "index?faces-redirect=true";
 	}
 

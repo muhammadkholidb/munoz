@@ -10,6 +10,10 @@ public class MessageHelper {
 	
 	public static String getStringByEL(String var, String key) {
 		String el = "#{" + var +"['" + key + "']}";
+		return getStringByEL(el);
+	}
+
+	public static String getStringByEL(String el) {
 		log.debug("Get EL: " + el);
 		return Faces.evaluateExpressionGet(el);
 	}
