@@ -2,7 +2,6 @@ package hu.pe.munoz.commonwebfaces.bean;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.servlet.ServletException;
@@ -38,18 +37,19 @@ public class LoginBean extends RESTBean implements Serializable {
     private JSONObject userGroup;
     private JSONArray menuPermissions;
 
-    @PostConstruct
-    public void init() {
-        log.info("@PostConstruct loginBean ...");
+    @Override
+    protected void postConstruct() {
+    	super.postConstruct();
+        log.info("Post construct LoginBean ...");
     }
-
+    
     @SuppressWarnings("unchecked")
 	public void doLogin() {
     	
     	JSONObject parameters = new JSONObject();
     	parameters.put("username", inputUsername.trim());
     	parameters.put("password", inputPassword);
-    	RESTResponse response = restClient.doPost("localhost:8080/munoz-common-rest", "/login", parameters);
+    	RESTResponse response = restClient.fetchPost(hostUrl, "/login", parameters);
     	String status = response.getStatus();
     	if (CommonConstants.SUCCESS.equals(status)) {
     		user = (JSONObject) response.getData();
@@ -165,6 +165,14 @@ public class LoginBean extends RESTBean implements Serializable {
     
     public JSONObject getUser() {
     	return user;
+    }
+
+    public JSONObject getUserGroup() {
+    	return userGroup;
+    }
+    
+    public JSONArray getMenuPermissions() {
+    	return menuPermissions;
     }
     
     public static void main(String[] args) {

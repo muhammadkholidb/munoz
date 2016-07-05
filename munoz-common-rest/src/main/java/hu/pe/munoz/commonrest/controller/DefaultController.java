@@ -14,7 +14,7 @@ import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.bo.UserBo;
 import hu.pe.munoz.commondata.entity.UserEntity;
-import hu.pe.munoz.commonrest.ResponseWrapper;
+import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 import hu.pe.munoz.commonrest.pojo.login.LoginUser;
 
 @RestController

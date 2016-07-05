@@ -19,15 +19,16 @@ import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.bo.UserGroupBo;
 import hu.pe.munoz.commondata.entity.UserGroupEntity;
 import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
-import hu.pe.munoz.commonrest.ResponseWrapper;
 import hu.pe.munoz.commonrest.controller.BaseController;
+import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 import hu.pe.munoz.commonrest.pojo.settings.UserGroup;
+import hu.pe.munoz.commonrest.pojo.settings.UserGroupWithMenuPermissions;
 
 @RestController
 @RequestMapping("/settings")
 public class UserGroupController extends BaseController {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	private Logger log = LoggerFactory.getLogger(UserGroupController.class);
 	
 	@Autowired
 	private UserGroupBo userGroupBo;
@@ -39,17 +40,23 @@ public class UserGroupController extends BaseController {
 		for (UserGroupEntity entity : listUserGroupEntity) {
 			list.add(mapper.map(entity, UserGroup.class));
 		}
-		return new ResponseWrapper<List<UserGroup>>(CommonConstants.SUCCESS, list, "");
+		return new ResponseWrapper<List<UserGroup>>(CommonConstants.SUCCESS, list);
+	}
+
+	@RequestMapping(value = "/user-group/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseWrapper<UserGroupWithMenuPermissions> getUserGroup(@RequestParam(value = "userGroupId") Long userGroupId) throws Exception {
+		UserGroupEntity entity = userGroupBo.getOneUserGroupWithMenuPermissions(userGroupId);
+		log.debug("Entity: " + entity);
+		List<UserGroupMenuPermissionEntity> list = entity.getUserGroupMenuPermissions();
+		log.debug("List: " + list.size());
+		UserGroupWithMenuPermissions userGroup = mapper.map(entity, UserGroupWithMenuPermissions.class);
+		return new ResponseWrapper<UserGroupWithMenuPermissions>(CommonConstants.SUCCESS, userGroup);
 	}
 
 	@RequestMapping(value = "/user-group/remove", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseWrapper<UserGroupEntity> removeUserGroup(@RequestParam(value = "userGroupId") Long userGroupId,
-			@RequestParam(value = "languageCode") String languageCode) throws Exception {
-
-		ResponseWrapper<UserGroupEntity> wrapper = new ResponseWrapper<UserGroupEntity>();
+	public ResponseWrapper<Object> removeUserGroup(@RequestParam(value = "userGroupId") Long userGroupId) throws Exception {
 		userGroupBo.removeUserGroup(userGroupId);
-		wrapper.setStatus(CommonConstants.SUCCESS);
-		return wrapper;
+		return new ResponseWrapper<Object>(CommonConstants.SUCCESS, getResponseMessage("success.SuccessfullyRemoveUserGroup"));
 	}
 
     @RequestMapping(value = "/user-group/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,25 +65,42 @@ public class UserGroupController extends BaseController {
     		@RequestParam(value = "menuPermissions") String strMenuPermissions) throws Exception {
     	
     	JSONObject jsonUserGroup = (JSONObject) JSONValue.parse(strUserGroup);
-    	log.debug("JSON user group: " + jsonUserGroup);
-    	
         JSONArray jsonMenuPermissions = (JSONArray) JSONValue.parse(strMenuPermissions);
-        log.debug("JSON menu permissions: " + jsonMenuPermissions);
         
         UserGroupEntity userGroupEntity = mapper.map(jsonUserGroup, UserGroupEntity.class);
-        log.debug("User group: " + userGroupEntity.getName());
         
         List<UserGroupMenuPermissionEntity> listMenuPermission = new ArrayList<UserGroupMenuPermissionEntity>();
         for (int i = 0; i < jsonMenuPermissions.size(); i++) {
         	UserGroupMenuPermissionEntity entity = mapper.map(jsonMenuPermissions.get(i), UserGroupMenuPermissionEntity.class);
-        	log.debug("Menu: " + entity.getMenuCode() + ", view: " + entity.getView() + ", modify: " + entity.getModify());
         	listMenuPermission.add(entity);
         }
         
         UserGroupEntity added = userGroupBo.addUserGroup(userGroupEntity, listMenuPermission);
         UserGroup userGroup = mapper.map(added, UserGroup.class);
         
-        return new ResponseWrapper<UserGroup>(CommonConstants.SUCCESS, userGroup);
+        return new ResponseWrapper<UserGroup>(CommonConstants.SUCCESS, userGroup, getResponseMessage("success.SuccessfullyAddUserGroup"));
+    }
+
+    @RequestMapping(value = "/user-group/edit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseWrapper<UserGroup> editUserGroup(
+            @RequestParam(value = "userGroup") String strUserGroup, 
+            @RequestParam(value = "menuPermissions") String strMenuPermissions) throws Exception {
+        
+        JSONObject jsonUserGroup = (JSONObject) JSONValue.parse(strUserGroup);
+        JSONArray jsonMenuPermissions = (JSONArray) JSONValue.parse(strMenuPermissions);
+        
+        UserGroupEntity userGroupEntity = mapper.map(jsonUserGroup, UserGroupEntity.class);
+        
+        List<UserGroupMenuPermissionEntity> listMenuPermission = new ArrayList<UserGroupMenuPermissionEntity>();
+        for (int i = 0; i < jsonMenuPermissions.size(); i++) {
+            UserGroupMenuPermissionEntity entity = mapper.map(jsonMenuPermissions.get(i), UserGroupMenuPermissionEntity.class);
+            listMenuPermission.add(entity);
+        }
+        
+        UserGroupEntity updated = userGroupBo.editUserGroup(userGroupEntity, listMenuPermission);
+        UserGroup userGroup = mapper.map(updated, UserGroup.class);
+        
+        return new ResponseWrapper<UserGroup>(CommonConstants.SUCCESS, userGroup, getResponseMessage("success.SuccessfullyEditUserGroup"));
     }
 
 }

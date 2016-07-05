@@ -1,10 +1,13 @@
 package hu.pe.munoz.commonrest.pojo.settings;
 
-public class UserGroup {
+import java.util.List;
+
+public class UserGroupWithMenuPermissions {
 
 	private Long id;
-	private String name;
+    private String name;
     private String active;
+    private List<UserGroupMenuPermission> userGroupMenuPermissions;
 
 	public Long getId() {
 		return id;
@@ -29,5 +32,13 @@ public class UserGroup {
     public void setActive(String active) {
         this.active = active;
     }
+
+	public List<UserGroupMenuPermission> getUserGroupMenuPermissions() {
+		return userGroupMenuPermissions;
+	}
+
+	public void setUserGroupMenuPermissions(List<UserGroupMenuPermission> userGroupMenuPermissions) {
+		this.userGroupMenuPermissions = userGroupMenuPermissions;
+	}
 
 }

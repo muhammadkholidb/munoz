@@ -26,7 +26,7 @@ public class UserGroupDaoImpl extends GenericDaoImpl<UserGroupEntity> implements
     @SuppressWarnings("unchecked")
 	@Override
     public UserGroupEntity findByIdWithMenuPermissions(Long id) {
-    	Query query = em.createQuery("FROM UserGroupEntity a JOIN FETCH a.userGroup b WHERE a.id = :id ").setMaxResults(1);
+    	Query query = em.createQuery("FROM UserGroupEntity a JOIN FETCH a.userGroupMenuPermissions b WHERE a.id = :id ").setMaxResults(1);
         query.setParameter("id", id);
         List<UserGroupEntity> list = query.getResultList();
         if (list != null && list.size() > 0) {

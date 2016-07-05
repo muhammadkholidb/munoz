@@ -46,7 +46,7 @@ public class UserGroupBoImpl implements UserGroupBo {
 
     @Override
     public UserGroupEntity getOneUserGroupWithMenuPermissions(Long id) throws DataException {
-    	UserGroupEntity userGroup = userGroupDao.findById(id);
+    	UserGroupEntity userGroup = userGroupDao.findByIdWithMenuPermissions(id);
         if (userGroup == null) {
             throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }

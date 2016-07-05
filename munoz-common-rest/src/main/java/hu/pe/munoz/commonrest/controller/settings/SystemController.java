@@ -6,8 +6,6 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.bo.SystemBo;
 import hu.pe.munoz.commondata.entity.SystemEntity;
-import hu.pe.munoz.commonrest.ResponseWrapper;
 import hu.pe.munoz.commonrest.controller.BaseController;
+import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 import hu.pe.munoz.commonrest.pojo.settings.System;
 
 /**
@@ -33,8 +31,6 @@ import hu.pe.munoz.commonrest.pojo.settings.System;
 @RequestMapping("/settings")
 public class SystemController extends BaseController {
     
-	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
     @Autowired
     private SystemBo systemBo;
     
@@ -45,13 +41,13 @@ public class SystemController extends BaseController {
         for (SystemEntity entity : listSystemEntity) {
         	list.add(mapper.map(entity, System.class));
         }
-        return new ResponseWrapper<List<System>>(CommonConstants.SUCCESS, list);
+        return new ResponseWrapper<List<System>>(CommonConstants.SUCCESS, list, "");
     }
     
     @RequestMapping(value = "/system/edit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseWrapper<List<System>> editSystemList(@RequestParam(value = "systems") String strSystems) throws Exception {
-        JSONArray systems = (JSONArray) JSONValue.parse(strSystems);
-        log.debug("Systems: " + systems);
+
+    	JSONArray systems = (JSONArray) JSONValue.parse(strSystems);
         
         List<SystemEntity> listSystemEntity = new ArrayList<SystemEntity>();
         for (Object object : systems) {
@@ -70,7 +66,7 @@ public class SystemController extends BaseController {
         	list.add(mapper.map(entity, System.class));
         }
          
-        return new ResponseWrapper<List<System>>(CommonConstants.SUCCESS, list);
+        return new ResponseWrapper<List<System>>(CommonConstants.SUCCESS, list, getResponseMessage("success.SuccessfullyEditSystem"));
     }
     
 }

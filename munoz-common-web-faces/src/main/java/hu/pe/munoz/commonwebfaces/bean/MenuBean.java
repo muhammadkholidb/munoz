@@ -30,6 +30,7 @@ public class MenuBean implements Serializable {
     private static final String POSTFIX_FILE_SUBMENU = ".submenu.json";
 
     private JSONArray menus;
+    private JSONArray flatMenus;
 
     @PostConstruct
     public void init() {
@@ -57,6 +58,7 @@ public class MenuBean implements Serializable {
         });
 
         menus = new JSONArray();
+        flatMenus = new JSONArray();
         JSONParser parser = new JSONParser();
         try {
             for (File file : menuFiles) {
@@ -75,6 +77,8 @@ public class MenuBean implements Serializable {
                 String parentCode = (String) json.get("code");
                 JSONArray children = getChildren(submenus, parentCode);
                 json.put("submenus", children);
+                flatMenus.add(json);
+                flatMenus.addAll(children);
             }
         } catch (ParseException | IOException e) {
             e.printStackTrace();
@@ -97,7 +101,8 @@ public class MenuBean implements Serializable {
         return menus;
     }
 
-    public void setMenus(JSONArray menus) {
-        this.menus = menus;
+    public JSONArray getFlatMenus() {
+        return flatMenus;
     }
+
 }

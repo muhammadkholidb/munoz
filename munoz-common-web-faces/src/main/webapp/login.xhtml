@@ -19,7 +19,7 @@
 	</h:head>
 	
 	<h:body>
-		<h:form id="login-form">
+		<h:form id="loginForm">
 			<p:outputPanel>
 				<div class="ui-grid ui-grid-responsive">
 					<div class="ui-grid-row" style="padding: 10px; background: #79c9ec;">
@@ -39,11 +39,9 @@
 							<div class="ui-fluid" style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
 								<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
 									<h1 class="page-title" style="margin-bottom: 5px; text-transform: uppercase;">#{lang['title.Login']}</h1>
-									<p:inputText id="username" value="#{loginBean.inputUsername}"
-										placeholder="#{lang['label.UsernameEmail']}" />
-									<p:password id="password" value="#{loginBean.inputPassword}"
-										placeholder="#{lang['label.Password']}" />
-									<p:commandButton value="#{lang['button.Login']}" actionListener="#{loginBean.doLogin()}" update="messages" />
+									<p:inputText id="username" value="#{loginBean.inputUsername}" placeholder="#{lang['label.UsernameEmail']}" required="true" requiredMessage="#{lang['required.UsernameEmailCannotBeEmpty']}" />
+									<p:password id="password" value="#{loginBean.inputPassword}" placeholder="#{lang['label.Password']}" required="true" requiredMessage="#{lang['required.PasswordCannotBeEmpty']}" />
+									<p:commandButton value="#{lang['button.Login']}" actionListener="#{loginBean.doLogin()}" update=":loginForm" />
 								</p:panelGrid>
 							</div>
 						</div>

@@ -23,7 +23,7 @@
 					ajax="false" />
 			</h:panelGroup>
 
-			<p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom">
+			<p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom" >
 
 				<f:facet name="header">
 					<h:outputText value="#{lang['label.UserGroupSetting']}" />
@@ -33,14 +33,16 @@
 					<h:outputText value="#{group.name}" />
 				</p:column>
 
-				<p:column headerText="#{lang['label.Active']}">
-					<h:outputText value="#{group.active}" />
+				<p:column headerText="#{lang['label.Active']}" style="text-align: center;" >
+					<h:outputText value="#{group.active eq 'Y' ? lang['label.Yes'] : lang['label.No']}" />
 				</p:column>
 
-				<p:column headerText="#{lang['label.Action']}" style="text-align: center;" rendered="#{userGroupBean.isModifyAllowed()}" >
-					<h:panelGroup layout="block">
-						<p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" />
-						<p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" style="margin-left: 5px;" />
+				<p:column headerText="#{lang['label.Action']}" style="text-align: center;" >
+					<h:panelGroup layout="block" rendered="#{userGroupBean.isModifyAllowed()}" >
+						<p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userGroupBean.gotoEdit(group.id)}" />
+						<p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" 
+						  style="margin-left: 5px;" actionListener="#{userGroupBean.prepareRemoveUserGroup(group.id)}"
+						  oncomplete="PF('dlgConfirmation').show()" />
 					</h:panelGroup>
 				</p:column>
 
@@ -52,6 +54,16 @@
 					ajax="false" />
 			</h:panelGroup>
 		</h:form>
+		
+        <p:confirmDialog widgetVar="dlgConfirmation" width="300px" >
+            <f:facet name="header"><h:outputText value="#{lang['dialog.title.Confirmation']}" /></f:facet>
+            <f:facet name="message"><h:outputText value="#{lang['dialog.message.AreYouSure']}" /></f:facet> 
+            <h:form>
+	            <p:commandButton value="#{lang['button.Yes']}" action="#{userGroupBean.doRemoveUserGroup()}" styleClass="button-green" />
+	            <p:commandButton value="#{lang['button.No']}" onclick="PF('dlgConfirmation').hide()" styleClass="button-grey" />
+	        </h:form>
+        </p:confirmDialog>
+		
 	</ui:define>
 
 </ui:composition>

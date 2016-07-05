@@ -3,7 +3,6 @@ package hu.pe.munoz.commonrest.controller;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -13,10 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.common.helper.CommonConstants;
-import hu.pe.munoz.commondata.bo.SystemBo;
-import hu.pe.munoz.commondata.entity.SystemEntity;
-import hu.pe.munoz.commonrest.ResponseWrapper;
 import hu.pe.munoz.commonrest.helper.MessageString;
+import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 
 public abstract class BaseController {
 
@@ -28,44 +25,29 @@ public abstract class BaseController {
 	@Autowired
 	protected MessageString messageString;
 
-	@Autowired 
-	protected HttpSession session;
-	
 	@Autowired
 	protected HttpServletRequest request;
 
-	@Autowired
-	private SystemBo systemBo;
-
-	protected Locale getCurrentLocale() {
-		Locale locale = (Locale) session.getAttribute(CommonConstants.SESSKEY_CURRENT_LOCALE);
-		if (locale == null) {
-			try {
-				SystemEntity system = systemBo.getSystemByKey(CommonConstants.SYSTEM_KEY_LANGUAGE_CODE);
-				String languageCode = system.getValue();
-				locale = new Locale(languageCode);
-				session.setAttribute(CommonConstants.SESSKEY_CURRENT_LOCALE, locale);
-			} catch (DataException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	protected String getResponseMessage(String code, Object[] arguments) {
+		String languageCode = request.getHeader("Accept-Language");
+		if (languageCode != null) {			
+		    return messageString.get(code, arguments, new Locale(languageCode)).toString();
 		}
-		return locale;
+		return messageString.get(code, arguments).toString();
 	}
 	
-	protected void updateCurrentLocale(String languageCode) {
-		session.setAttribute(CommonConstants.SESSKEY_CURRENT_LOCALE, new Locale(languageCode));
+	protected String getResponseMessage(String code) {
+		return getResponseMessage(code, null);
 	}
-
+	
 	@ExceptionHandler(DataException.class)
 	public ResponseWrapper<Object> handleDataException(DataException e) {
 		log.debug("Data exception caught!");
-		String message = messageString.get(e.getMessage(), e.getData(), getCurrentLocale()).toString();
-		return new ResponseWrapper<Object>(CommonConstants.FAIL, null, e.getCode() + ": " + message);	
+		String message = getResponseMessage(e.getMessage(), e.getData());
+		return new ResponseWrapper<Object>(CommonConstants.FAIL, e.getCode() + ": " + message);	
 	}
 	
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class) 
 	public ResponseWrapper<Object> handleOtherException(Exception e) {
 		log.debug("Other exception caught!", e);
 		return new ResponseWrapper<Object>(CommonConstants.FAIL, null, e.toString());

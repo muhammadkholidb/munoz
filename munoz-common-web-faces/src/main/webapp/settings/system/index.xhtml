@@ -16,7 +16,9 @@
 	<ui:define name="inner">
 	
 		<h:form>
-	
+	    
+            <p:messages id="messages" closable="true" />
+        
 			<h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" rendered="#{systemBean.isModifyAllowed()}">
 				<p:commandButton value="#{lang['button.Edit']}"
 					styleClass="button-green" action="#{systemBean.gotoEdit()}"
@@ -27,7 +29,7 @@
 
 				<div class="ui-fluid">
 					<p:panelGrid columns="2"
-						columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-4"
+						columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-10"
 						layout="grid" styleClass="ui-panelgrid-blank">
 
 						<h:outputText value="#{lang['label.LogoImage']}" />

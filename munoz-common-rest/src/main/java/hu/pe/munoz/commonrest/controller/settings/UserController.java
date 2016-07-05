@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.bo.UserBo;
 import hu.pe.munoz.commondata.entity.UserEntity;
-import hu.pe.munoz.commonrest.ResponseWrapper;
 import hu.pe.munoz.commonrest.controller.BaseController;
+import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 
 @RestController
 @RequestMapping("/settings")

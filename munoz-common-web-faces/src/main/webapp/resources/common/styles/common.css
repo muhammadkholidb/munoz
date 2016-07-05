@@ -366,6 +366,16 @@ th.ui-state-default {
 	width: unset !important;
 }
 
+.ui-fileupload-simple.no-responsive .ui-fileupload-filename {
+    float: left;
+    margin: 5px !important;
+}
+
+.ui-fileupload-simple.no-responsive .ui-button {
+    width: unset !important;
+    float: left;
+}
+
 .ui-datatable-header.ui-widget-header {
     border-top: 1px solid #a6c9e2 !important;
     border-left: 1px solid #a6c9e2 !important;
@@ -390,16 +400,6 @@ th.ui-state-default {
 .ui-datatable tbody td.wrap {
     white-space: normal;
     word-wrap: break-word;
-}
-
-.ui-fileupload-simple .ui-fileupload-filename {
-    float: left;
-    margin: 5px !important;
-}
-
-.ui-fileupload-simple .ui-button {
-    width: unset !important;
-    float: left;
 }
 
 .ui-chkbox .ui-state-default, 
@@ -440,4 +440,17 @@ th.ui-state-default {
 .ui-paginator .ui-widget-header .ui-state-active {
     border: 1px solid #acdd4a;
     background: #6eac2c;
+}
+
+.ui-dialog .ui-widget-header {
+    background: #2191c0;
+}
+
+.ui-dialog .ui-state-hover, 
+.ui-dialog .ui-widget-content .ui-state-hover, 
+.ui-dialog .ui-widget-header .ui-state-hover, 
+.ui-dialog .ui-state-focus, 
+.ui-dialog .ui-widget-content .ui-state-focus, 
+.ui-dialog .ui-widget-header .ui-state-focus {
+    background: #79c9ec;
 }

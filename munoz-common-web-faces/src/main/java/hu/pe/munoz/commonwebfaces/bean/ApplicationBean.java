@@ -7,6 +7,7 @@ import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_TEMPLATE_CODE
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
@@ -18,11 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.rest.RESTClient;
 import hu.pe.munoz.common.rest.RESTResponse;
+import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
 
 @ManagedBean
 @ApplicationScoped
-public class ApplicationBean extends RESTBean implements Serializable {
+public class ApplicationBean implements Serializable {
 
     /**
      * 
@@ -38,11 +41,19 @@ public class ApplicationBean extends RESTBean implements Serializable {
     private String image;
     private String online;
 
+    private Properties applicationProperties;
+    private String hostUrl;
+    private RESTClient restClient;
+    
     @PostConstruct
-    private void init() {
-    	log.debug("@PostConstruct ApplicationBean ...");
-        RESTResponse response = restClient.doGet("localhost:8080/munoz-common-rest", "/settings/system/list", null);
+    private void postConstruct() {
+    	log.debug("Post construct ApplicationBean ...");    	
+    	applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
+    	hostUrl = applicationProperties.getProperty("rest.HostUrl");
+    	restClient = new RESTClient();
+        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/system/list", null);
         if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+        	log.debug("Data: " + response.getData());
         	setSystems((JSONArray) response.getData());
         } else {
         	log.error(response.getMessage());

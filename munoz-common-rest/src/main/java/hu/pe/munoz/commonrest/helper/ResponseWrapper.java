@@ -1,4 +1,4 @@
-package hu.pe.munoz.commonrest;
+package hu.pe.munoz.commonrest.helper;
 
 /**
  * 

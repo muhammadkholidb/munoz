@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import org.apache.commons.io.IOUtils;
@@ -52,16 +50,10 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     
     private List<JSONObject> supportedLanguages;
 
-    @ManagedProperty(value = "#{applicationBean}")
-    protected ApplicationBean applicationBean;
-
-    public void setApplicationBean(ApplicationBean applicationBean) {
-        this.applicationBean = applicationBean;
-    }
-
-    @PostConstruct
-    public void init() {
-    	log.info("@PostConstruct SystemBean ...");
+    @Override
+    protected void postConstruct() {
+    	super.postConstruct();
+    	log.info("Post construct SystemBean ...");
     	load();
     }
 
@@ -107,7 +99,6 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 	    	OutputStream output = null;
 	    	try {
 				input = imageUpload.getInputstream();
-				log.debug("Input stream: " + input);
 				output = new FileOutputStream(new File(imageDir, newFileName));
 				IOUtils.copy(input, output);
 				uploaded = true;
@@ -143,16 +134,22 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     	JSONObject params = new JSONObject();
     	params.put("systems", systems);
     	
-        RESTResponse response = restClient.doPost(hostUrl, "/settings/system/edit", params);
-        log.debug("Response: " + response);
-    	if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-    		applicationBean.setSystems((JSONArray) response.getData());
-    	} else {
-    		log.debug(response.getMessage());
-    		Messages.addGlobalError(response.getMessage());
-    		return "";
+    	// Update header Accept-Language in restClient if language changed
+    	if (!languageCode.equals(applicationBean.getLanguageCode())) {
+    	    log.debug("Language changed!");
+    	    restClient.setHeader("Accept-Language", languageCode);
     	}
-        
+    	
+        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/system/edit", params);
+        if (response != null) {        	
+        	if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+        		applicationBean.setSystems((JSONArray) response.getData());
+        		Messages.addFlashGlobalInfo(response.getMessage());	
+        	} else if (CommonConstants.FAIL.equals(response.getStatus())) {
+        		Messages.addGlobalError(response.getMessage());
+        		return "";
+        	}
+        }
         return gotoIndex();
     }
     

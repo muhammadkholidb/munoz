@@ -31,14 +31,15 @@
 	    
 	            <div class="ui-fluid">
 	                <p:panelGrid columns="2"
-	                    columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-4"
+	                    columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-10"
 	                    layout="grid" styleClass="ui-panelgrid-blank">
 	    
 	                    <h:outputText value="#{lang['label.LogoImage']}" />
 	                    <p:graphicImage value="/resources.image/#{systemBean.image}" height="30px" />
 	    
 	                    <h:outputText />
-	                    <p:fileUpload value="#{systemBean.imageUpload}" mode="simple" skinSimple="true" label="#{lang['button.ChooseFile']}" />
+	                    <p:fileUpload value="#{systemBean.imageUpload}" mode="simple" skinSimple="true" label="#{lang['button.ChooseFile']}" 
+	                       styleClass="no-responsive" />
 	    
 	                    <h:outputText value="#{lang['label.Language']}" />
 	                    <p:selectOneMenu value="#{systemBean.languageCode}">
