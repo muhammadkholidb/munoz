@@ -34,6 +34,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     private JSONArray userGroups;
     private JSONArray inputMenus;
     private String inputGroupName;
+    private String inputGroupActive;
 
     @ManagedProperty(value = "#{menuBean}")
     protected MenuBean menuBean;
@@ -145,6 +146,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     		}
     	}
     	inputGroupName = (String) editUserGroup.get("name");
+    	setInputGroupActive((String) editUserGroup.get("active"));
     	inputMenus = new JSONArray();
     	JSONArray menus = menuBean.getFlatMenus();
 	    for (Object o : menus) {
@@ -170,6 +172,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     public String doSaveEdit() {
 
         editUserGroup.put("name", inputGroupName.trim());
+        editUserGroup.put("active", inputGroupActive);
         
         JSONArray arrMenuPermission = new JSONArray();
         for (int i = 0; i < inputMenus.size(); i++) {
@@ -216,8 +219,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     		if (CommonConstants.SUCCESS.equals(response.getStatus())) {
         		Messages.addFlashGlobalInfo(response.getMessage());	
     		} else if (CommonConstants.FAIL.equals(response.getStatus())) {
-        		Messages.addGlobalError(response.getMessage());
-        		return "";
+        		Messages.addFlashGlobalError(response.getMessage());
     		}
     	}
     	return gotoIndex();
@@ -251,5 +253,13 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
 	public void setInputMenus(JSONArray inputMenus) {
 		this.inputMenus = inputMenus;
 	}
+
+    public String getInputGroupActive() {
+        return inputGroupActive;
+    }
+
+    public void setInputGroupActive(String inputGroupActive) {
+        this.inputGroupActive = inputGroupActive;
+    }
     
 }

@@ -26,7 +26,7 @@
 			<p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom" >
 
 				<f:facet name="header">
-					<h:outputText value="#{lang['label.UserGroupSetting']}" />
+					<h:outputText value="#{lang['label.UserGroupList']}" />
 				</f:facet>
 
 				<p:column headerText="#{lang['label.Name']}">
@@ -38,11 +38,12 @@
 				</p:column>
 
 				<p:column headerText="#{lang['label.Action']}" style="text-align: center;" >
-					<h:panelGroup layout="block" rendered="#{userGroupBean.isModifyAllowed()}" >
-						<p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userGroupBean.gotoEdit(group.id)}" />
+					<h:panelGroup layout="block" >
+						<p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userGroupBean.gotoEdit(group.id)}" rendered="#{userGroupBean.isModifyAllowed()}" />
 						<p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" 
 						  style="margin-left: 5px;" actionListener="#{userGroupBean.prepareRemoveUserGroup(group.id)}"
-						  oncomplete="PF('dlgConfirmation').show()" />
+						  oncomplete="PF('dlgConfirmation').show()" 
+						  rendered="#{userGroupBean.isModifyAllowed()}" />
 					</h:panelGroup>
 				</p:column>
 

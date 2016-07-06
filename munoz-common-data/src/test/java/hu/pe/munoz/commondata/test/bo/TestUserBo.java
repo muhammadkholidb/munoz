@@ -123,7 +123,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 			fail();
         } catch (DataException e) {
         	log.debug(e.toString());
-        	assertEquals(ExceptionCode.E0003, e.getCode());
+        	assertEquals(ExceptionCode.D0003, e.getCode());
         	assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS, e.getMessage());
         } catch (Exception e) {
 			log.error(e.toString(), e);
@@ -178,7 +178,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 			fail();
         } catch (DataException e) {
         	log.debug(e.toString());
-        	assertEquals(ExceptionCode.E0001, e.getCode());
+        	assertEquals(ExceptionCode.D0001, e.getCode());
         	assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
 			log.debug(e.toString());
@@ -206,7 +206,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 			fail();
         } catch (DataException e) {
         	log.debug(e.toString());
-        	assertEquals(ExceptionCode.E0003, e.getCode());
+        	assertEquals(ExceptionCode.D0003, e.getCode());
         	assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS, e.getMessage());
         } catch (Exception e) {
         	e.printStackTrace();
@@ -237,7 +237,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 			fail();
         } catch (DataException e) {
         	log.debug(e.toString());
-        	assertEquals(ExceptionCode.E0001, e.getCode());
+        	assertEquals(ExceptionCode.D0001, e.getCode());
         	assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
 			log.debug(e.toString());

@@ -67,7 +67,7 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
             fail();
         } catch (DataException e) {
             LOGGER.debug(e.toString());
-            assertEquals(ExceptionCode.E0001, e.getCode());
+            assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.SYSTEM_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,7 +129,7 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
             fail();
         } catch (DataException e) {
             LOGGER.debug(e.toString());
-            assertEquals(ExceptionCode.E0001, e.getCode());
+            assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.SYSTEM_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();

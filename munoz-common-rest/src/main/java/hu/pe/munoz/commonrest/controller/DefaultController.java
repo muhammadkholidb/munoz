@@ -30,12 +30,20 @@ public class DefaultController extends BaseController {
 		
     	ResponseWrapper<LoginUser> wrapper = new ResponseWrapper<LoginUser>();
     	if (username == null) {
-			throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_NOT_FOUND);
+			throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND);
 		}
 		UserEntity userEntity = userBo.getUser(username, username);
 		String hash = DigestUtils.sha1Hex(password);
 		if (!hash.equals(userEntity.getPassword())) {
-			throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_NOT_FOUND);
+			throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND);
+		}
+		
+		if (CommonConstants.NO.equals(userEntity.getActive())) {
+		    throw new DataException(ExceptionCode.R0001, ErrorMessageConstants.CANT_LOGIN_CAUSE_USER_NOT_ACTIVE);
+		}
+		
+		if (CommonConstants.NO.equals(userEntity.getUserGroup().getActive())) {
+		    throw new DataException(ExceptionCode.R0001, ErrorMessageConstants.CANT_LOGIN_CAUSE_USER_GROUP_NOT_ACTIVE);
 		}
 		
 		LoginUser loginUser = mapper.map(userEntity, LoginUser.class);

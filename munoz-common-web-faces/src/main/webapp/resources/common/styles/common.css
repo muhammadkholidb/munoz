@@ -435,6 +435,23 @@ th.ui-state-default {
     background: #2191c0;
 }
 
+.ui-paginator .ui-state-default, 
+.ui-paginator .ui-widget-content .ui-state-default, 
+.ui-paginator .ui-widget-header .ui-state-default {
+    border: 1px solid #77d5f7;
+    background: #0078ae;
+}
+
+.ui-paginator .ui-state-hover, 
+.ui-paginator .ui-widget-content .ui-state-hover, 
+.ui-paginator .ui-widget-header .ui-state-hover, 
+.ui-paginator .ui-state-focus, 
+.ui-paginator .ui-widget-content .ui-state-focus, 
+.ui-paginator .ui-widget-header .ui-state-focus {
+    border: 1px solid #79c9ec;
+    background: #79c9ec;
+}
+
 .ui-paginator .ui-state-active, 
 .ui-paginator .ui-widget-content .ui-state-active, 
 .ui-paginator .ui-widget-header .ui-state-active {

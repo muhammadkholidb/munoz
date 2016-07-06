@@ -59,7 +59,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             fail();
         } catch (DataException e) {
             log.debug(e.toString());
-            assertEquals(ExceptionCode.E0001, e.getCode());
+            assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,7 +165,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             fail();
         } catch (DataException e) {
             log.debug(e.toString());
-            assertEquals(ExceptionCode.E0003, e.getCode());
+            assertEquals(ExceptionCode.D0003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,7 +231,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             fail();
         } catch (DataException e) {
             log.debug(e.toString());
-            assertEquals(ExceptionCode.E0001, e.getCode());
+            assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,7 +253,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             fail();
         } catch (DataException e) {
             log.debug(e.toString());
-            assertEquals(ExceptionCode.E0003, e.getCode());
+            assertEquals(ExceptionCode.D0003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,7 +270,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             fail();
         } catch (DataException e) {
             log.debug(e.toString());
-            assertEquals(ExceptionCode.E0002, e.getCode());
+            assertEquals(ExceptionCode.D0002, e.getCode());
             assertEquals(ErrorMessageConstants.CANT_REMOVE_USER_GROUP_CAUSE_USER_EXISTS, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -295,7 +295,7 @@ public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTes
             fail();
         } catch (DataException e) {
         	log.debug(e.toString());
-        	assertEquals(ExceptionCode.E0001, e.getCode());
+        	assertEquals(ExceptionCode.D0001, e.getCode());
         	assertEquals(ErrorMessageConstants.USER_GROUP_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();

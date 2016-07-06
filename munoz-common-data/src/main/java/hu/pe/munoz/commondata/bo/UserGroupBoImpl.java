@@ -39,7 +39,7 @@ public class UserGroupBoImpl implements UserGroupBo {
     public UserGroupEntity getOneUserGroup(Long id) throws DataException {
         UserGroupEntity userGroup = userGroupDao.findById(id);
         if (userGroup == null) {
-            throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
+            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }
         return userGroup;
     }
@@ -48,7 +48,7 @@ public class UserGroupBoImpl implements UserGroupBo {
     public UserGroupEntity getOneUserGroupWithMenuPermissions(Long id) throws DataException {
     	UserGroupEntity userGroup = userGroupDao.findByIdWithMenuPermissions(id);
         if (userGroup == null) {
-            throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
+            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }
         return userGroup;
     }
@@ -59,7 +59,7 @@ public class UserGroupBoImpl implements UserGroupBo {
     	// Find other user group with name
         UserGroupEntity findUserGroup = userGroupDao.findByName(userGroupEntity.getName());
         if (findUserGroup != null) {
-            throw new DataException(ExceptionCode.E0003, ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, new Object[] { findUserGroup.getName() });
+            throw new DataException(ExceptionCode.D0003, ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, new Object[] { findUserGroup.getName() });
         }
         
         // Save new user group
@@ -81,13 +81,13 @@ public class UserGroupBoImpl implements UserGroupBo {
         // Find by ID
         UserGroupEntity findUserGroupById = userGroupDao.findById(userGroupEntity.getId());
         if (findUserGroupById == null) {
-            throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
+            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }
         
         // Find another user group having the same name
         UserGroupEntity findUserGroupByName = userGroupDao.findByName(userGroupEntity.getName());
         if ((findUserGroupByName != null) && (findUserGroupByName.getId() != userGroupEntity.getId())) {
-            throw new DataException(ExceptionCode.E0003, ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, new Object[] { findUserGroupByName.getName() });
+            throw new DataException(ExceptionCode.D0003, ErrorMessageConstants.USER_GROUP_ALREADY_EXISTS, new Object[] { findUserGroupByName.getName() });
         }
         
         // Update user group
@@ -117,13 +117,13 @@ public class UserGroupBoImpl implements UserGroupBo {
         // Find by ID
         UserGroupEntity findUserGroupById = userGroupDao.findById(id);
         if (findUserGroupById == null) {
-            throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
+            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }
         
         // Find users in this group
         List<UserEntity> userList = userDao.findByUserGroupId(id);
         if (userList != null && userList.size() > 0) {
-            throw new DataException(ExceptionCode.E0002, ErrorMessageConstants.CANT_REMOVE_USER_GROUP_CAUSE_USER_EXISTS, new Object[] {userList.size()});
+            throw new DataException(ExceptionCode.D0002, ErrorMessageConstants.CANT_REMOVE_USER_GROUP_CAUSE_USER_EXISTS, new Object[] {findUserGroupById.getName(), userList.size()});
         }
 
         // Remove menus for this user group first to avoid foreign key constraint violation

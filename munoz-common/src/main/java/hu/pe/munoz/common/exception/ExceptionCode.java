@@ -5,16 +5,20 @@ public enum ExceptionCode {
     /**
      * Entity not found
      */
-    E0001, 
+    D0001, 
     
     /**
      * Can't remove cause other entity
      */
-    E0002, 
+    D0002, 
     
     /**
      * Entity already exists
      */
-    E0003
+    D0003,
     
+    /**
+     * Data status not active
+     */
+    R0001
 }

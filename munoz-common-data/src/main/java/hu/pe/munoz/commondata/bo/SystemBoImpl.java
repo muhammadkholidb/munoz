@@ -29,7 +29,7 @@ public class SystemBoImpl implements SystemBo {
     public SystemEntity getSystemByKey(String key) throws DataException {
         SystemEntity systemEntity = systemDao.findByKey(key);
         if (systemEntity == null) {
-            throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.SYSTEM_NOT_FOUND, new Object[] {key});
+            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.SYSTEM_NOT_FOUND, new Object[] {key});
         }
         return systemEntity; 
     }
@@ -38,7 +38,7 @@ public class SystemBoImpl implements SystemBo {
     public SystemEntity getOneSystem(Long id) throws DataException {
         SystemEntity systemEntity = systemDao.findById(id);
         if (systemEntity == null) {
-            throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.SYSTEM_NOT_FOUND);
+            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.SYSTEM_NOT_FOUND);
         }
         return systemEntity;
     }
@@ -49,7 +49,7 @@ public class SystemBoImpl implements SystemBo {
         for (SystemEntity system : systemList) {
             SystemEntity findSystem = systemDao.findById(system.getId());
             if (findSystem == null) {
-                throw new DataException(ExceptionCode.E0001, ErrorMessageConstants.SYSTEM_NOT_FOUND, new Object[] { system.getKey() });
+                throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.SYSTEM_NOT_FOUND, new Object[] { system.getKey() });
             }
             updatedList.add(systemDao.update(system));
         }

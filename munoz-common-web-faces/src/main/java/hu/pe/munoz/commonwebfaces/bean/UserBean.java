@@ -1,33 +1,39 @@
 package hu.pe.munoz.commonwebfaces.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import static hu.pe.munoz.commonwebfaces.helper.PageMode.ADD;
+import static hu.pe.munoz.commonwebfaces.helper.PageMode.EDIT;
+import static hu.pe.munoz.commonwebfaces.helper.PageMode.INDEX;
 
-import javax.annotation.PostConstruct;
+import java.io.Serializable;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.omnifaces.util.Faces;
+import org.omnifaces.util.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.CommonUtils;
-import hu.pe.munoz.commonwebfaces.helper.PageMode;
+import hu.pe.munoz.common.rest.RESTResponse;
 
 @ManagedBean
 @ViewScoped
-public class UserBean implements Serializable {
+public class UserBean extends DefaultBehaviorBean implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
     
-    private List<HashMap> userList;
+    private Logger log = LoggerFactory.getLogger(UserBean.class);
+    
+    private JSONArray users;
+    private JSONArray userGroups;
     
     private String inputFirstName;
     private String inputLastName;
@@ -35,56 +41,174 @@ public class UserBean implements Serializable {
     private String inputEmail;
     private String inputActive;
     private String inputPassword;
+    private Long inputUserGroupId;
     
-    private int mode = PageMode.INDEX;
-    
-    @PostConstruct
-    public void init() {
-        userList = loadUsers();
-        inputPassword = CommonUtils.getDefaultRandomPassword();
-    }
-
-    private List<HashMap> loadUsers() {
-        List<HashMap> list = new ArrayList<HashMap>();
-        for (int i = 0; i < 5; i++) {
-            HashMap map = new HashMap();
-            map.put("firstName", "First" + i);
-            map.put("lastName", "Last" + i);
-            map.put("username", "Username" + i);
-            map.put("email", "Email" + i);
-            map.put("status", "Status" + i);
-            list.add(map);
+    @Override
+    protected void postConstruct() {
+        super.postConstruct();
+        log.debug("Post construct UserBean ...");
+        switch (mode) {
+        case INDEX:         
+            loadUsers();
+            break;
+        case ADD:
+            prepareAdd();
+            break;
+        case EDIT:
+            prepareEdit();
+            break;
         }
-        return  list;
     }
     
-    private List<HashMap> loadUserGroups() {
-        return null;
+    private void loadUsers() {
+        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/user/list", null);
+        if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+            users = (JSONArray) response.getData();
+        } else {
+            log.debug(response.getMessage());
+        }
+    }
+    
+    private void loadUserGroups() {
+        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/user-group/list", null);
+        if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+            userGroups = (JSONArray) response.getData();
+        } else {
+            log.debug(response.getMessage());
+        }
     }
     
     public void generateRandom() {
         inputPassword = CommonUtils.getDefaultRandomPassword();
     }
     
-    public String addUser() {
-        return "add?faces-redirect=true";
-    }
-
-    public String cancelForm() {
-        return "list?faces-redirect=true";
+    private void prepareAdd() {
+        loadUserGroups();
+        generateRandom();
     }
     
-    public String saveForm() {
-        // Call rest to save data
-        return "list?faces-redirect=true";
+    @SuppressWarnings("unchecked")
+    public String doSaveAdd() {
+
+        JSONObject jsonUserGroup = new JSONObject();
+        jsonUserGroup.put("id", inputUserGroupId);
+        
+        JSONObject jsonUser = new JSONObject();
+        jsonUser.put("firstName", inputFirstName.trim());
+        jsonUser.put("lastName", inputLastName.trim());
+        jsonUser.put("username", inputUsername.trim());
+        jsonUser.put("email", inputEmail.trim());
+        jsonUser.put("password", DigestUtils.sha1Hex(inputPassword));
+        jsonUser.put("active", CommonConstants.YES);
+        jsonUser.put("userGroup", jsonUserGroup);
+        
+        JSONObject parameters = new JSONObject();
+        parameters.put("user", jsonUser);
+        
+        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/user/add", parameters);
+        if (response != null) {         
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                Messages.addFlashGlobalInfo(response.getMessage());
+            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                Messages.addGlobalError(response.getMessage());
+                return "";
+            }
+        }
+        return gotoIndex();
     }
     
-    public List<HashMap> getUserList() {
-        return userList;
+    private Long removeId;
+    
+    public void prepareRemoveUser(Long removeId) {
+        this.removeId = removeId;
     }
 
-    public void setUserList(List<HashMap> userList) {
-        this.userList = userList;
+    @SuppressWarnings("unchecked")
+    public String doRemoveUser() {
+        JSONObject parameters = new JSONObject();
+        parameters.put("userId", removeId);
+        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/user/remove", parameters);
+        if (response != null) {
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                Messages.addFlashGlobalInfo(response.getMessage()); 
+            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                Messages.addFlashGlobalInfo(response.getMessage());
+            }
+        }
+        return gotoIndex();
+    }
+    
+    public String gotoEdit(Long editId) {
+        Faces.getFlash().put("editId", editId);
+        return gotoEdit();
+    }
+
+    private JSONObject editUser;
+    
+    @SuppressWarnings("unchecked")
+    public void prepareEdit() {
+        Long editId = (Long) Faces.getFlash().get("editId");
+        JSONObject parameters = new JSONObject();
+        parameters.put("userId", editId);
+        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/user/find", parameters);
+        if (response != null) {
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                editUser = (JSONObject) response.getData();
+            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                Messages.addGlobalError(response.getMessage());
+                return;
+            }
+        }
+        inputFirstName = (String) editUser.get("firstName");
+        inputLastName = (String) editUser.get("lastName");
+        inputUsername = (String) editUser.get("username");
+        inputEmail = (String) editUser.get("email");
+        inputActive = (String) editUser.get("active");
+        inputUserGroupId = (Long) ((JSONObject) editUser.get("userGroup")).get("id");
+        loadUserGroups();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public String doSaveEdit() {
+        editUser.put("firstName", inputFirstName.trim());
+        editUser.put("lastName", inputLastName.trim());
+        editUser.put("username", inputUsername.trim());
+        editUser.put("email", inputEmail.trim());
+        editUser.put("active", inputActive);
+        if ((inputPassword != null) && !CommonConstants.EMPTY_STRING.equals(inputPassword)) {
+            editUser.put("password", DigestUtils.sha1Hex(inputPassword));
+        }
+        JSONObject userGroup = new JSONObject();
+        userGroup.put("id", inputUserGroupId);
+        editUser.put("userGroup", userGroup);
+
+        JSONObject parameters = new JSONObject();
+        parameters.put("user", editUser);
+        
+        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/user/edit", parameters);
+        if (response != null) {         
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                Messages.addFlashGlobalInfo(response.getMessage());
+            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                Messages.addGlobalError(response.getMessage());
+                return "";
+            }
+        }
+        return gotoIndex();
+    }
+    
+    @Override
+    protected String getMenuCode() {
+        return "menu.settings.user";
+    }
+
+    
+    public JSONArray getUsers() {
+        return users;
+    }
+
+    public void setUsers(JSONArray users) {
+        this.users = users;
     }
 
     public String getInputFirstName() {
@@ -133,6 +257,22 @@ public class UserBean implements Serializable {
 
     public void setInputPassword(String inputPassword) {
         this.inputPassword = inputPassword;
+    }
+
+    public JSONArray getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(JSONArray userGroups) {
+        this.userGroups = userGroups;
+    }
+
+    public Long getInputUserGroupId() {
+        return inputUserGroupId;
+    }
+
+    public void setInputUserGroupId(Long inputUserGroupId) {
+        this.inputUserGroupId = inputUserGroupId;
     }
     
 }

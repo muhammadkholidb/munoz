@@ -27,7 +27,7 @@
 	                ajax="false" immediate="true" />
 	        </h:panelGroup>
                 
-            <p:panel header="#{lang['label.AddUserGroup']}">
+            <p:panel header="#{lang['label.EditUserGroup']}"> 
         
                 <div class="ui-fluid">
                     <p:panelGrid columns="2"
@@ -58,6 +58,12 @@
                             			            
 				        </p:dataTable>
                         
+                        <h:outputText value="#{lang['label.Active']}" />
+                        <p:selectOneMenu value="#{userGroupBean.inputGroupActive}"> 
+                            <f:selectItem itemLabel="#{lang['label.Yes']}" itemValue="Y" />
+                            <f:selectItem itemLabel="#{lang['label.No']}" itemValue="N" />
+                        </p:selectOneMenu>
+    
                     </p:panelGrid>
                 </div>
         

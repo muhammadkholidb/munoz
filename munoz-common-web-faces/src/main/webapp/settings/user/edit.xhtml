@@ -8,22 +8,22 @@
 
     <f:metadata>
         <f:viewAction action="#{userBean.pageCheck()}" />
-    </f:metadata>
+    </f:metadata> 
 
 	<ui:define name="title">#{lang['title.User']}</ui:define>
 
 	<ui:define name="inner">
 		
-        <h:form id="formAdd">
+        <h:form id="formEdit">
             
             <p:messages id="messages" closable="true" />
 	            
 			<h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" >
-				<p:commandButton value="#{lang['button.Save']}" styleClass="button-green" action="#{userBean.doSaveAdd()}" ajax="false" />
+				<p:commandButton value="#{lang['button.Save']}" styleClass="button-green" action="#{userBean.doSaveEdit()}" ajax="false" />
 				<p:commandButton value="#{lang['button.Cancel']}" styleClass="button-grey" action="#{userBean.gotoIndex()}" ajax="false" immediate="true" />
 			</h:panelGroup>
 	
-			<p:panel header="#{lang['label.AddUser']}"> 
+			<p:panel header="#{lang['label.EditUser']}"> 
 	
 				<div class="ui-fluid">
 					<p:panelGrid columns="2"
@@ -43,7 +43,7 @@
 						<p:inputText value="#{userBean.inputEmail}" placeholder="#{lang['label.Email']}" required="true" requiredMessage="#{lang['required.EmailCannotBeEmpty']}" />
 	
 						<h:outputText value="#{lang['label.Password']}" />
-					    <p:inputText value="#{userBean.inputPassword}" id="inputPassword" placeholder="#{lang['label.Password']}" required="true" requiredMessage="#{lang['required.PasswordCannotBeEmpty']}" />
+					    <p:inputText value="#{userBean.inputPassword}" id="inputPassword" placeholder="#{lang['label.Password']}" />
 						
 						<h:outputText />
 						<p:commandButton value="#{lang['button.Randomize']}" actionListener="#{userBean.generateRandom()}" 
@@ -55,14 +55,20 @@
                         <p:selectOneMenu value="#{userBean.inputUserGroupId}"> 
                             <f:selectItems value="#{userBean.userGroups}" var="group" itemLabel="#{group.name}" itemValue="#{group.id}" />
                         </p:selectOneMenu>
-        
+                            
+                        <h:outputText value="#{lang['label.Active']}" />
+                        <p:selectOneMenu value="#{userBean.inputActive}"> 
+                            <f:selectItem itemLabel="#{lang['label.Yes']}" itemValue="Y" />
+                            <f:selectItem itemLabel="#{lang['label.No']}" itemValue="N" />
+                        </p:selectOneMenu>
+    
 					</p:panelGrid>
 				</div>
 	
 			</p:panel>
 			
 			<h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block" >
-				<p:commandButton value="#{lang['button.Save']}" styleClass="button-green" action="#{userBean.doSaveAdd()}" ajax="false" /> 
+				<p:commandButton value="#{lang['button.Save']}" styleClass="button-green" action="#{userBean.doSaveEdit()}" ajax="false" /> 
 				<p:commandButton value="#{lang['button.Cancel']}" styleClass="button-grey" action="#{userBean.gotoIndex()}" ajax="false" immediate="true" />
 			</h:panelGroup>
     
