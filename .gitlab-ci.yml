@@ -1,4 +1,4 @@
 image: maven
 
 build:
-  script: "mvn clean install deploy -DskipTests -s settings.xml -Dsettings.security=settings-security.xml"
+  script: "mvn clean install deploy -DskipTests -s .m2/settings.xml -Dsettings.security=.m2/settings-security.xml"

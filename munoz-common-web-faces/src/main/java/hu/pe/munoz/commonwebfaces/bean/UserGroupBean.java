@@ -72,20 +72,13 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     @SuppressWarnings("unchecked")
 	private void prepareAdd() {
     	// Load menus
-    	JSONArray menus = menuBean.getMenus(); // Two level menus: parent and children.
+    	JSONArray menus = menuBean.getFlatMenus(); 
     	inputMenus = new JSONArray();
     	for (int i = 0; i < menus.size(); i++) {
     		JSONObject menu = (JSONObject) menus.get(i);
     		menu.put("viewBoolean", false);
     		menu.put("modifyBoolean", false);
     		inputMenus.add(menu);
-    		JSONArray submenus = (JSONArray) menu.get("submenus");
-    		for (int j = 0; j < submenus.size(); j++) {
-    			JSONObject submenu = (JSONObject) submenus.get(j);
-    			submenu.put("viewBoolean", false);
-    			submenu.put("modifyBoolean", false);
-    			inputMenus.add(submenus.get(j));
-    		}
     	}
     }
     
@@ -146,7 +139,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     		}
     	}
     	inputGroupName = (String) editUserGroup.get("name");
-    	setInputGroupActive((String) editUserGroup.get("active"));
+    	inputGroupActive = (String) editUserGroup.get("active");
     	inputMenus = new JSONArray();
     	JSONArray menus = menuBean.getFlatMenus();
 	    for (Object o : menus) {

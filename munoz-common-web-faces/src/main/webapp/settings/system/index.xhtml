@@ -43,12 +43,14 @@
 								itemValue="#{language.code}" />
 						</p:selectOneMenu>
 
+						<ui:remove> 
 						<h:outputText value="#{lang['label.Online']}" />
 						<p:selectOneMenu value="#{systemBean.online}" disabled="true">
 							<f:selectItem itemValue="y" itemLabel="#{lang['label.Yes']}" />
 							<f:selectItem itemValue="n" itemLabel="#{lang['label.No']}" />
 						</p:selectOneMenu>
-
+						</ui:remove>
+						
 					</p:panelGrid>
 				</div>
 

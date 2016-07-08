@@ -24,7 +24,7 @@ public class ImageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Properties applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-		String imageDir = applicationProperties.getProperty("directory.Images");
+		String imageDir = System.getProperty("user.home") + applicationProperties.getProperty("directory.Images");
 		String filename = req.getPathInfo().substring(1);
 		File file = new File(imageDir, filename);
 		resp.setHeader("Content-Type", getServletContext().getMimeType(filename));

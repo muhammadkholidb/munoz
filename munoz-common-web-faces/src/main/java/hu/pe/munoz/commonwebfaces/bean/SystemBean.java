@@ -90,7 +90,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 			}
 			
 			String uploadedFileName = imageUpload.getFileName();
-			String imageDir = applicationProperties.getProperty("directory.Images");
+			String imageDir = System.getProperty("user.home") + applicationProperties.getProperty("directory.Images");
 			
 			newFileName = UUID.randomUUID().toString() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
 

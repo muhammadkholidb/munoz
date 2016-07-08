@@ -47,13 +47,15 @@
 	                            var="language" itemLabel="#{language.name}"
 	                            itemValue="#{language.code}" />
 	                    </p:selectOneMenu>
-	    
+	    				
+	    				<ui:remove>  
 	                    <h:outputText value="#{lang['label.Online']}" />
 	                    <p:selectOneMenu value="#{systemBean.online}">
 	                        <f:selectItem itemValue="y" itemLabel="#{lang['label.Yes']}" />
 	                        <f:selectItem itemValue="n" itemLabel="#{lang['label.No']}" />
 	                    </p:selectOneMenu>
-	    
+	    				</ui:remove>
+	    				
 	                </p:panelGrid>
 	            </div>
 	    

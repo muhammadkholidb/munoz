@@ -13,11 +13,11 @@
 	<ui:define name="title">#{lang['title.User']}</ui:define>
 
 	<ui:define name="inner">
-
+		
         <h:form>
             
             <p:messages id="messages" closable="true" />
-	        
+ 				        
 			<h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" rendered="#{userBean.isModifyAllowed()}" >
 				<p:commandButton value="#{lang['button.Add']}"
 					styleClass="button-green" action="#{userBean.gotoAdd()}"
@@ -30,7 +30,7 @@
 					<h:outputText value="#{lang['label.UserList']}" /> 
 				</f:facet>
 	
-				<p:column headerText="#{lang['label.FullName']}" styleClass="wrap" >
+				<p:column headerText="#{lang['label.Name']}" styleClass="wrap" >
 					<h:outputText value="#{user.firstName} #{user.lastName}" />
 				</p:column>
 	
