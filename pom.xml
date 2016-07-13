@@ -192,6 +192,12 @@
 				<version>${version.primefaces-themes}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.primefaces.themes</groupId>
+				<artifactId>start</artifactId>
+				<version>${version.primefaces-themes}</version>
+			</dependency>
+
 			<!-- MySQL Java Connector dependency -->
 			<dependency>
 				<groupId>mysql</groupId>
