@@ -24,7 +24,7 @@ import hu.pe.munoz.commondata.entity.UserEntity;
 import hu.pe.munoz.commondata.entity.UserGroupEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ContextConfiguration(locations = "classpath:munoz-common-data-test-context.xml")
 public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -85,7 +85,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST SUCCESS add user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
-        
+
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName("Brian");
         userEntity.setLastName("Mc Knight");
@@ -95,13 +95,13 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         userEntity.setActive(CommonConstants.YES);
         userEntity.setUserGroup(userGroup);
         try {
-			userEntity = userBo.addUser(userEntity);
-			assertEquals(3L, userEntity.getId().longValue());
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.debug(e.toString());
-			fail();
-		}
+            userEntity = userBo.addUser(userEntity);
+            assertEquals(3L, userEntity.getId().longValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.debug(e.toString());
+            fail();
+        }
     }
 
     @Test
@@ -109,7 +109,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST FAIL add user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
-        
+
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName("John");
         userEntity.setLastName("Doe");
@@ -119,16 +119,16 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         userEntity.setActive(CommonConstants.YES);
         userEntity.setUserGroup(userGroup);
         try {
-			userBo.addUser(userEntity);
-			fail();
+            userBo.addUser(userEntity);
+            fail();
         } catch (DataException e) {
-        	log.debug(e.toString());
-        	assertEquals(ExceptionCode.D0003, e.getCode());
-        	assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS, e.getMessage());
+            log.debug(e.toString());
+            assertEquals(ExceptionCode.D0003, e.getCode());
+            assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, e.getMessage());
         } catch (Exception e) {
-			log.error(e.toString(), e);
-			fail(e.toString());
-		}
+            log.error(e.toString(), e);
+            fail(e.toString());
+        }
     }
 
     @Test
@@ -136,7 +136,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST SUCCESS edit user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
-        
+
         UserEntity userEntity = new UserEntity();
         userEntity.setId(2L);
         userEntity.setFirstName("Fulan");
@@ -147,15 +147,15 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         userEntity.setActive(CommonConstants.NO);
         userEntity.setUserGroup(userGroup);
         try {
-			userEntity = userBo.editUser(userEntity);
-			assertEquals("fulan2", userEntity.getUsername());
-			assertEquals("fulan2@yahoo.com", userEntity.getEmail());
-			assertEquals(CommonConstants.NO, userEntity.getActive());
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.debug(e.toString());
-			fail();
-		}
+            userEntity = userBo.editUser(userEntity);
+            assertEquals("fulan2", userEntity.getUsername());
+            assertEquals("fulan2@yahoo.com", userEntity.getEmail());
+            assertEquals(CommonConstants.NO, userEntity.getActive());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.debug(e.toString());
+            fail();
+        }
     }
 
     @Test
@@ -163,7 +163,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST FAIL 1 edit user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
-        
+
         UserEntity userEntity = new UserEntity();
         userEntity.setId(20L);
         userEntity.setFirstName("John");
@@ -174,16 +174,16 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         userEntity.setActive(CommonConstants.YES);
         userEntity.setUserGroup(userGroup);
         try {
-			userBo.editUser(userEntity);
-			fail();
+            userBo.editUser(userEntity);
+            fail();
         } catch (DataException e) {
-        	log.debug(e.toString());
-        	assertEquals(ExceptionCode.D0001, e.getCode());
-        	assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
+            log.debug(e.toString());
+            assertEquals(ExceptionCode.D0001, e.getCode());
+            assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-			log.debug(e.toString());
-			fail(e.toString());
-		}
+            log.debug(e.toString());
+            fail(e.toString());
+        }
     }
 
     @Test
@@ -191,28 +191,28 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST FAIL 2 edit user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
-        
+
         UserEntity userEntity = new UserEntity();
         userEntity.setId(2L);
         userEntity.setFirstName("John");
         userEntity.setLastName("Doe");
-        userEntity.setUsername("johndoe");
+        userEntity.setUsername("johndoe2");
         userEntity.setEmail("johndoe@yahoo.com");
         userEntity.setPassword("mbp0jhai");
         userEntity.setActive(CommonConstants.NO);
         userEntity.setUserGroup(userGroup);
         try {
-			userBo.editUser(userEntity);
-			fail();
+            userBo.editUser(userEntity);
+            fail();
         } catch (DataException e) {
-        	log.debug(e.toString());
-        	assertEquals(ExceptionCode.D0003, e.getCode());
-        	assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS, e.getMessage());
+            log.debug(e.toString());
+            assertEquals(ExceptionCode.D0003, e.getCode());
+            assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, e.getMessage());
         } catch (Exception e) {
-        	e.printStackTrace();
-			log.error(e.toString(), e);
-			fail(e.toString());
-		}
+            e.printStackTrace();
+            log.error(e.toString(), e);
+            fail(e.toString());
+        }
     }
 
     @Test
@@ -220,12 +220,12 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST SUCCESS remove user ...");
         Long id = 2L;
         try {
-			userBo.removeUser(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.debug(e.toString());
-			fail();
-		}
+            userBo.removeUser(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.debug(e.toString());
+            fail();
+        }
     }
 
     @Test
@@ -233,16 +233,16 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
         log.debug("TEST FAIL remove user ...");
         Long id = 100L;
         try {
-			userBo.removeUser(id);
-			fail();
+            userBo.removeUser(id);
+            fail();
         } catch (DataException e) {
-        	log.debug(e.toString());
-        	assertEquals(ExceptionCode.D0001, e.getCode());
-        	assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
+            log.debug(e.toString());
+            assertEquals(ExceptionCode.D0001, e.getCode());
+            assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-			log.debug(e.toString());
-			fail(e.toString());
-		}
+            log.debug(e.toString());
+            fail(e.toString());
+        }
     }
-    
+
 }

@@ -9,17 +9,6 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     
     <!-- Data Source Declaration -->
-    <!--  
-    <bean id="dataSource" class="org.h2.jdbcx.JdbcConnectionPool" destroy-method="dispose">
-	    <constructor-arg>
-	        <bean class="org.h2.jdbcx.JdbcDataSource">
-	            <property name="url" value="jdbc:h2:tcp://localhost:9092/file:~/Server/h2/data/munozdb"/>
-	            <property name="user" value="root"/>
-	            <property name="password" value="root"/>
-	         </bean>
-	    </constructor-arg>
-    </bean>  -->
-    
     <bean id="dataSource" class="org.h2.jdbcx.JdbcConnectionPool" destroy-method="dispose">
 	    <constructor-arg>
 	        <bean class="org.h2.jdbcx.JdbcDataSource">

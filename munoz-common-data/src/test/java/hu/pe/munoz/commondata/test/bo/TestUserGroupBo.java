@@ -26,7 +26,7 @@ import hu.pe.munoz.commondata.entity.UserGroupEntity;
 import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ContextConfiguration(locations = "classpath:munoz-common-data-test-context.xml")
 public class TestUserGroupBo extends AbstractTransactionalJUnit4SpringContextTests {
     
     private Logger log = LoggerFactory.getLogger(this.getClass());
