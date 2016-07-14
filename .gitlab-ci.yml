@@ -1,4 +1,22 @@
 image: maven
 
-build:
-  script: "mvn clean install deploy -DskipTests -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml"
+stages:
+  - test
+  - build
+  - deploy
+  
+testJob:
+  stage: test
+  script:
+  - mvn test -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
+  
+buildJob:
+  stage: build
+  script:
+  - mvn install -DskipTests -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
+  
+deployJob:
+  stage: deploy
+  script: 
+  - mvn deploy -DskipTests -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
+  
