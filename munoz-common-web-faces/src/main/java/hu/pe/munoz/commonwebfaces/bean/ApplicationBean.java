@@ -19,8 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
-import hu.pe.munoz.common.rest.RESTClient;
-import hu.pe.munoz.common.rest.RESTResponse;
+import hu.pe.munoz.common.helper.HttpClient;
+import hu.pe.munoz.common.helper.HttpClientResponse;
 import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
 
 @ManagedBean
@@ -28,12 +28,12 @@ import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
 public class ApplicationBean implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    
+
     private JSONArray systems;
     private Locale locale;
     private String languageCode;
@@ -43,57 +43,63 @@ public class ApplicationBean implements Serializable {
 
     private Properties applicationProperties;
     private String hostUrl;
-    private RESTClient restClient;
-    
+
     @PostConstruct
-    private void postConstruct() {
-    	log.debug("Post construct ApplicationBean ...");    	
-    	applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-    	hostUrl = applicationProperties.getProperty("rest.HostUrl");
-    	restClient = new RESTClient();
-        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/system/list", null);
-        if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-        	log.debug("Data: " + response.getData());
-        	setSystems((JSONArray) response.getData());
-        } else {
-        	log.error(response.getMessage());
+    public void postConstruct() {
+        log.debug("Post construct ApplicationBean ...");
+        applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
+        hostUrl = applicationProperties.getProperty("rest.HostUrl");
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.setHost(hostUrl);
+        httpClient.setPath("/settings/system/list");
+        
+        HttpClientResponse response = httpClient.get();
+
+        if (response != null) {
+            
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                setSystems((JSONArray) response.getData());
+            } else {
+                log.error(response.getMessage());
+            }
         }
     }
-    
+
     public JSONArray getSystems() {
-    	return this.systems;
+        return this.systems;
     }
-    
+
     public void setSystems(JSONArray systems) {
-    	this.systems = systems;
+        this.systems = systems;
         for (Object o : systems) {
-        	
-        	JSONObject json = (JSONObject) o;
-        	String key = (String) json.get("key");
-        	String value = (String) json.get("value");
-        	
-        	switch (key) {
-			case SYSTEM_KEY_LANGUAGE_CODE:
-				languageCode = value;
-				locale = new Locale(languageCode);
-				break;
-				
-			case SYSTEM_KEY_TEMPLATE_CODE:
-				templateCode = value;
-				break;
-				
-			case SYSTEM_KEY_ONLINE:
-				online = value;
-				break;
-				
-			case SYSTEM_KEY_IMAGE:
-				image = value;
-				break;
-				
-			}        	
+
+            JSONObject json = (JSONObject) o;
+            String key = (String) json.get("key");
+            String value = (String) json.get("value");
+
+            switch (key) {
+                case SYSTEM_KEY_LANGUAGE_CODE:
+                    languageCode = value;
+                    locale = new Locale(languageCode);
+                    break;
+
+                case SYSTEM_KEY_TEMPLATE_CODE:
+                    templateCode = value;
+                    break;
+
+                case SYSTEM_KEY_ONLINE:
+                    online = value;
+                    break;
+
+                case SYSTEM_KEY_IMAGE:
+                    image = value;
+                    break;
+
+            }
         }
     }
-    
+
     public Locale getLocale() {
         return locale;
     }
@@ -101,7 +107,7 @@ public class ApplicationBean implements Serializable {
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
-    
+
     public String getLanguageCode() {
         return languageCode;
     }
@@ -118,20 +124,20 @@ public class ApplicationBean implements Serializable {
         this.templateCode = templateCode;
     }
 
-	public String getImage() {
-		return image;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-	public String getOnline() {
-		return online;
-	}
+    public String getOnline() {
+        return online;
+    }
 
-	public void setOnline(String online) {
-		this.online = online;
-	}
-    
+    public void setOnline(String online) {
+        this.online = online;
+    }
+
 }

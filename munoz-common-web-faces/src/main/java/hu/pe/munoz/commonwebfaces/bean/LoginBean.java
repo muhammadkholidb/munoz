@@ -52,7 +52,7 @@ public class LoginBean extends RESTBean implements Serializable {
         httpClient.addParameter("username", inputUsername.trim());
         httpClient.addParameter("password", inputPassword);
 
-        HttpClientResponse response = httpClient.get();
+        HttpClientResponse response = httpClient.post();
 
         if (response != null) {
             String status = response.getStatus();

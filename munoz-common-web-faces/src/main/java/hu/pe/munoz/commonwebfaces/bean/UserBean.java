@@ -19,7 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.CommonUtils;
-import hu.pe.munoz.common.rest.RESTResponse;
+import hu.pe.munoz.common.helper.HttpClient;
+import hu.pe.munoz.common.helper.HttpClientResponse;
 
 @ManagedBean
 @ViewScoped
@@ -61,7 +62,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     }
     
     private void loadUsers() {
-        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/user/list", null);
+        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user/list").get();
         if (CommonConstants.SUCCESS.equals(response.getStatus())) {
             users = (JSONArray) response.getData();
         } else {
@@ -70,7 +71,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     }
     
     private void loadUserGroups() {
-        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/user-group/list", null);
+        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
         if (CommonConstants.SUCCESS.equals(response.getStatus())) {
             userGroups = (JSONArray) response.getData();
         } else {
@@ -105,7 +106,11 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("user", jsonUser);
         
-        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/user/add", parameters);
+        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/add");
+        httpClient.setParameters(parameters);
+        
+        HttpClientResponse response = httpClient.post();
+        
         if (response != null) {         
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 Messages.addFlashGlobalInfo(response.getMessage());
@@ -127,7 +132,12 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     public String doRemoveUser() {
         JSONObject parameters = new JSONObject();
         parameters.put("userId", removeId);
-        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/user/remove", parameters);
+        
+        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/remove");
+        httpClient.setParameters(parameters);
+        
+        HttpClientResponse response = httpClient.post();
+        
         if (response != null) {
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 Messages.addFlashGlobalInfo(response.getMessage()); 
@@ -150,7 +160,12 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         Long editId = (Long) Faces.getFlash().get("editId");
         JSONObject parameters = new JSONObject();
         parameters.put("userId", editId);
-        RESTResponse response = restClient.fetchGet(hostUrl, "/settings/user/find", parameters);
+        
+        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/find");
+        httpClient.setParameters(parameters);
+        
+        HttpClientResponse response = httpClient.get();
+        
         if (response != null) {
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 editUser = (JSONObject) response.getData();
@@ -185,7 +200,11 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("user", editUser);
         
-        RESTResponse response = restClient.fetchPost(hostUrl, "/settings/user/edit", parameters);
+        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/edit");
+        httpClient.setParameters(parameters);
+        
+        HttpClientResponse response = httpClient.post();
+        
         if (response != null) {         
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 Messages.addFlashGlobalInfo(response.getMessage());

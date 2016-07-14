@@ -6,12 +6,11 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 
-import hu.pe.munoz.common.rest.RESTClient;
 import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
+import org.json.simple.JSONObject;
 
 public abstract class RESTBean {
 
-    protected RESTClient restClient;
     protected Properties applicationProperties;
     protected String hostUrl;
 
@@ -24,8 +23,6 @@ public abstract class RESTBean {
 
     @PostConstruct
     protected void postConstruct() {
-    	restClient = new RESTClient();
-    	restClient.setHeader("Accept-Language", applicationBean.getLanguageCode());
     	applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
     	hostUrl = applicationProperties.getProperty("rest.HostUrl");
     }
@@ -38,6 +35,12 @@ public abstract class RESTBean {
     
     protected HttpClient getHttpClient(String host, String path) {
         HttpClient httpClient = new HttpClient(host, path);
+        httpClient.setHeader("Accept-Language", applicationBean.getLanguageCode());
+        return httpClient;
+    }
+    
+    protected HttpClient getHttpClient(String host, String path, JSONObject parameters) {
+        HttpClient httpClient = new HttpClient(host, path, parameters);
         httpClient.setHeader("Accept-Language", applicationBean.getLanguageCode());
         return httpClient;
     }

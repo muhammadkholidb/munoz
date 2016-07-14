@@ -39,7 +39,6 @@ public class HttpClient {
     }
 
     public HttpClient(String host, String path, JSONObject parameters, JSONObject headers, boolean secure) {
-        this.method = GET;
         this.host = host;
         this.path = path;
         this.parameters = parameters;
@@ -96,8 +95,10 @@ public class HttpClient {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod(method);
-            for (Object name : headers.keySet()) {
-                con.setRequestProperty((String) name, (String) headers.get(name));
+            if (headers != null) {
+                for (Object name : headers.keySet()) {
+                    con.setRequestProperty((String) name, (String) headers.get(name));
+                }
             }
 
             int responseCode = con.getResponseCode();
@@ -145,15 +146,19 @@ public class HttpClient {
 
             con.setRequestMethod(method);
             con.setDoOutput(true);
-            for (Object name : headers.keySet()) {
-                con.setRequestProperty((String) name, (String) headers.get(name));
+            if (headers != null) {
+                for (Object name : headers.keySet()) {
+                    con.setRequestProperty((String) name, (String) headers.get(name));
+                }
             }
 
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(queryStrings);
-            wr.flush();
-            wr.close();
-
+            if (queryStrings != null) {
+                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+                wr.writeBytes(queryStrings);
+                wr.flush();
+                wr.close();    
+            }
+            
             int responseCode = con.getResponseCode();
             log.debug("Response code: " + responseCode);
 
