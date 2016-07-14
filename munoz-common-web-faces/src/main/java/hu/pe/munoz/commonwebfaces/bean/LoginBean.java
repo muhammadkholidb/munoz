@@ -15,19 +15,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.helper.HttpClient;
+import hu.pe.munoz.common.helper.HttpClientResponse;
 import hu.pe.munoz.common.helper.SuperAdmin;
-import hu.pe.munoz.common.rest.RESTResponse;
+import java.util.Objects;
 
 @ManagedBean
 @SessionScoped
 public class LoginBean extends RESTBean implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private Logger log = LoggerFactory.getLogger(LoginBean.class);
 
     private String inputUsername;
 
@@ -39,72 +41,75 @@ public class LoginBean extends RESTBean implements Serializable {
 
     @Override
     protected void postConstruct() {
-    	super.postConstruct();
+        super.postConstruct();
         log.info("Post construct LoginBean ...");
     }
-    
+
     @SuppressWarnings("unchecked")
-	public void doLogin() {
-    	
-    	JSONObject parameters = new JSONObject();
-    	parameters.put("username", inputUsername.trim());
-    	parameters.put("password", inputPassword);
-    	RESTResponse response = restClient.fetchPost(hostUrl, "/login", parameters);
-    	String status = response.getStatus();
-    	if (CommonConstants.SUCCESS.equals(status)) {
-    		user = (JSONObject) response.getData();
-    		userGroup = (JSONObject) user.get("userGroup");
-    		menuPermissions = (JSONArray) userGroup.get("userGroupMenuPermissions");
-    	} else {
-    		String message = response.getMessage();
-    		// Try servlet login
-    		doServletLogin(inputUsername.trim(), inputPassword);
-    		if (user == null) {    			
-    			Messages.addGlobalError(message);
-        		return;
-    		}
-    	}
-    	
-        if (user != null) {
-        	Faces.setSessionAttribute(CommonConstants.SESSKEY_IS_LOGGED_IN, true);
-        	Faces.setSessionAttribute(CommonConstants.SESSKEY_USER, user);
-        	try {
-        		String redirect = Faces.getSessionAttribute(CommonConstants.SESSKEY_REDIRECT);
-                if (redirect != null) {
-                	Faces.removeSessionAttribute(CommonConstants.SESSKEY_REDIRECT);
-                	Faces.redirect(redirect);
-                	return;
-                }
-                Faces.redirect("home.xhtml");
+    public void doLogin() {
+
+        HttpClient httpClient = getHttpClient(hostUrl, "/login");
+        httpClient.addParameter("username", inputUsername.trim());
+        httpClient.addParameter("password", inputPassword);
+
+        HttpClientResponse response = httpClient.get();
+
+        if (response != null) {
+            String status = response.getStatus();
+            String message = response.getMessage();
+            if (CommonConstants.SUCCESS.equals(status)) {
+                user = (JSONObject) response.getData();
+                userGroup = (JSONObject) user.get("userGroup");
+                menuPermissions = (JSONArray) userGroup.get("userGroupMenuPermissions");
+            } else {
+                // Try servlet login
+                doServletLogin(inputUsername.trim(), inputPassword);
+            }
+            if (user == null) {
+                Messages.addGlobalError(message);
                 return;
-			} catch (Exception e) {
-				e.printStackTrace();
-    			Messages.addGlobalError(e.getMessage(), new Object[] {});
-    			return;
-			}
+            }
+        }
+
+        // User can't be null here
+        Faces.setSessionAttribute(CommonConstants.SESSKEY_IS_LOGGED_IN, true);
+        Faces.setSessionAttribute(CommonConstants.SESSKEY_USER, user);
+        try {
+            String redirect = Faces.getSessionAttribute(CommonConstants.SESSKEY_REDIRECT);
+            if (redirect != null) {
+                Faces.removeSessionAttribute(CommonConstants.SESSKEY_REDIRECT);
+                Faces.redirect(redirect);
+                return;
+            }
+            Faces.redirect("home.xhtml");
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Messages.addGlobalError(e.getMessage(), new Object[]{});
+            return;
         }
     }
 
     @SuppressWarnings("unchecked")
-	private void doServletLogin(String username, String password) {
-    	try {
-    		String hash = DigestUtils.sha1Hex(password);
-        	Faces.login(username, hash);
-			if(Faces.isUserInRole(SuperAdmin.USER_GROUP_NAME)) {
-				userGroup = new JSONObject();
-				userGroup.put("id", SuperAdmin.USER_GROUP_ID);
-				userGroup.put("name", SuperAdmin.USER_GROUP_NAME);
-				user = new JSONObject();
-				user.put("username", Faces.getRemoteUser());
-				user.put("firstName", SuperAdmin.FIRST_NAME);
-				user.put("lastName", SuperAdmin.LAST_NAME);
-				user.put("userGroup", userGroup);
-			}
-		} catch (ServletException e) {
-			log.debug(e.toString());
-		}
+    private void doServletLogin(String username, String password) {
+        try {
+            String hash = DigestUtils.sha1Hex(password);
+            Faces.login(username, hash);
+            if (Faces.isUserInRole(SuperAdmin.USER_GROUP_NAME)) {
+                userGroup = new JSONObject();
+                userGroup.put("id", SuperAdmin.USER_GROUP_ID);
+                userGroup.put("name", SuperAdmin.USER_GROUP_NAME);
+                user = new JSONObject();
+                user.put("username", Faces.getRemoteUser());
+                user.put("firstName", SuperAdmin.FIRST_NAME);
+                user.put("lastName", SuperAdmin.LAST_NAME);
+                user.put("userGroup", userGroup);
+            }
+        } catch (ServletException e) {
+            log.debug(e.toString());
+        }
     }
-    
+
     public boolean isLoggedIn() {
         return user != null;
     }
@@ -115,37 +120,38 @@ public class LoginBean extends RESTBean implements Serializable {
     }
 
     private boolean checkPermission(String menuCode, String type) {
-    	if ((Long) userGroup.get("id") == SuperAdmin.USER_GROUP_ID) {
-    		return true;
-    	}
-    	switch (type) {
-		case "view":
-			for (int i = 0; i < menuPermissions.size(); i++) {
-				JSONObject permission = (JSONObject) menuPermissions.get(i);
-				if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("view"))) {
-					return true;
-				}
-			}
-			break;
-		case "modify":
-			for (int i = 0; i < menuPermissions.size(); i++) {
-				JSONObject permission = (JSONObject) menuPermissions.get(i);
-				if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("modify"))) {
-					return true;
-				}
-			}
-		}
-    	return false;
+        if (Objects.equals((Long) userGroup.get("id"), SuperAdmin.USER_GROUP_ID)) {
+            return true;
+        }
+        switch (type) {
+            case "view":
+                for (int i = 0; i < menuPermissions.size(); i++) {
+                    JSONObject permission = (JSONObject) menuPermissions.get(i);
+                    if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("view"))) {
+                        return true;
+                    }
+                }
+                break;
+            case "modify":
+                for (int i = 0; i < menuPermissions.size(); i++) {
+                    JSONObject permission = (JSONObject) menuPermissions.get(i);
+                    if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("modify"))) {
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
     }
-    
+
     public boolean isViewAllowed(String menuCode) {
-    	return checkPermission(menuCode, "view");
+        return checkPermission(menuCode, "view");
     }
-    
+
     public boolean isModifyAllowed(String menuCode) {
-    	return checkPermission(menuCode, "modify");
+        return checkPermission(menuCode, "modify");
     }
-    
+
     // Getters and setters
     public String getInputUsername() {
         return inputUsername;
@@ -162,21 +168,21 @@ public class LoginBean extends RESTBean implements Serializable {
     public void setInputPassword(String inputPassword) {
         this.inputPassword = inputPassword;
     }
-    
+
     public JSONObject getUser() {
-    	return user;
+        return user;
     }
 
     public JSONObject getUserGroup() {
-    	return userGroup;
+        return userGroup;
     }
-    
+
     public JSONArray getMenuPermissions() {
-    	return menuPermissions;
+        return menuPermissions;
     }
-    
+
     public static void main(String[] args) {
-		System.out.println(DigestUtils.sha1Hex("pwd!@#A"));
-	}
-    
+        System.out.println(DigestUtils.sha1Hex("pwd!@#A"));
+    }
+
 }
