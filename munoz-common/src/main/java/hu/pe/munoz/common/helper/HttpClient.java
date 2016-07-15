@@ -55,6 +55,20 @@ public class HttpClient {
 //
 //    }
 
+    public HttpClientResponse request() {
+        if (method == null) {
+            throw new NullPointerException("Request method has not been set.");
+        }
+        switch (method) {
+            case POST:
+                return post();
+            case GET:
+                return get();
+            default:
+                return null;
+        }
+    }
+    
     private String buildQueryStrings(JSONObject parameters) {
         if ((parameters != null) && !parameters.isEmpty()) {
             StringBuilder builder = new StringBuilder();
@@ -73,16 +87,8 @@ public class HttpClient {
         return null;
     }
 
-    public HttpClientResponse get() throws IllegalArgumentException {
-
-        if ((method != null) && !GET.equals(method)) {
-            throw new IllegalArgumentException("Invalid request method.");
-        }
-        
-        if (method == null) {
-            method = GET;
-        }
-        
+    public HttpClientResponse get() {
+        method = GET;
         String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
@@ -96,6 +102,7 @@ public class HttpClient {
 
             con.setRequestMethod(method);
             if (headers != null) {
+                log.debug("Headers: " + headers);
                 for (Object name : headers.keySet()) {
                     con.setRequestProperty((String) name, (String) headers.get(name));
                 }
@@ -123,16 +130,8 @@ public class HttpClient {
         return null;
     }
 
-    public HttpClientResponse post() throws IllegalArgumentException {
-
-        if ((method != null) && !POST.equals(method)) {
-            throw new IllegalArgumentException("Invalid request method.");
-        }
-        
-        if (method == null) {
-            method = POST;
-        }
-        
+    public HttpClientResponse post() {
+        method = POST;
         String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
@@ -147,6 +146,7 @@ public class HttpClient {
             con.setRequestMethod(method);
             con.setDoOutput(true);
             if (headers != null) {
+                log.debug("Headers: " + headers);
                 for (Object name : headers.keySet()) {
                     con.setRequestProperty((String) name, (String) headers.get(name));
                 }
