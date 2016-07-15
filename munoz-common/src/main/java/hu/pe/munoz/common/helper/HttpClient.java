@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 public class HttpClient {
 
+    // http://slf4j.org/faq.html#logging_performance
     private Logger log = LoggerFactory.getLogger(HttpClient.class);
 
     public static final String GET = "GET";
@@ -65,7 +66,7 @@ public class HttpClient {
             case GET:
                 return get();
             default:
-                return null;
+                throw new UnsupportedOperationException("Unsupported request method: " + method );
         }
     }
     
@@ -92,8 +93,8 @@ public class HttpClient {
         String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
-        log.debug("Sending GET request to URL : " + strUrl);
-        log.debug("Parameters: " + parameters);
+        log.debug("Sending GET request to URL: {}", strUrl);
+        log.debug("Parameters: {}", parameters);
 
         try {
 
@@ -102,14 +103,14 @@ public class HttpClient {
 
             con.setRequestMethod(method);
             if (headers != null) {
-                log.debug("Headers: " + headers);
+                log.debug("Headers: {}", headers);
                 for (Object name : headers.keySet()) {
                     con.setRequestProperty((String) name, (String) headers.get(name));
                 }
             }
 
             int responseCode = con.getResponseCode();
-            log.debug("Response code : " + responseCode);
+            log.debug("Response code: {}", responseCode);
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
 
@@ -120,7 +121,7 @@ public class HttpClient {
                     response.append(inputLine);
                 }
                 in.close();
-                log.debug("Response: " + response);
+                log.debug("Response: {}", response);
                 return new HttpClientResponse(response.toString());
             }
 
@@ -135,8 +136,8 @@ public class HttpClient {
         String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
-        log.debug("Sending POST request to URL : " + strUrl);
-        log.debug("Parameters : " + parameters);
+        log.debug("Sending POST request to URL: {}", strUrl);
+        log.debug("Parameters: {}", parameters);
 
         try {
             
@@ -146,7 +147,7 @@ public class HttpClient {
             con.setRequestMethod(method);
             con.setDoOutput(true);
             if (headers != null) {
-                log.debug("Headers: " + headers);
+                log.debug("Headers: {}", headers);
                 for (Object name : headers.keySet()) {
                     con.setRequestProperty((String) name, (String) headers.get(name));
                 }
@@ -160,7 +161,7 @@ public class HttpClient {
             }
             
             int responseCode = con.getResponseCode();
-            log.debug("Response code: " + responseCode);
+            log.debug("Response code: {}", responseCode);
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
 
@@ -171,7 +172,7 @@ public class HttpClient {
                     response.append(inputLine);
                 }
                 in.close();
-                log.debug("Response: " + response);
+                log.debug("Response: {}", response);
                 return new HttpClientResponse(response.toString());
             }
 
