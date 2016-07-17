@@ -23,26 +23,27 @@ public abstract class RESTBean {
 
     @PostConstruct
     protected void postConstruct() {
-    	applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-    	hostUrl = applicationProperties.getProperty("rest.HostUrl");
+        applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
+        hostUrl = applicationProperties.getProperty("rest.HostUrl");
     }
-    
+
     protected HttpClient getHttpClient() {
-        HttpClient httpClient = new HttpClient();
-        httpClient.setHeader("Accept-Language", applicationBean.getLanguageCode());
-        return httpClient;
+        return new HttpClient().setHeader("Accept-Language", applicationBean.getLanguageCode());
     }
-    
+
     protected HttpClient getHttpClient(String host, String path) {
-        HttpClient httpClient = new HttpClient(host, path);
-        httpClient.setHeader("Accept-Language", applicationBean.getLanguageCode());
-        return httpClient;
+        return new HttpClient()
+                .setHost(host)
+                .setPath(path)
+                .setHeader("Accept-Language", applicationBean.getLanguageCode());
     }
-    
+
     protected HttpClient getHttpClient(String host, String path, JSONObject parameters) {
-        HttpClient httpClient = new HttpClient(host, path, parameters);
-        httpClient.setHeader("Accept-Language", applicationBean.getLanguageCode());
-        return httpClient;
+        return new HttpClient()
+                .setHost(host)
+                .setPath(path)
+                .setParameters(parameters)
+                .setHeader("Accept-Language", applicationBean.getLanguageCode());
     }
-    
+
 }

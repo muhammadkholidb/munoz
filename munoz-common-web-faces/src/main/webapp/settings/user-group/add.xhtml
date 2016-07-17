@@ -1,80 +1,71 @@
 <ui:composition template="/WEB-INF/templates/#{applicationBean.templateCode}/layout.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
     <f:metadata>
         <f:viewAction action="#{userGroupBean.pageCheck()}" /> 
     </f:metadata>
 
-	<ui:define name="title">#{lang['title.UserGroup']}</ui:define>
+    <ui:define name="title">#{lang['title.UserGroup']}</ui:define>
 
-	<ui:define name="inner">
-			
-	    <h:form>
-            
+    <ui:define name="inner">
+
+        <h:form>
+
             <p:messages id="messages" closable="true" />
-	    
-	        <h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block">
-	            <p:commandButton value="#{lang['button.Save']}"
-	                styleClass="button-green" action="#{userGroupBean.doSaveAdd()}"
-	                ajax="false" /> 
-	            <p:commandButton value="#{lang['button.Cancel']}"
-	                styleClass="button-grey" action="#{userGroupBean.gotoIndex()}"
-	                ajax="false" immediate="true" />
-	        </h:panelGroup>
-	    
+
             <p:panel header="#{lang['label.AddUserGroup']}">
-        
+
                 <div class="ui-fluid">
                     <p:panelGrid columns="2"
-                        columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-10"
-                        layout="grid" styleClass="ui-panelgrid-blank">
-        
+                                 columnClasses="ui-grid-col-2 form-label-right,ui-grid-col-10"
+                                 layout="grid" styleClass="ui-panelgrid-blank">
+
                         <h:outputText value="#{lang['label.Name']}" />
                         <p:inputText value="#{userGroupBean.inputGroupName}" placeholder="#{lang['label.Name']}" required="true" requiredMessage="#{lang['required.NameCannotBeEmpty']}" />
-        
+
                         <h:outputText value="#{lang['label.MenuPermissions']}" />
                         <p:dataTable var="menu" value="#{userGroupBean.inputMenus}" reflow="true" > 
-				        
-				            <p:column headerText="#{lang['label.Name']}" styleClass="wrap" >
-				                <h:outputText value="#{menu.label[applicationBean.languageCode]}" /> 
-				            </p:column>
-				
-				            <p:column headerText="#{lang['label.Description']}" styleClass="wrap" >
-				                <h:outputText value="#{menu.description}" />
-				            </p:column>
-				
-				            <p:column headerText="#{lang['label.View']}" styleClass="wrap" style="text-align: center;" >
-				                <p:selectBooleanCheckbox value="#{menu.viewBoolean}" />
-				            </p:column>
-				            
+
+                            <p:column headerText="#{lang['label.Name']}" styleClass="wrap" >
+                                <h:outputText value="#{menu.label[applicationBean.languageCode]}" /> 
+                            </p:column>
+
+                            <p:column headerText="#{lang['label.Description']}" styleClass="wrap" >
+                                <h:outputText value="#{menu.description}" />
+                            </p:column>
+
+                            <p:column headerText="#{lang['label.View']}" styleClass="wrap" style="text-align: center;" >
+                                <p:selectBooleanCheckbox value="#{menu.viewBoolean}" />
+                            </p:column>
+
                             <p:column headerText="#{lang['label.Modify']}" styleClass="wrap" style="text-align: center;" >
                                 <p:selectBooleanCheckbox value="#{menu.modifyBoolean}" />
                             </p:column>
-                            			            
-				        </p:dataTable>
-	
-        
+
+                        </p:dataTable>
+
+
                     </p:panelGrid>
                 </div>
-        
-            </p:panel>
-        
-	        <h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block">
-	            <p:commandButton value="#{lang['button.Save']}"
-	                styleClass="button-green" action="#{userGroupBean.doSaveAdd()}"
-	                ajax="false" />
-	            <p:commandButton value="#{lang['button.Cancel']}"
-	                styleClass="button-grey" action="#{userGroupBean.gotoIndex()}"
-	                ajax="false" immediate="true" />
-	        </h:panelGroup>
-	
-	    </h:form>
 
-	</ui:define>
+            </p:panel>
+
+            <h:panelGroup styleClass="form-buttons aleft bottom-buttons stick" layout="block">
+                <p:commandButton value="#{lang['button.Save']}"
+                                 styleClass="button-green" action="#{userGroupBean.doSaveAdd()}"
+                                 ajax="false" />
+                <p:commandButton value="#{lang['button.Cancel']}"
+                                 styleClass="button-grey" action="#{userGroupBean.gotoIndex()}"
+                                 ajax="false" immediate="true" />
+            </h:panelGroup>
+
+        </h:form>
+
+    </ui:define>
 
 </ui:composition>

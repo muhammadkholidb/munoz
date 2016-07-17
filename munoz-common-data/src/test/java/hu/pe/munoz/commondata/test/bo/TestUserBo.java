@@ -24,7 +24,7 @@ import hu.pe.munoz.commondata.entity.UserEntity;
 import hu.pe.munoz.commondata.entity.UserGroupEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:munoz-common-data-test-context.xml")
+@ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
 public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());

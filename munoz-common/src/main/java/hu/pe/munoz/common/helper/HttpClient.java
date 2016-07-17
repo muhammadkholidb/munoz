@@ -2,6 +2,7 @@ package hu.pe.munoz.common.helper;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 public class HttpClient {
 
-    // http://slf4j.org/faq.html#logging_performance
     private Logger log = LoggerFactory.getLogger(HttpClient.class);
 
     public static final String GET = "GET";
@@ -56,10 +56,7 @@ public class HttpClient {
 //
 //    }
 
-    public HttpClientResponse request() {
-        if (method == null) {
-            throw new NullPointerException("Request method has not been set.");
-        }
+    public HttpClientResponse request() throws IOException {
         switch (method) {
             case POST:
                 return post();
@@ -88,50 +85,46 @@ public class HttpClient {
         return null;
     }
 
-    public HttpClientResponse get() {
+    public HttpClientResponse get() throws IOException {
         method = GET;
         String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
+        // Read http://slf4j.org/faq.html#logging_performance
         log.debug("Sending GET request to URL: {}", strUrl);
         log.debug("Parameters: {}", parameters);
 
-        try {
+        URL url = new URL(strUrl + ((queryStrings == null) ? "" : ("?" + queryStrings)));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-            URL url = new URL(strUrl + ((queryStrings == null) ? "" : ("?" + queryStrings)));
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-            con.setRequestMethod(method);
-            if (headers != null) {
-                log.debug("Headers: {}", headers);
-                for (Object name : headers.keySet()) {
-                    con.setRequestProperty((String) name, (String) headers.get(name));
-                }
+        con.setRequestMethod(method);
+        if (headers != null) {
+            log.debug("Headers: {}", headers);
+            for (Object name : headers.keySet()) {
+                con.setRequestProperty((String) name, (String) headers.get(name));
             }
-
-            int responseCode = con.getResponseCode();
-            log.debug("Response code: {}", responseCode);
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                StringBuilder response = new StringBuilder();
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-                log.debug("Response: {}", response);
-                return new HttpClientResponse(response.toString());
-            }
-
-        } catch (Exception e) {
-            log.error(e.toString(), e);
         }
+
+        int responseCode = con.getResponseCode();
+        log.debug("Response code: {}", responseCode);
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+
+            StringBuilder response = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            log.debug("Response: {}", response);
+            return new HttpClientResponse(response.toString());
+        }
+
         return null;
     }
 
-    public HttpClientResponse post() {
+    public HttpClientResponse post() throws IOException {
         method = POST;
         String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
         String queryStrings = buildQueryStrings(parameters);
@@ -139,109 +132,128 @@ public class HttpClient {
         log.debug("Sending POST request to URL: {}", strUrl);
         log.debug("Parameters: {}", parameters);
 
-        try {
-            
-            URL obj = new URL(strUrl);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        URL obj = new URL(strUrl);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-            con.setRequestMethod(method);
-            con.setDoOutput(true);
-            if (headers != null) {
-                log.debug("Headers: {}", headers);
-                for (Object name : headers.keySet()) {
-                    con.setRequestProperty((String) name, (String) headers.get(name));
-                }
+        con.setRequestMethod(method);
+        con.setDoOutput(true);
+        if (headers != null) {
+            log.debug("Headers: {}", headers);
+            for (Object name : headers.keySet()) {
+                con.setRequestProperty((String) name, (String) headers.get(name));
             }
-
-            if (queryStrings != null) {
-                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-                wr.writeBytes(queryStrings);
-                wr.flush();
-                wr.close();    
-            }
-            
-            int responseCode = con.getResponseCode();
-            log.debug("Response code: {}", responseCode);
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                StringBuilder response = new StringBuilder();
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-                log.debug("Response: {}", response);
-                return new HttpClientResponse(response.toString());
-            }
-
-        } catch (Exception e) {
-            log.error(e.toString(), e);
         }
+
+        if (queryStrings != null) {
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(queryStrings);
+            wr.flush();
+            wr.close();    
+        }
+
+        int responseCode = con.getResponseCode();
+        log.debug("Response code: {}", responseCode);
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+
+            StringBuilder response = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            log.debug("Response: {}", response);
+            return new HttpClientResponse(response.toString());
+        }
+
         return null;
     }
 
-    public void addParameter(String name, String value) {
+    @SuppressWarnings("unchecked")
+    public HttpClient addParameter(String name, Object value) {
         if (parameters == null) {
             parameters = new JSONObject();
         }
         parameters.put(name, value);
+        return this;
     }
     
-    public void setHeader(String name, String value) {
+    public Object getParameter(String name) {
+        if (parameters != null) {
+            return parameters.get(name);
+        }
+        return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public HttpClient setHeader(String name, Object value) {
         if (headers == null) {
             headers = new JSONObject();
         }
         headers.put(name, value);
+        return this;
+    }
+    
+    public Object getHeader(String name) {
+        if (headers != null) {
+            return headers.get(name);
+        }
+        return null;
     }
     
     public boolean isSecure() {
         return secure;
     }
 
-    public void setSecure(boolean secure) {
+    public HttpClient setSecure(boolean secure) {
         this.secure = secure;
+        return this;
     }
 
     public String getMethod() {
         return method;
     }
 
-    public void setMethod(String method) {
+    public HttpClient setMethod(String method) {
         this.method = method;
+        return this;
     }
 
     public String getHost() {
         return host;
     }
 
-    public void setHost(String host) {
+    public HttpClient setHost(String host) {
         this.host = host;
+        return this;
     }
 
     public String getPath() {
         return path;
     }
 
-    public void setPath(String path) {
+    public HttpClient setPath(String path) {
         this.path = path;
+        return this;
     }
 
     public JSONObject getParameters() {
         return parameters;
     }
 
-    public void setParameters(JSONObject parameters) {
+    public HttpClient setParameters(JSONObject parameters) {
         this.parameters = parameters;
+        return this;
     }
 
     public JSONObject getHeaders() {
         return headers;
     }
 
-    public void setHeaders(JSONObject headers) {
+    public HttpClient setHeaders(JSONObject headers) {
         this.headers = headers;
+        return this;
     }
 
 }

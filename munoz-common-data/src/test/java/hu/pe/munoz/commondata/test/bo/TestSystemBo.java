@@ -23,7 +23,7 @@ import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.bo.SystemBo;
 import hu.pe.munoz.commondata.entity.SystemEntity;
 
-@ContextConfiguration(locations = "classpath:munoz-common-data-test-context.xml")
+@ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests {
 

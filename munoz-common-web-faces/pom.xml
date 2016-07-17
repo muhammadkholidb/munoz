@@ -137,7 +137,7 @@
                         <contextPath>/munoz-common-web-faces</contextPath>
                     </webApp>
                     <httpConnector>
-                        <port>8888</port>
+                        <port>8080</port>
                     </httpConnector>
                 </configuration>
             </plugin>

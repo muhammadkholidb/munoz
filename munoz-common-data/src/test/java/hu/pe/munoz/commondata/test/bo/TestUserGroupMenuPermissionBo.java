@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import hu.pe.munoz.commondata.bo.UserGroupMenuPermissionBo;
 import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 
-@ContextConfiguration(locations = "classpath:munoz-common-data-test-context.xml")
+@ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TestUserGroupMenuPermissionBo extends AbstractTransactionalJUnit4SpringContextTests {
 

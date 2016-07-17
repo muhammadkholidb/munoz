@@ -48,29 +48,34 @@ public class LoginBean extends RESTBean implements Serializable {
     @SuppressWarnings("unchecked")
     public void doLogin() {
 
-        HttpClient httpClient = getHttpClient(hostUrl, "/login");
-        httpClient.addParameter("username", inputUsername.trim());
-        httpClient.addParameter("password", inputPassword);
-
-        HttpClientResponse response = httpClient.post();
-
-        if (response != null) {
-            String status = response.getStatus();
-            String message = response.getMessage();
-            if (CommonConstants.SUCCESS.equals(status)) {
-                user = (JSONObject) response.getData();
-                userGroup = (JSONObject) user.get("userGroup");
-                menuPermissions = (JSONArray) userGroup.get("userGroupMenuPermissions");
-            } else {
-                // Try servlet login
-                doServletLogin(inputUsername.trim(), inputPassword);
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/login")
+                    .addParameter("username", inputUsername.trim())
+                    .addParameter("password", inputPassword)
+                    .post();
+            if (response != null) {
+                String status = response.getStatus();
+                String message = response.getMessage();
+                if (CommonConstants.SUCCESS.equals(status)) {
+                    user = (JSONObject) response.getData();
+                    userGroup = (JSONObject) user.get("userGroup");
+                    menuPermissions = (JSONArray) userGroup.get("userGroupMenuPermissions");
+                } else {
+                    // Try servlet login
+                    doServletLogin(inputUsername.trim(), inputPassword);
+                }
+                if (user == null) {
+                    Messages.addGlobalError(message);
+                    return;
+                }
             }
-            if (user == null) {
-                Messages.addGlobalError(message);
-                return;
-            }
+        } catch (Exception e) {
+            log.error(e.toString(), e); 
+            String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
+            Messages.addGlobalError(message);
+            return;
         }
-
+        
         // User can't be null here
         Faces.setSessionAttribute(CommonConstants.SESSKEY_IS_LOGGED_IN, true);
         Faces.setSessionAttribute(CommonConstants.SESSKEY_USER, user);
@@ -82,11 +87,9 @@ public class LoginBean extends RESTBean implements Serializable {
                 return;
             }
             Faces.redirect("home.xhtml");
-            return;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(), e);
             Messages.addGlobalError(e.getMessage(), new Object[]{});
-            return;
         }
     }
 

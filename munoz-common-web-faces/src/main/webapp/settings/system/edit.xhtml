@@ -18,15 +18,6 @@
             
             <p:messages id="messages" closable="true" />
 	    
-	        <h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block">
-	            <p:commandButton value="#{lang['button.Save']}"
-	                styleClass="button-green" action="#{systemBean.saveForm()}"
-	                ajax="false" />
-	            <p:commandButton value="#{lang['button.Cancel']}"
-	                styleClass="button-grey" action="#{systemBean.gotoIndex()}"
-	                ajax="false" />
-	        </h:panelGroup>
-	    
 	        <p:panel header="#{lang['label.EditSystemSetting']}">
 	    
 	            <div class="ui-fluid">
@@ -58,18 +49,18 @@
 	    				
 	                </p:panelGrid>
 	            </div>
-	    
+
 	        </p:panel>
+
+                <h:panelGroup styleClass="form-buttons aleft bottom-buttons stick" layout="block">
+                    <p:commandButton value="#{lang['button.Save']}"
+                        styleClass="button-green" action="#{systemBean.saveForm()}"
+                        ajax="false" />
+                    <p:commandButton value="#{lang['button.Cancel']}"
+                        styleClass="button-grey" action="#{systemBean.gotoIndex()}"
+                        ajax="false" />
+                </h:panelGroup>
 	    
-	        <h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block">
-	            <p:commandButton value="#{lang['button.Save']}"
-	                styleClass="button-green" action="#{systemBean.saveForm()}"
-	                ajax="false" />
-	            <p:commandButton value="#{lang['button.Cancel']}"
-	                styleClass="button-grey" action="#{systemBean.gotoIndex()}"
-	                ajax="false" />
-	        </h:panelGroup>
-	
 	    </h:form>
 
 	</ui:define>

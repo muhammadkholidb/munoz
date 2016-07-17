@@ -1,70 +1,65 @@
 <ui:composition template="/WEB-INF/templates/common/layout.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <f:metadata>
         <f:viewAction action="#{userGroupBean.pageCheck()}" />
     </f:metadata>
 
-	<ui:define name="title">#{lang['title.UserGroup']}</ui:define>
+    <ui:define name="title">#{lang['title.UserGroup']}</ui:define>
 
-	<ui:define name="inner">
-		<h:form>
-		    
+    <ui:define name="inner">
+        <h:form>
+
             <p:messages id="messages" closable="true" />
-        
-			<h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" rendered="#{userGroupBean.isModifyAllowed()}" >
-				<p:commandButton value="#{lang['button.Add']}"
-					styleClass="button-green" action="#{userGroupBean.gotoAdd()}"
-					ajax="false" />
-			</h:panelGroup>
 
-			<p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom" >
+            <h:panelGroup styleClass="form-buttons aleft top-buttons" layout="block" rendered="#{userGroupBean.isModifyAllowed()}" >
+                <p:commandButton value="#{lang['button.Add']}"
+                                 styleClass="button-green" action="#{userGroupBean.gotoAdd()}"
+                                 ajax="false" />
+            </h:panelGroup>
 
-				<f:facet name="header">
-					<h:outputText value="#{lang['label.UserGroupList']}" />
-				</f:facet>
+            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom" >
 
-				<p:column headerText="#{lang['label.Name']}">
-					<h:outputText value="#{group.name}" />
-				</p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{lang['label.UserGroupList']}" />
+                </f:facet>
 
-				<p:column headerText="#{lang['label.Active']}" style="text-align: center;" >
-					<h:outputText value="#{group.active eq 'Y' ? lang['label.Yes'] : lang['label.No']}" />
-				</p:column>
+                <p:column headerText="#{lang['label.Name']}">
+                    <h:outputText value="#{group.name}" />
+                </p:column>
 
-				<p:column headerText="#{lang['label.Action']}" style="text-align: center;" >
-					<h:panelGroup layout="block" >
-						<p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userGroupBean.gotoEdit(group.id)}" rendered="#{userGroupBean.isModifyAllowed()}" />
-						<p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" 
-						  style="margin-left: 5px;" actionListener="#{userGroupBean.prepareRemoveUserGroup(group.id)}"
-						  oncomplete="PF('dlgConfirmation').show()" 
-						  rendered="#{userGroupBean.isModifyAllowed()}" />
-					</h:panelGroup>
-				</p:column>
+                <p:column headerText="#{lang['label.Active']}" style="text-align: center;" >
+                    <h:outputText value="#{group.active eq 'Y' ? lang['label.Yes'] : lang['label.No']}" />
+                </p:column>
 
-			</p:dataTable>
+                <p:column headerText="#{lang['label.Action']}" style="text-align: center;" >
+                    <h:panelGroup layout="block" >
+                        <p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userGroupBean.gotoEdit(group.id)}" rendered="#{userGroupBean.isModifyAllowed()}" />
+                        <p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" 
+                                         style="margin-left: 5px;" actionListener="#{userGroupBean.prepareRemoveUserGroup(group.id)}"
+                                         oncomplete="PF('dlgConfirmation').show()" 
+                                         rendered="#{userGroupBean.isModifyAllowed()}" />
+                    </h:panelGroup>
+                </p:column>
 
-			<h:panelGroup styleClass="form-buttons aleft bottom-buttons" layout="block" rendered="#{userGroupBean.isModifyAllowed()}" >
-				<p:commandButton value="#{lang['button.Add']}"
-					styleClass="button-green" action="#{userGroupBean.gotoAdd()}"
-					ajax="false" />
-			</h:panelGroup>
-		</h:form>
-		
+            </p:dataTable>
+
+        </h:form>
+
         <p:confirmDialog widgetVar="dlgConfirmation" width="300px" >
             <f:facet name="header"><h:outputText value="#{lang['dialog.title.Confirmation']}" /></f:facet>
             <f:facet name="message"><h:outputText value="#{lang['dialog.message.AreYouSure']}" /></f:facet> 
             <h:form>
-	            <p:commandButton value="#{lang['button.Yes']}" action="#{userGroupBean.doRemoveUserGroup()}" styleClass="button-green" />
-	            <p:commandButton value="#{lang['button.No']}" onclick="PF('dlgConfirmation').hide()" styleClass="button-grey" />
-	        </h:form>
+                <p:commandButton value="#{lang['button.Yes']}" action="#{userGroupBean.doRemoveUserGroup()}" styleClass="button-green" />
+                <p:commandButton value="#{lang['button.No']}" onclick="PF('dlgConfirmation').hide()" styleClass="button-grey" />
+            </h:form>
         </p:confirmDialog>
-		
-	</ui:define>
+
+    </ui:define>
 
 </ui:composition>

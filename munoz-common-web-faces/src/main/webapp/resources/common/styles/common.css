@@ -204,9 +204,9 @@ ul.top-nav > li div ul li a {
 }
 
 @media (max-width: 768px) { 	
-	.ui-panelgrid .ui-grid-responsive .ui-grid-row {
-	    border-top: none !important;
-	}
+    .ui-panelgrid .ui-grid-responsive .ui-grid-row {
+        border-top: none !important;
+    }
 }
 
 .ui-panel.ui-widget-content {
@@ -217,7 +217,6 @@ ul.top-nav > li div ul li a {
 .ui-panel-titlebar.ui-widget-header {
     background: #2191c0 !important;
     border: 0 !important;
-    font-weight: normal;
     color: #fff;
 }
 
@@ -226,12 +225,17 @@ ul.top-nav > li div ul li a {
 }
 
 .ui-panel .ui-panel-titlebar {
-    padding: 5px 10px !important;
+    padding: 8px 10px !important;
 }
 
 .ui-panel {
     padding: 0 !important;
 }
+
+.ui-panel .ui-panel-content {
+    padding: 8px 10px !important;
+}
+
 .ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
     margin-top: 8px !important;
 }
@@ -240,10 +244,10 @@ ul.top-nav > li div ul li a {
 }
 .ui-selectonemenu .ui-selectonemenu-trigger.ui-state-focus .ui-icon,
 .ui-selectonemenu .ui-selectonemenu-trigger.ui-state-hover .ui-icon {
-	/**
-	 * To read:
-	 * http://stackoverflow.com/questions/6925733/how-to-reference-jsf-image-resource-as-css-background-image-url/6926193#6926193
-	 */
+    /**
+     * To read:
+     * http://stackoverflow.com/questions/6925733/how-to-reference-jsf-image-resource-as-css-background-image-url/6926193#6926193
+     */
     background-image: url("#{resource['primefaces-start:images/ui-icons_e0fdff_256x240.png']}");
 }
 .ui-corner-right {
@@ -273,88 +277,102 @@ ul.top-nav > li div ul li a {
     background: #79c9ec;
 }
 .ui-button.ui-widget {
-	color: #fff;
+    color: #fff;
 }
 
 .button-green {
-	background: #6eac2c !important;
-	border: 1px solid #6eac2c !important;
-	color: #fff !important;
+    background: #6eac2c !important;
+    border: 1px solid #6eac2c !important;
+    color: #fff !important;
 }
 
 .button-green:hover, .button-green:focus {
-	background: #80c635 !important;
-	border: 1px solid #80c635 !important;
-	color: #fff !important;
+    background: #80c635 !important;
+    border: 1px solid #80c635 !important;
+    color: #fff !important;
 }
 
 .button-grey {
-	background: #999 !important;
-	border: 1px solid #999 !important;
-	color: #fff !important;
+    background: #999 !important;
+    border: 1px solid #999 !important;
+    color: #fff !important;
 }
 
 .button-grey:hover, .button-gray:focus {
-	background: #aaa !important;
-	border: 1px solid #aaa !important;
-	color: #fff !important;
+    background: #aaa !important;
+    border: 1px solid #aaa !important;
+    color: #fff !important;
 }
 
 .button-red {
-	background: #e12323 !important;
-	border: 1px solid #e12323 !important;
-	color: #fff !important;
+    background: #e12323 !important;
+    border: 1px solid #e12323 !important;
+    color: #fff !important;
 }
 
 .button-red:hover, .button-red:focus {
-	background: #ff4b4b !important;
-	border: 1px solid #ff4b4b !important;
-	color: #fff !important;
+    background: #ff4b4b !important;
+    border: 1px solid #ff4b4b !important;
+    color: #fff !important;
 }
 
 .form-label-right {
-	line-height: 35px;
-	text-align: right;
+    line-height: 35px;
+    text-align: right;
 }
 
 .top-buttons {	
-	margin-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.top-buttons.stick {	
+    margin-bottom: 0;
+    padding: 8px 10px;
+    border-top: 1px solid #a6c9e2 !important;
+    border-left: 1px solid #a6c9e2 !important;
+    border-right: 1px solid #a6c9e2 !important;
+    border-bottom: none;
 }
 
 .bottom-buttons {	
-	margin-top: 10px;
+    margin-top: 10px;
+}
+
+.bottom-buttons.stick {	
+    margin-top: 0;
+    padding: 8px 10px;
+    border-bottom: 1px solid #a6c9e2 !important;
+    border-left: 1px solid #a6c9e2 !important;
+    border-right: 1px solid #a6c9e2 !important;
+    border-top: none;
 }
 
 .aright {
-	text-align: right !important;
+    text-align: right !important;
 }
 
 .aleft {
-	text-align: left !important;
+    text-align: left !important;
 }
 
 .acenter {
-	text-align: center !important;
-}
-
-.form-buttons {
-	width: 100%; 
+    text-align: center !important;
 }
 
 .form-buttons.aright input, .form-buttons.aright button {
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 .form-buttons.aleft input, .form-buttons.aleft button {
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .form-buttons.acenter input, .form-buttons.acenter button {
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .form-buttons.acenter input:last-child, .form-buttons.acenter button:last-child {
-	margin-right: 0;
+    margin-right: 0;
 }
 
 th.ui-state-default {
@@ -362,7 +380,7 @@ th.ui-state-default {
 }
 
 .no-responsive {
-	width: unset !important;
+    width: unset !important;
 }
 
 .ui-fileupload-simple.no-responsive .ui-fileupload-filename {
@@ -385,7 +403,8 @@ th.ui-state-default {
 
 .ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer {
     text-align: left !important;
-    padding: 5px 10px !important;
+    padding: 8px 10px !important;
+    font-weight: bold;
 }
 
 .ui-datatable-odd {
@@ -393,7 +412,7 @@ th.ui-state-default {
 }
 
 .ui-datatable .ui-widget-content {
-	border: 1px solid #a6c9e2 !important;
+    border: 1px solid #a6c9e2 !important;
 }
 
 .ui-datatable tbody td.wrap {

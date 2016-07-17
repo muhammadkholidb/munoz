@@ -50,19 +50,21 @@ public class ApplicationBean implements Serializable {
         applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
         hostUrl = applicationProperties.getProperty("rest.HostUrl");
 
-        HttpClient httpClient = new HttpClient();
-        httpClient.setHost(hostUrl);
-        httpClient.setPath("/settings/system/list");
-        
-        HttpClientResponse response = httpClient.get();
+        try {
+            HttpClientResponse response = new HttpClient()
+                    .setHost(hostUrl)
+                    .setPath("/settings/system/list")
+                    .get();
+            if (response != null) {
 
-        if (response != null) {
-            
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                setSystems((JSONArray) response.getData());
-            } else {
-                log.error(response.getMessage());
+                if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                    setSystems((JSONArray) response.getData());
+                } else {
+                    log.error(response.getMessage());
+                }
             }
+        } catch (Exception e) {
+            log.error(e.toString(), e);
         }
     }
 

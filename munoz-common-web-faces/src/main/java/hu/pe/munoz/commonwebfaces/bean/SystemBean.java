@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
 import hu.pe.munoz.commonwebfaces.helper.MessageHelper;
@@ -95,6 +96,8 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 
             newFileName = UUID.randomUUID().toString() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
 
+            log.debug("Upload image ({}) to {}", newFileName, imageDir);
+            
             // http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
             InputStream input = null;
             OutputStream output = null;
@@ -104,8 +107,8 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
                 IOUtils.copy(input, output);
                 uploaded = true;
             } catch (IOException e) {
-                e.printStackTrace();
-                Messages.addGlobalError(e.toString());
+                log.error(e.getMessage(), e);
+                Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
             } finally {
                 IOUtils.closeQuietly(input);
                 IOUtils.closeQuietly(output);
@@ -135,27 +138,35 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
         JSONObject params = new JSONObject();
         params.put("systems", systems);
 
-        HttpClient httpClient = getHttpClient();
-        httpClient.setHost(hostUrl);
-        httpClient.setPath("/settings/system/edit");
-        httpClient.setParameters(params);
-        
-        // Update header Accept-Language in restClient if language changed
-        if (!languageCode.equals(applicationBean.getLanguageCode())) {
-            log.debug("Language changed!");
-            httpClient.setHeader("Accept-Language", languageCode);
-        }
+        try {
+            HttpClient httpClient = getHttpClient()
+                    .setHost(hostUrl)
+                    .setPath("/settings/system/edit")
+                    .setParameters(params);
 
-        HttpClientResponse response = httpClient.post();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                applicationBean.setSystems((JSONArray) response.getData());
-                Messages.addFlashGlobalInfo(response.getMessage());
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return "";
+            // Update header Accept-Language in restClient if language changed
+            if (!languageCode.equals(applicationBean.getLanguageCode())) {
+                log.debug("Language changed!");
+                httpClient.setHeader("Accept-Language", languageCode);
             }
+
+            HttpClientResponse response = httpClient.post();
+
+            if (response != null) {
+                if (null != response.getStatus()) switch (response.getStatus()) {
+                    case CommonConstants.SUCCESS:
+                        applicationBean.setSystems((JSONArray) response.getData());
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        break;
+                    case CommonConstants.FAIL:
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
+                }
+            }
+        } catch (Exception e) { 
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return "";
         }
         return gotoIndex();
     }

@@ -62,20 +62,28 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     }
     
     private void loadUsers() {
-        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user/list").get();
-        if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-            users = (JSONArray) response.getData();
-        } else {
-            log.debug(response.getMessage());
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/settings/user/list").get();
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                users = (JSONArray) response.getData();
+            } else {
+                log.debug(response.getMessage());
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
     
     private void loadUserGroups() {
-        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
-        if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-            userGroups = (JSONArray) response.getData();
-        } else {
-            log.debug(response.getMessage());
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                userGroups = (JSONArray) response.getData();
+            } else {
+                log.debug(response.getMessage());
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
     
@@ -106,19 +114,28 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("user", jsonUser);
         
-        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/add");
-        httpClient.setParameters(parameters);
-        
-        HttpClientResponse response = httpClient.post();
-        
-        if (response != null) {         
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage());
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return "";
-            }
+        try {
+            HttpClientResponse response = getHttpClient()
+                    .setHost(hostUrl)
+                    .setPath("/settings/user/add")
+                    .setParameters(parameters)
+                    .post();
+            if (response != null) {         
+                if (null != response.getStatus()) switch (response.getStatus()) {
+                    case CommonConstants.SUCCESS:
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        break;
+                    case CommonConstants.FAIL:
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
+                }
+            }    
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return "";
         }
+        
         return gotoIndex();
     }
     
@@ -133,17 +150,19 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("userId", removeId);
         
-        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/remove");
-        httpClient.setParameters(parameters);
-        
-        HttpClientResponse response = httpClient.post();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage()); 
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage());
-            }
+        try {
+            HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/remove", parameters);
+            HttpClientResponse response = httpClient.post();
+            if (response != null) {
+                if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                    Messages.addFlashGlobalInfo(response.getMessage()); 
+                } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                    Messages.addFlashGlobalInfo(response.getMessage());
+                }
+            }    
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addFlashGlobalInfo(CommonUtils.getExceptionMessage(e));
         }
         return gotoIndex();
     }
@@ -161,18 +180,22 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("userId", editId);
         
-        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/find");
-        httpClient.setParameters(parameters);
-        
-        HttpClientResponse response = httpClient.get();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                editUser = (JSONObject) response.getData();
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return;
+        try {
+            HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/find");
+            httpClient.setParameters(parameters);
+            HttpClientResponse response = httpClient.get();
+            if (response != null) {
+                if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                    editUser = (JSONObject) response.getData();
+                } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                    Messages.addGlobalError(response.getMessage());
+                    return;
+                }
             }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return;
         }
         inputFirstName = (String) editUser.get("firstName");
         inputLastName = (String) editUser.get("lastName");
@@ -200,18 +223,24 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("user", editUser);
         
-        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/edit");
-        httpClient.setParameters(parameters);
-        
-        HttpClientResponse response = httpClient.post();
-        
-        if (response != null) {         
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage());
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return "";
+        try {
+            HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/edit");
+            httpClient.setParameters(parameters);
+            HttpClientResponse response = httpClient.post();
+            if (response != null) {         
+                if (null != response.getStatus()) switch (response.getStatus()) {
+                    case CommonConstants.SUCCESS:
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        break;
+                    case CommonConstants.FAIL:
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
+                }
             }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return "";
         }
         return gotoIndex();
     }

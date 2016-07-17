@@ -22,6 +22,10 @@ public class HttpClientResponse {
         }
     }
 
+    public String getResponse() {
+        return response;
+    }
+    
     public String getStatus() {
         return status;
     }
@@ -34,8 +38,9 @@ public class HttpClientResponse {
         return data;
     }
 
+    @Override
     public String toString() {
-        return response;
+        return getResponse();
     }
 
 }

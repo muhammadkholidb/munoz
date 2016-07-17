@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
 
@@ -62,11 +63,15 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     }
 
     private void loadUserGroups() {
-        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
-        if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-            userGroups = (JSONArray) response.getData();
-        } else {
-            log.debug(response.getMessage());
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
+            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                userGroups = (JSONArray) response.getData();
+            } else {
+                log.debug(response.getMessage());
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -104,18 +109,24 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         parameters.put("userGroup", jsonUserGroup);
         parameters.put("menuPermissions", arrMenuPermission);
 
-        HttpClient httpClient = getHttpClient(hostUrl, "/settings/user-group/add");
-        httpClient.setParameters(parameters);
-        
-        HttpClientResponse response = httpClient.post();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage());
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return "";
-            }
+        try {
+            HttpClient httpClient = getHttpClient(hostUrl, "/settings/user-group/add");
+            httpClient.setParameters(parameters);
+            HttpClientResponse response = httpClient.post();
+            if (response != null) {
+                if (null != response.getStatus()) switch (response.getStatus()) {
+                    case CommonConstants.SUCCESS:
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        break;
+                    case CommonConstants.FAIL:
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
+                }
+            }    
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return "";
         }
         return gotoIndex();
     }
@@ -134,17 +145,23 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         JSONObject parameters = new JSONObject();
         parameters.put("userGroupId", editId);
         
-        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/find", parameters).get();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                editUserGroup = (JSONObject) response.getData();
-                editMenuPermissions = (JSONArray) editUserGroup.get("userGroupMenuPermissions");
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return;
-            }
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/find", parameters).get();
+            if (response != null) {
+                if (CommonConstants.SUCCESS.equals(response.getStatus())) {
+                    editUserGroup = (JSONObject) response.getData();
+                    editMenuPermissions = (JSONArray) editUserGroup.get("userGroupMenuPermissions");
+                } else if (CommonConstants.FAIL.equals(response.getStatus())) {
+                    Messages.addGlobalError(response.getMessage());
+                    return;
+                }
+            }    
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return;
         }
+        
         inputGroupName = (String) editUserGroup.get("name");
         inputGroupActive = (String) editUserGroup.get("active");
         inputMenus = new JSONArray();
@@ -188,19 +205,25 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         parameters.put("userGroup", editUserGroup);
         parameters.put("menuPermissions", arrMenuPermission);
 
-        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/edit", parameters).post();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage());
-                JSONObject updated = (JSONObject) response.getData();
-                if (loginBean.getUserGroup().get("id").equals(updated.get("id"))) {
-                    return loginBean.doLogout();
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/edit", parameters).post();
+            if (response != null) {
+                if (null != response.getStatus()) switch (response.getStatus()) {
+                    case CommonConstants.SUCCESS:
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        JSONObject updated = (JSONObject) response.getData();
+                        if (loginBean.getUserGroup().get("id").equals(updated.get("id"))) {
+                            return loginBean.doLogout();
+                        }   break;
+                    case CommonConstants.FAIL:
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
                 }
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addGlobalError(response.getMessage());
-                return "";
             }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
+            return "";
         }
         return gotoIndex();
     }
@@ -215,15 +238,21 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     public String doRemoveUserGroup() {
         JSONObject parameters = new JSONObject();
         parameters.put("userGroupId", removeId);
-        
-        HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/remove", parameters).post();
-        
-        if (response != null) {
-            if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                Messages.addFlashGlobalInfo(response.getMessage());
-            } else if (CommonConstants.FAIL.equals(response.getStatus())) {
-                Messages.addFlashGlobalError(response.getMessage());
+        try {
+            HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/remove", parameters).post();
+            if (response != null) {
+                if (null != response.getStatus()) switch (response.getStatus()) {
+                    case CommonConstants.SUCCESS:
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        break;
+                    case CommonConstants.FAIL:
+                        Messages.addFlashGlobalError(response.getMessage());
+                        break;
+                }
             }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
         }
         return gotoIndex();
     }
