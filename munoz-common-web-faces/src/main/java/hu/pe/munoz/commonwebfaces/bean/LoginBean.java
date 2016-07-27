@@ -29,7 +29,7 @@ public class LoginBean extends RESTBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private Logger log = LoggerFactory.getLogger(LoginBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
 
     private String inputUsername;
 
@@ -42,7 +42,7 @@ public class LoginBean extends RESTBean implements Serializable {
     @Override
     protected void postConstruct() {
         super.postConstruct();
-        log.info("Post construct LoginBean ...");
+        LOG.info("Post construct LoginBean ...");
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +70,7 @@ public class LoginBean extends RESTBean implements Serializable {
                 }
             }
         } catch (Exception e) {
-            log.error(e.toString(), e); 
+            LOG.error(e.toString(), e); 
             String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
             Messages.addGlobalError(message);
             return;
@@ -88,7 +88,7 @@ public class LoginBean extends RESTBean implements Serializable {
             }
             Faces.redirect("home.xhtml");
         } catch (Exception e) {
-            log.error(e.toString(), e);
+            LOG.error(e.toString(), e);
             Messages.addGlobalError(e.getMessage(), new Object[]{});
         }
     }
@@ -109,7 +109,7 @@ public class LoginBean extends RESTBean implements Serializable {
                 user.put("userGroup", userGroup);
             }
         } catch (ServletException e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
         }
     }
 

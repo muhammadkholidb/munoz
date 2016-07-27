@@ -42,7 +42,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(SystemBean.class);
 
     private String languageCode;
     private String image;
@@ -55,7 +55,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     @Override
     protected void postConstruct() {
         super.postConstruct();
-        log.info("Post construct SystemBean ...");
+        LOG.info("Post construct SystemBean ...");
         load();
     }
 
@@ -96,8 +96,8 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 
             newFileName = UUID.randomUUID().toString() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
 
-            log.debug("Upload image ({}) to {}", newFileName, imageDir);
-            
+            LOG.debug("Upload image ({}) to {}", newFileName, imageDir);
+
             // http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
             InputStream input = null;
             OutputStream output = null;
@@ -107,7 +107,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
                 IOUtils.copy(input, output);
                 uploaded = true;
             } catch (IOException e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
                 Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
             } finally {
                 IOUtils.closeQuietly(input);
@@ -146,25 +146,27 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 
             // Update header Accept-Language in restClient if language changed
             if (!languageCode.equals(applicationBean.getLanguageCode())) {
-                log.debug("Language changed!");
+                LOG.debug("Language changed!");
                 httpClient.setHeader("Accept-Language", languageCode);
             }
 
             HttpClientResponse response = httpClient.post();
 
             if (response != null) {
-                if (null != response.getStatus()) switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
-                        applicationBean.setSystems((JSONArray) response.getData());
-                        Messages.addFlashGlobalInfo(response.getMessage());
-                        break;
-                    case CommonConstants.FAIL:
-                        Messages.addGlobalError(response.getMessage());
-                        return "";
+                if (null != response.getStatus()) {
+                    switch (response.getStatus()) {
+                        case CommonConstants.SUCCESS:
+                            applicationBean.setSystems((JSONArray) response.getData());
+                            Messages.addFlashGlobalInfo(response.getMessage());
+                            break;
+                        case CommonConstants.FAIL:
+                            Messages.addGlobalError(response.getMessage());
+                            return "";
+                    }
                 }
             }
-        } catch (Exception e) { 
-            log.error(e.getMessage(), e);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return "";
         }

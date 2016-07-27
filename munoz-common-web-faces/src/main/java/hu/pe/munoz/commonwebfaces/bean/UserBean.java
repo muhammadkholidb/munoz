@@ -27,15 +27,15 @@ import hu.pe.munoz.common.helper.HttpClientResponse;
 public class UserBean extends DefaultBehaviorBean implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-    
-    private Logger log = LoggerFactory.getLogger(UserBean.class);
-    
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserBean.class);
+
     private JSONArray users;
     private JSONArray userGroups;
-    
+
     private String inputFirstName;
     private String inputLastName;
     private String inputUsername;
@@ -43,65 +43,65 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     private String inputActive;
     private String inputPassword;
     private Long inputUserGroupId;
-    
+
     @Override
     protected void postConstruct() {
         super.postConstruct();
-        log.debug("Post construct UserBean ...");
+        LOG.debug("Post construct UserBean ...");
         switch (mode) {
-        case INDEX:         
-            loadUsers();
-            break;
-        case ADD:
-            prepareAdd();
-            break;
-        case EDIT:
-            prepareEdit();
-            break;
+            case INDEX:
+                loadUsers();
+                break;
+            case ADD:
+                prepareAdd();
+                break;
+            case EDIT:
+                prepareEdit();
+                break;
         }
     }
-    
+
     private void loadUsers() {
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user/list").get();
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 users = (JSONArray) response.getData();
             } else {
-                log.debug(response.getMessage());
+                LOG.debug(response.getMessage());
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
-    
+
     private void loadUserGroups() {
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 userGroups = (JSONArray) response.getData();
             } else {
-                log.debug(response.getMessage());
+                LOG.debug(response.getMessage());
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
-    
+
     public void generateRandom() {
         inputPassword = CommonUtils.getDefaultRandomPassword();
     }
-    
+
     private void prepareAdd() {
         loadUserGroups();
         generateRandom();
     }
-    
+
     @SuppressWarnings("unchecked")
     public String doSaveAdd() {
 
         JSONObject jsonUserGroup = new JSONObject();
         jsonUserGroup.put("id", inputUserGroupId);
-        
+
         JSONObject jsonUser = new JSONObject();
         jsonUser.put("firstName", inputFirstName.trim());
         jsonUser.put("lastName", inputLastName.trim());
@@ -110,37 +110,39 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         jsonUser.put("password", DigestUtils.sha1Hex(inputPassword));
         jsonUser.put("active", CommonConstants.YES);
         jsonUser.put("userGroup", jsonUserGroup);
-        
+
         JSONObject parameters = new JSONObject();
         parameters.put("user", jsonUser);
-        
+
         try {
             HttpClientResponse response = getHttpClient()
                     .setHost(hostUrl)
                     .setPath("/settings/user/add")
                     .setParameters(parameters)
                     .post();
-            if (response != null) {         
-                if (null != response.getStatus()) switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
-                        Messages.addFlashGlobalInfo(response.getMessage());
-                        break;
-                    case CommonConstants.FAIL:
-                        Messages.addGlobalError(response.getMessage());
-                        return "";
+            if (response != null) {
+                if (null != response.getStatus()) {
+                    switch (response.getStatus()) {
+                        case CommonConstants.SUCCESS:
+                            Messages.addFlashGlobalInfo(response.getMessage());
+                            break;
+                        case CommonConstants.FAIL:
+                            Messages.addGlobalError(response.getMessage());
+                            return "";
+                    }
                 }
-            }    
+            }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return "";
         }
-        
+
         return gotoIndex();
     }
-    
+
     private Long removeId;
-    
+
     public void prepareRemoveUser(Long removeId) {
         this.removeId = removeId;
     }
@@ -149,37 +151,37 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     public String doRemoveUser() {
         JSONObject parameters = new JSONObject();
         parameters.put("userId", removeId);
-        
+
         try {
             HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/remove", parameters);
             HttpClientResponse response = httpClient.post();
             if (response != null) {
                 if (CommonConstants.SUCCESS.equals(response.getStatus())) {
-                    Messages.addFlashGlobalInfo(response.getMessage()); 
+                    Messages.addFlashGlobalInfo(response.getMessage());
                 } else if (CommonConstants.FAIL.equals(response.getStatus())) {
                     Messages.addFlashGlobalInfo(response.getMessage());
                 }
-            }    
+            }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addFlashGlobalInfo(CommonUtils.getExceptionMessage(e));
         }
         return gotoIndex();
     }
-    
+
     public String gotoEdit(Long editId) {
         Faces.getFlash().put("editId", editId);
         return gotoEdit();
     }
 
     private JSONObject editUser;
-    
+
     @SuppressWarnings("unchecked")
     public void prepareEdit() {
         Long editId = (Long) Faces.getFlash().get("editId");
         JSONObject parameters = new JSONObject();
         parameters.put("userId", editId);
-        
+
         try {
             HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/find");
             httpClient.setParameters(parameters);
@@ -193,7 +195,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return;
         }
@@ -205,7 +207,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         inputUserGroupId = (Long) ((JSONObject) editUser.get("userGroup")).get("id");
         loadUserGroups();
     }
-    
+
     @SuppressWarnings("unchecked")
     public String doSaveEdit() {
         editUser.put("firstName", inputFirstName.trim());
@@ -222,35 +224,36 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
 
         JSONObject parameters = new JSONObject();
         parameters.put("user", editUser);
-        
+
         try {
             HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/edit");
             httpClient.setParameters(parameters);
             HttpClientResponse response = httpClient.post();
-            if (response != null) {         
-                if (null != response.getStatus()) switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
-                        Messages.addFlashGlobalInfo(response.getMessage());
-                        break;
-                    case CommonConstants.FAIL:
-                        Messages.addGlobalError(response.getMessage());
-                        return "";
+            if (response != null) {
+                if (null != response.getStatus()) {
+                    switch (response.getStatus()) {
+                        case CommonConstants.SUCCESS:
+                            Messages.addFlashGlobalInfo(response.getMessage());
+                            break;
+                        case CommonConstants.FAIL:
+                            Messages.addGlobalError(response.getMessage());
+                            return "";
+                    }
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return "";
         }
         return gotoIndex();
     }
-    
+
     @Override
     protected String getMenuCode() {
         return "menu.settings.user";
     }
 
-    
     public JSONArray getUsers() {
         return users;
     }
@@ -322,5 +325,5 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     public void setInputUserGroupId(Long inputUserGroupId) {
         this.inputUserGroupId = inputUserGroupId;
     }
-    
+
 }

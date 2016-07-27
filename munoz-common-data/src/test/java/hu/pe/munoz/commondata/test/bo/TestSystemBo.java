@@ -27,7 +27,7 @@ import hu.pe.munoz.commondata.entity.SystemEntity;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestSystemBo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestSystemBo.class);
 
     @Autowired
     private SystemBo systemBo;
@@ -40,14 +40,14 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
 
     @Test
     public void testGetAllSystem() {
-        LOGGER.debug("TEST get all system ...");
+        LOG.debug("TEST get all system ...");
         List<SystemEntity> list = systemBo.getAllSystem();
         assertEquals(4, list.size());
     }
 
     @Test
     public void testGetSystemByKeySuccess() {
-        LOGGER.debug("TEST SUCCESS get system by key ...");
+        LOG.debug("TEST SUCCESS get system by key ...");
         String key = CommonConstants.SYSTEM_KEY_LANGUAGE_CODE;
         try {
             SystemEntity system = systemBo.getSystemByKey(key);
@@ -60,13 +60,13 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
 
     @Test
     public void testGetSystemByKeyFail() {
-        LOGGER.debug("TEST FAIL get system by key ...");
+        LOG.debug("TEST FAIL get system by key ...");
         String key = "unknown";
         try {
             systemBo.getSystemByKey(key);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            LOG.debug(e.toString());
             assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.SYSTEM_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
 
     @Test
     public void testEditSystemListSuccess() {
-        LOGGER.debug("TEST SUCCESS edit system list ...");
+        LOG.debug("TEST SUCCESS edit system list ...");
 
         SystemEntity systemLanguageCode = new SystemEntity();
         systemLanguageCode.setId(1L);
@@ -114,7 +114,7 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
 
     @Test
     public void testEditSystemListFail() {
-        LOGGER.debug("TEST FAIL edit system list ...");
+        LOG.debug("TEST FAIL edit system list ...");
 
         SystemEntity systemUnknown = new SystemEntity();
         systemUnknown.setId(10L);
@@ -128,7 +128,7 @@ public class TestSystemBo extends AbstractTransactionalJUnit4SpringContextTests 
             systemBo.editSystemList(systemList);
             fail();
         } catch (DataException e) {
-            LOGGER.debug(e.toString());
+            LOG.debug(e.toString());
             assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.SYSTEM_NOT_FOUND, e.getMessage());
         } catch (Exception e) {

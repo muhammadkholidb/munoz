@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseEntity.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BaseEntity.class);
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,13 +58,13 @@ public abstract class BaseEntity {
 
     @PrePersist
     protected void onCreate() {
-        LOGGER.debug("onCreate() triggered ...");
+        LOG.debug("onCreate() triggered ...");
         modifiedAt = createdAt = System.currentTimeMillis();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        LOGGER.debug("onUpdate() triggered ...");
+        LOG.debug("onUpdate() triggered ...");
         modifiedAt = System.currentTimeMillis();
     }
 }

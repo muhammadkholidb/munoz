@@ -32,7 +32,7 @@ public class ApplicationBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationBean.class);
 
     private JSONArray systems;
     private Locale locale;
@@ -46,7 +46,7 @@ public class ApplicationBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Post construct ApplicationBean ...");
+        LOG.debug("Post construct ApplicationBean ...");
         applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
         hostUrl = applicationProperties.getProperty("rest.HostUrl");
 
@@ -60,11 +60,11 @@ public class ApplicationBean implements Serializable {
                 if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                     setSystems((JSONArray) response.getData());
                 } else {
-                    log.error(response.getMessage());
+                    LOG.error(response.getMessage());
                 }
             }
         } catch (Exception e) {
-            log.error(e.toString(), e);
+            LOG.error(e.toString(), e);
         }
     }
 

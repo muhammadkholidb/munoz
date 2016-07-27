@@ -14,139 +14,139 @@ import org.slf4j.LoggerFactory;
 
 public class RESTClient {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(RESTClient.class);
 
-	private boolean secure;
-	private Map<String, String> headers;
+    private boolean secure;
+    private Map<String, String> headers;
 
-	public RESTClient() {
-		secure = false;
-		headers = new HashMap<String, String>();
-	}
-	
-	public void setHeader(String name, String value) {
-		headers.put(name, value);
-	}
-	
-	private String buildQueryStrings(JSONObject parameters) {
-		if ((parameters != null) && !parameters.isEmpty()) {
-			StringBuilder builder = new StringBuilder();
-			int i = 0;
-			for (Object key : parameters.keySet()) {
-				builder.append(key);
-				builder.append("=");
-				builder.append(parameters.get(key));
-				i++;
-				if (i < parameters.size()) {
-					builder.append("&");
-				}
-			}
-			return builder.toString();
-		}
-		return null;
-	}
+    public RESTClient() {
+        secure = false;
+        headers = new HashMap<String, String>();
+    }
 
-	public RESTResponse fetchGet(String host, String path, JSONObject parameters, boolean secure) {
-		this.secure = secure;
-		return fetchGet(host, path, parameters);
-	}
+    public void setHeader(String name, String value) {
+        headers.put(name, value);
+    }
 
-	public RESTResponse fetchGet(String host, String path, JSONObject parameters) {
+    private String buildQueryStrings(JSONObject parameters) {
+        if ((parameters != null) && !parameters.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            int i = 0;
+            for (Object key : parameters.keySet()) {
+                builder.append(key);
+                builder.append("=");
+                builder.append(parameters.get(key));
+                i++;
+                if (i < parameters.size()) {
+                    builder.append("&");
+                }
+            }
+            return builder.toString();
+        }
+        return null;
+    }
 
-		String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
-		String queryStrings = buildQueryStrings(parameters);
+    public RESTResponse fetchGet(String host, String path, JSONObject parameters, boolean secure) {
+        this.secure = secure;
+        return fetchGet(host, path, parameters);
+    }
 
-		log.debug("Sending GET request to URL : " + strUrl);
-		log.debug("Parameters: " + parameters);
+    public RESTResponse fetchGet(String host, String path, JSONObject parameters) {
 
-		try {
+        String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
+        String queryStrings = buildQueryStrings(parameters);
 
-			URL url = new URL(strUrl + ((queryStrings == null) ? "" : ("?" + queryStrings)));
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        LOG.debug("Sending GET request to URL : " + strUrl);
+        LOG.debug("Parameters: " + parameters);
 
-			con.setRequestMethod("GET");
-			for (String name : headers.keySet()) {
-				con.setRequestProperty(name, headers.get(name));
-			}
+        try {
 
-			int responseCode = con.getResponseCode();
-			log.debug("Response code : " + responseCode);
+            URL url = new URL(strUrl + ((queryStrings == null) ? "" : ("?" + queryStrings)));
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-			if (responseCode == HttpURLConnection.HTTP_OK) {
+            con.setRequestMethod("GET");
+            for (String name : headers.keySet()) {
+                con.setRequestProperty(name, headers.get(name));
+            }
 
-				StringBuilder response = new StringBuilder();
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-				log.debug("Response: " + response);
-				return new RESTResponse(response.toString());
-			}
+            int responseCode = con.getResponseCode();
+            LOG.debug("Response code : " + responseCode);
 
-		} catch (Exception e) {
-			log.error(e.toString(), e);
-		}
-		return null;
-	}
+            if (responseCode == HttpURLConnection.HTTP_OK) {
 
-	public RESTResponse fetchPost(String host, String path, JSONObject parameters, boolean secure) {
-		this.secure = secure;
-		return fetchPost(host, path, parameters);
-	}
-	
-	public RESTResponse fetchPost(String host, String path, JSONObject parameters) {
+                StringBuilder response = new StringBuilder();
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                LOG.debug("Response: " + response);
+                return new RESTResponse(response.toString());
+            }
 
-		String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
-		String queryStrings = buildQueryStrings(parameters);
+        } catch (Exception e) {
+            LOG.error(e.toString(), e);
+        }
+        return null;
+    }
 
-		log.debug("Sending POST request to URL : " + strUrl);
-		log.debug("Parameters : " + parameters);
+    public RESTResponse fetchPost(String host, String path, JSONObject parameters, boolean secure) {
+        this.secure = secure;
+        return fetchPost(host, path, parameters);
+    }
 
-		try {
-			URL obj = new URL(strUrl);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-			
-			con.setRequestMethod("POST");
-			con.setDoOutput(true);
-			for (String name : headers.keySet()) {
-				con.setRequestProperty(name, headers.get(name));
-			}
+    public RESTResponse fetchPost(String host, String path, JSONObject parameters) {
 
-			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.writeBytes(queryStrings);
-			wr.flush();
-			wr.close();
-			
-			int responseCode = con.getResponseCode();
-			log.debug("Response code: " + responseCode);
+        String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
+        String queryStrings = buildQueryStrings(parameters);
 
-			if (responseCode == HttpURLConnection.HTTP_OK) {				
-				
-				StringBuilder response = new StringBuilder();
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-				log.debug("Response: " + response);
-				return new RESTResponse(response.toString());
-			}
-			
-		} catch (Exception e) {
-			log.error(e.toString(), e);
-		}
-		return null;
-	}
+        LOG.debug("Sending POST request to URL : " + strUrl);
+        LOG.debug("Parameters : " + parameters);
 
-	public boolean isSecure() {
-		return secure;
-	}
+        try {
+            URL obj = new URL(strUrl);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-	public void setSecure(boolean secure) {
-		this.secure = secure;
-	}
+            con.setRequestMethod("POST");
+            con.setDoOutput(true);
+            for (String name : headers.keySet()) {
+                con.setRequestProperty(name, headers.get(name));
+            }
+
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(queryStrings);
+            wr.flush();
+            wr.close();
+
+            int responseCode = con.getResponseCode();
+            LOG.debug("Response code: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+
+                StringBuilder response = new StringBuilder();
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                LOG.debug("Response: " + response);
+                return new RESTResponse(response.toString());
+            }
+
+        } catch (Exception e) {
+            LOG.error(e.toString(), e);
+        }
+        return null;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(boolean secure) {
+        this.secure = secure;
+    }
 
 }

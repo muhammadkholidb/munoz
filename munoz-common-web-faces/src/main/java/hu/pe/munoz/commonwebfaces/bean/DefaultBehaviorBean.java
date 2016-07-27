@@ -9,10 +9,13 @@ import javax.faces.bean.ManagedProperty;
 import org.omnifaces.util.Faces;
 
 import hu.pe.munoz.commonwebfaces.helper.PageMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class DefaultBehaviorBean extends RESTBean {
 
-    // private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultBehaviorBean.class);
+
     private final List<String> LIST_PATH_FOR_VIEW = Arrays.asList("/index.xhtml", "/view.xhtml");
     private final List<String> LIST_PATH_FOR_MODIFY = Arrays.asList("/edit.xhtml", "/add.xhtml");
 

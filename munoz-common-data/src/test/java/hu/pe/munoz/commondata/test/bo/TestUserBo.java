@@ -27,7 +27,7 @@ import hu.pe.munoz.commondata.entity.UserGroupEntity;
 @ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
 public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(TestUserBo.class);
 
     @Autowired
     private UserBo userBo;
@@ -40,7 +40,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void testGetAllUser() {
-        log.debug("TEST get all user ...");
+        LOG.debug("TEST get all user ...");
         List<UserEntity> list = userBo.getAllUser();
         assertEquals(2, list.size());
         for (UserEntity user : list) {
@@ -67,7 +67,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void testGetUserListByUserGroupId() {
-        log.debug("TEST get user list by user group id ...");
+        LOG.debug("TEST get user list by user group id ...");
         Long userGroupId = 1L;
         List<UserEntity> list = userBo.getUserListByUserGroupId(userGroupId);
         assertEquals(1, list.size());
@@ -82,7 +82,7 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void testAddUserSuccess() {
-        log.debug("TEST SUCCESS add user ...");
+        LOG.debug("TEST SUCCESS add user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
 
@@ -99,14 +99,14 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
             assertEquals(3L, userEntity.getId().longValue());
         } catch (Exception e) {
             e.printStackTrace();
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             fail();
         }
     }
 
     @Test
     public void testAddUserFail() {
-        log.debug("TEST FAIL add user ...");
+        LOG.debug("TEST FAIL add user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
 
@@ -122,18 +122,18 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
             userBo.addUser(userEntity);
             fail();
         } catch (DataException e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             assertEquals(ExceptionCode.D0003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, e.getMessage());
         } catch (Exception e) {
-            log.error(e.toString(), e);
+            LOG.error(e.toString(), e);
             fail(e.toString());
         }
     }
 
     @Test
     public void testEditUserSuccess() {
-        log.debug("TEST SUCCESS edit user ...");
+        LOG.debug("TEST SUCCESS edit user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
 
@@ -153,14 +153,14 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
             assertEquals(CommonConstants.NO, userEntity.getActive());
         } catch (Exception e) {
             e.printStackTrace();
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             fail();
         }
     }
 
     @Test
     public void testEditUserFail1() {
-        log.debug("TEST FAIL 1 edit user ...");
+        LOG.debug("TEST FAIL 1 edit user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
 
@@ -177,18 +177,18 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
             userBo.editUser(userEntity);
             fail();
         } catch (DataException e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             fail(e.toString());
         }
     }
 
     @Test
     public void testEditUserFail2() {
-        log.debug("TEST FAIL 2 edit user ...");
+        LOG.debug("TEST FAIL 2 edit user ...");
         UserGroupEntity userGroup = new UserGroupEntity();
         userGroup.setId(1L);
 
@@ -205,42 +205,42 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
             userBo.editUser(userEntity);
             fail();
         } catch (DataException e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             assertEquals(ExceptionCode.D0003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            log.error(e.toString(), e);
+            LOG.error(e.toString(), e);
             fail(e.toString());
         }
     }
 
     @Test
     public void testRemoveUserSuccess() {
-        log.debug("TEST SUCCESS remove user ...");
+        LOG.debug("TEST SUCCESS remove user ...");
         Long id = 2L;
         try {
             userBo.removeUser(id);
         } catch (Exception e) {
             e.printStackTrace();
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             fail();
         }
     }
 
     @Test
     public void testRemoveUserFail() {
-        log.debug("TEST FAIL remove user ...");
+        LOG.debug("TEST FAIL remove user ...");
         Long id = 100L;
         try {
             userBo.removeUser(id);
             fail();
         } catch (DataException e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             assertEquals(ExceptionCode.D0001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-            log.debug(e.toString());
+            LOG.debug(e.toString());
             fail(e.toString());
         }
     }

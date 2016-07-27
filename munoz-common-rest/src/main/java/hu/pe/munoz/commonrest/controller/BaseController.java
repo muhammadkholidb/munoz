@@ -17,40 +17,40 @@ import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 
 public abstract class BaseController {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	protected Mapper mapper;
-	
-	@Autowired
-	protected MessageString messageString;
+    private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
-	@Autowired
-	protected HttpServletRequest request;
+    @Autowired
+    protected Mapper mapper;
 
-	protected String getResponseMessage(String code, Object[] arguments) {
-		String languageCode = request.getHeader("Accept-Language");
-		if (languageCode != null) {			
-		    return messageString.get(code, arguments, new Locale(languageCode)).toString();
-		}
-		return messageString.get(code, arguments).toString();
-	}
-	
-	protected String getResponseMessage(String code) {
-		return getResponseMessage(code, null);
-	}
-	
-	@ExceptionHandler(DataException.class)
-	public ResponseWrapper<Object> handleDataException(DataException e) {
-		log.debug("Data exception caught!");
-		String message = getResponseMessage(e.getMessage(), e.getData());
-		return new ResponseWrapper<Object>(CommonConstants.FAIL, e.getCode() + ": " + message);	
-	}
-	
-	@ExceptionHandler(Exception.class) 
-	public ResponseWrapper<Object> handleOtherException(Exception e) {
-		log.debug("Other exception caught!", e);
-		return new ResponseWrapper<Object>(CommonConstants.FAIL, null, e.toString());
-	}
-	
+    @Autowired
+    protected MessageString messageString;
+
+    @Autowired
+    protected HttpServletRequest request;
+
+    protected String getResponseMessage(String code, Object[] arguments) {
+        String languageCode = request.getHeader("Accept-Language");
+        if (languageCode != null) {
+            return messageString.get(code, arguments, new Locale(languageCode)).toString();
+        }
+        return messageString.get(code, arguments).toString();
+    }
+
+    protected String getResponseMessage(String code) {
+        return getResponseMessage(code, null);
+    }
+
+    @ExceptionHandler(DataException.class)
+    public ResponseWrapper<Object> handleDataException(DataException e) {
+        LOG.debug("Data exception caught!");
+        String message = getResponseMessage(e.getMessage(), e.getData());
+        return new ResponseWrapper<Object>(CommonConstants.FAIL, e.getCode() + ": " + message);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseWrapper<Object> handleOtherException(Exception e) {
+        LOG.debug("Other exception caught!", e);
+        return new ResponseWrapper<Object>(CommonConstants.FAIL, null, e.toString());
+    }
+
 }

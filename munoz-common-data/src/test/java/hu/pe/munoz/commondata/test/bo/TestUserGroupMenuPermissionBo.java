@@ -21,7 +21,7 @@ import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TestUserGroupMenuPermissionBo extends AbstractTransactionalJUnit4SpringContextTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestUserGroupMenuPermissionBo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestUserGroupMenuPermissionBo.class);
 
     @Autowired
     private UserGroupMenuPermissionBo userGroupMenuPermissionBo;
@@ -34,17 +34,17 @@ public class TestUserGroupMenuPermissionBo extends AbstractTransactionalJUnit4Sp
 
     @Test
     public void testGetAllUserGroupMenuPermission() {
-        LOGGER.debug("TEST get all user group menu permission ...");
+        LOG.debug("TEST get all user group menu permission ...");
         List<UserGroupMenuPermissionEntity> list = userGroupMenuPermissionBo.getAllUserGroupMenuPermission();
         assertEquals(8, list.size());
     }
 
     @Test
     public void testGetUserGroupMenuPermissionListByUserGroupId() {
-    	LOGGER.debug("TEST get user group menu permission by user group id ...");
-    	Long userGroupId = 1L;
-    	List<UserGroupMenuPermissionEntity> list = userGroupMenuPermissionBo.getUserGroupMenuPermissionListByUserGroupId(userGroupId);
-    	assertEquals(4, list.size());
+        LOG.debug("TEST get user group menu permission by user group id ...");
+        Long userGroupId = 1L;
+        List<UserGroupMenuPermissionEntity> list = userGroupMenuPermissionBo.getUserGroupMenuPermissionListByUserGroupId(userGroupId);
+        assertEquals(4, list.size());
     }
-    
+
 }

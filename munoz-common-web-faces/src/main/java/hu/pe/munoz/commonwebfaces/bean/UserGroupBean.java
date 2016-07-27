@@ -31,7 +31,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(UserGroupBean.class);
 
     private JSONArray userGroups;
     private JSONArray inputMenus;
@@ -48,7 +48,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     @Override
     protected void postConstruct() {
         super.postConstruct();
-        log.debug("Post construct UserGroupBean ...");
+        LOG.debug("Post construct UserGroupBean ...");
         switch (mode) {
             case INDEX:
                 loadUserGroups();
@@ -68,10 +68,10 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 userGroups = (JSONArray) response.getData();
             } else {
-                log.debug(response.getMessage());
+                LOG.debug(response.getMessage());
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -114,17 +114,19 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             httpClient.setParameters(parameters);
             HttpClientResponse response = httpClient.post();
             if (response != null) {
-                if (null != response.getStatus()) switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
-                        Messages.addFlashGlobalInfo(response.getMessage());
-                        break;
-                    case CommonConstants.FAIL:
-                        Messages.addGlobalError(response.getMessage());
-                        return "";
+                if (null != response.getStatus()) {
+                    switch (response.getStatus()) {
+                        case CommonConstants.SUCCESS:
+                            Messages.addFlashGlobalInfo(response.getMessage());
+                            break;
+                        case CommonConstants.FAIL:
+                            Messages.addGlobalError(response.getMessage());
+                            return "";
+                    }
                 }
-            }    
+            }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return "";
         }
@@ -144,7 +146,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         Long editId = (Long) Faces.getFlash().get("editId");
         JSONObject parameters = new JSONObject();
         parameters.put("userGroupId", editId);
-        
+
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/find", parameters).get();
             if (response != null) {
@@ -155,13 +157,13 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
                     Messages.addGlobalError(response.getMessage());
                     return;
                 }
-            }    
+            }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return;
         }
-        
+
         inputGroupName = (String) editUserGroup.get("name");
         inputGroupActive = (String) editUserGroup.get("active");
         inputMenus = new JSONArray();
@@ -208,20 +210,23 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/edit", parameters).post();
             if (response != null) {
-                if (null != response.getStatus()) switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
-                        Messages.addFlashGlobalInfo(response.getMessage());
-                        JSONObject updated = (JSONObject) response.getData();
-                        if (loginBean.getUserGroup().get("id").equals(updated.get("id"))) {
-                            return loginBean.doLogout();
-                        }   break;
-                    case CommonConstants.FAIL:
-                        Messages.addGlobalError(response.getMessage());
-                        return "";
+                if (null != response.getStatus()) {
+                    switch (response.getStatus()) {
+                        case CommonConstants.SUCCESS:
+                            Messages.addFlashGlobalInfo(response.getMessage());
+                            JSONObject updated = (JSONObject) response.getData();
+                            if (loginBean.getUserGroup().get("id").equals(updated.get("id"))) {
+                                return loginBean.doLogout();
+                            }
+                            break;
+                        case CommonConstants.FAIL:
+                            Messages.addGlobalError(response.getMessage());
+                            return "";
+                    }
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return "";
         }
@@ -241,17 +246,19 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/remove", parameters).post();
             if (response != null) {
-                if (null != response.getStatus()) switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
-                        Messages.addFlashGlobalInfo(response.getMessage());
-                        break;
-                    case CommonConstants.FAIL:
-                        Messages.addFlashGlobalError(response.getMessage());
-                        break;
+                if (null != response.getStatus()) {
+                    switch (response.getStatus()) {
+                        case CommonConstants.SUCCESS:
+                            Messages.addFlashGlobalInfo(response.getMessage());
+                            break;
+                        case CommonConstants.FAIL:
+                            Messages.addFlashGlobalError(response.getMessage());
+                            break;
+                    }
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
         }
         return gotoIndex();
