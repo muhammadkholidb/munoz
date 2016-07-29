@@ -21,6 +21,7 @@ import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
+import hu.pe.munoz.commonwebfaces.helper.MessageHelper;
 
 @ManagedBean
 @ViewScoped
@@ -99,6 +100,11 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     @SuppressWarnings("unchecked")
     public String doSaveAdd() {
 
+        if (userGroups == null || userGroups.size() == 0) {
+            Messages.addGlobalError(MessageHelper.getStringByEL("lang", "error.UserGroupCannotBeEmpty"));
+            return "";
+        }
+        
         JSONObject jsonUserGroup = new JSONObject();
         jsonUserGroup.put("id", inputUserGroupId);
 

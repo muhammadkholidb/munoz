@@ -91,19 +91,24 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
                 return "";
             }
 
+            String envUserDir = applicationProperties.getProperty("environment.UserHomeDir");
+            String applicationDir = applicationProperties.getProperty("directory.Application");
+            String imagesDir = applicationProperties.getProperty("directory.Images");
+            String userDir = System.getenv(envUserDir);
+            
+            String fullImagesDir = userDir + applicationDir + imagesDir;
             String uploadedFileName = imageUpload.getFileName();
-            String imageDir = System.getProperty("user.home") + applicationProperties.getProperty("directory.Images");
 
             newFileName = UUID.randomUUID().toString() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
 
-            LOG.debug("Upload image ({}) to {}", newFileName, imageDir);
+            LOG.debug("Upload image ({}) to {}", newFileName, fullImagesDir);
 
             // http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
             InputStream input = null;
             OutputStream output = null;
             try {
                 input = imageUpload.getInputstream();
-                output = new FileOutputStream(new File(imageDir, newFileName));
+                output = new FileOutputStream(new File(fullImagesDir, newFileName));
                 IOUtils.copy(input, output);
                 uploaded = true;
             } catch (IOException e) {

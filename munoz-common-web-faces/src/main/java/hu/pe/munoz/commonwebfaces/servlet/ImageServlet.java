@@ -16,21 +16,29 @@ import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
 @WebServlet("/resources.image/*")
 public class ImageServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Properties applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-		String imageDir = System.getProperty("user.home") + applicationProperties.getProperty("directory.Images");
-		String filename = req.getPathInfo().substring(1);
-		File file = new File(imageDir, filename);
-		resp.setHeader("Content-Type", getServletContext().getMimeType(filename));
-		resp.setHeader("Content-Length", String.valueOf(file.length()));
-		resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-		Files.copy(file.toPath(), resp.getOutputStream());
-	}
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        
+        Properties applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
+
+        String envUserDir = applicationProperties.getProperty("environment.UserHomeDir");
+        String applicationDir = applicationProperties.getProperty("directory.Application");
+        String imagesDir = applicationProperties.getProperty("directory.Images");
+        String userDir = System.getenv(envUserDir);
+
+        String fullImagesDir = userDir + applicationDir + imagesDir;
+        String filename = req.getPathInfo().substring(1);
+        
+        File file = new File(fullImagesDir, filename);
+        resp.setHeader("Content-Type", getServletContext().getMimeType(filename));
+        resp.setHeader("Content-Length", String.valueOf(file.length()));
+        resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+        Files.copy(file.toPath(), resp.getOutputStream());
+    }
 
 }

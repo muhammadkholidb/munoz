@@ -152,6 +152,46 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources> 
     </build>
 
+    <profiles>
+        <profile>
+            <id>default-linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <EnvUserHomeDir>HOME</EnvUserHomeDir>
+                <ApplicationDir>Server/</ApplicationDir>
+            </properties>
+        </profile>
+        <profile>
+            <id>default-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <EnvUserHomeDir>USERPROFILE</EnvUserHomeDir>
+                <ApplicationDir>Server/</ApplicationDir>
+            </properties>
+        </profile>
+        <profile>
+            <id>openshift</id>
+            <properties>
+                <EnvUserHomeDir>OPENSHIFT_HOMEDIR</EnvUserHomeDir>
+                <ApplicationDir>app-root/data/</ApplicationDir>
+            </properties>
+        </profile>
+    </profiles>
+    
 </project>
