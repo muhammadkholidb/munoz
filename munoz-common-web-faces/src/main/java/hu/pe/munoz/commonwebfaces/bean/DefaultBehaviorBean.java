@@ -16,10 +16,10 @@ public abstract class DefaultBehaviorBean extends RESTBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBehaviorBean.class);
 
-    private final List<String> LIST_PATH_FOR_VIEW = Arrays.asList("/index.xhtml", "/view.xhtml");
-    private final List<String> LIST_PATH_FOR_MODIFY = Arrays.asList("/edit.xhtml", "/add.xhtml");
+    private final List<String> LIST_PATH_FOR_VIEW = Arrays.asList("/index.xhtml", "/index", "/view.xhtml", "/view");
+    private final List<String> LIST_PATH_FOR_MODIFY = Arrays.asList("/edit.xhtml", "/edit", "/add.xhtml", "/add");
 
-    private final String PATH_INDEX = "/index.xhtml";
+    private final List<String> PATH_INDEX = Arrays.asList("/index.xhtml", "/index");
 
     @ManagedProperty(value = "#{loginBean}")
     protected LoginBean loginBean;
@@ -40,11 +40,11 @@ public abstract class DefaultBehaviorBean extends RESTBean {
         String path = Faces.getRequestServletPath();
         String pathFirstPart = path.substring(1, path.lastIndexOf("/"));
         String pathLastPart = path.substring(path.lastIndexOf("/"));
-        if (!PATH_INDEX.equals(pathLastPart) && mode == PageMode.INDEX) { // Page mode is not set yet, so it is PageMode.INDEX
+        if (!PATH_INDEX.contains(pathLastPart) && mode == PageMode.INDEX) { // Page mode is not set yet, so it is PageMode.INDEX
             try {
                 Faces.redirect(pathFirstPart + "/index.xhtml");
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error(e.toString(), e);
             }
             return;
         }
@@ -53,7 +53,7 @@ public abstract class DefaultBehaviorBean extends RESTBean {
                 try {
                     Faces.redirect("error.xhtml");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOG.error(e.toString(), e);
                 }
                 return;
             }
@@ -63,7 +63,7 @@ public abstract class DefaultBehaviorBean extends RESTBean {
                 try {
                     Faces.redirect("error.xhtml");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOG.error(e.toString(), e);
                 }
                 return;
             }

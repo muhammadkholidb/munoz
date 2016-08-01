@@ -20,13 +20,14 @@ import hu.pe.munoz.common.helper.CommonConstants;
 public class LoginFilter implements Filter {
 
     private static final List<String> LIST_FILTER_EXCLUDED_PAGES = Arrays.asList(
-    		"/page-not-found.xhtml",
+            "/page-not-found.xhtml",
             "/server-error.xhtml"
     );
     private static final String HOME_PAGE = "/home.xhtml";
     private static final String LOGIN_PAGE = "/login.xhtml";
     private static final String LOGOUT_PAGE = "/logout.xhtml";
-    
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // This method will process all requests to any pages / css / js / images, 
         // so the log information might be printed more than once.
@@ -39,12 +40,12 @@ public class LoginFilter implements Filter {
         String loginUrl = contextPath + LOGIN_PAGE;
         String logoutUrl = contextPath + LOGOUT_PAGE;
         String homeUrl = contextPath + HOME_PAGE;
-        
+
         boolean loggedIn = (httpSession != null) && (Boolean.valueOf(String.valueOf(httpSession.getAttribute(CommonConstants.SESSKEY_IS_LOGGED_IN))));
-        boolean loginRequest = requestUrl.equals(loginUrl);
-        boolean logoutRequest = requestUrl.equals(logoutUrl);
+        boolean loginRequest = requestUrl.equals(loginUrl) || requestUrl.equals(loginUrl.substring(0, loginUrl.indexOf(".xhtml")));
+        boolean logoutRequest = requestUrl.equals(logoutUrl) || requestUrl.equals(logoutUrl.substring(0, logoutUrl.indexOf(".xhtml")));
         boolean resourceRequest = requestUrl.startsWith(contextPath + ResourceHandler.RESOURCE_IDENTIFIER + "/");
-        
+
         // Read http://stackoverflow.com/questions/14526574/jsf-page-style-missing-when-using-login-filter
         
         if (!resourceRequest) {
@@ -55,17 +56,17 @@ public class LoginFilter implements Filter {
             httpResponse.setHeader("Pragma", "no-cache"); // HTTP 1.0.
             httpResponse.setDateHeader("Expires", 0); // Proxies.
         }
-        
+
         // 1. Check if the page is excluded from login filter
         if (LIST_FILTER_EXCLUDED_PAGES.contains(requestUrl.substring(requestUrl.lastIndexOf("/")))) {
             chain.doFilter(request, response);
-        }
-        
+        } 
+
         // 2. Check if the page is resource request
         else if (resourceRequest) {
             chain.doFilter(request, response);
-        }
-        
+        } 
+
         // 3. Check if the page is logout request, prevent user to directly open logout page
         else if (logoutRequest) {
             // If the user has logged in, then redirect to home page
@@ -76,8 +77,8 @@ public class LoginFilter implements Filter {
             else {
                 chain.doFilter(request, response);
             }
-        }
-        
+        } 
+
         // 4. Check if the page is login request
         else if (loginRequest) {
             // If the user has logged in, then redirect to home page
@@ -88,8 +89,8 @@ public class LoginFilter implements Filter {
             else {
                 chain.doFilter(request, response);
             }
-        }
-        
+        } 
+
         // 5. Check if the page is not login request
         else {
             // If the user has logged in, then continue the request
@@ -102,13 +103,15 @@ public class LoginFilter implements Filter {
                 httpResponse.sendRedirect(loginUrl);
             }
         }
-        
+
     }
 
+    @Override
     public void init(FilterConfig config) throws ServletException {
 
     }
 
+    @Override
     public void destroy() {
 
     }
