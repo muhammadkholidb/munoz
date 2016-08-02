@@ -1,63 +1,65 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
-<f:view locale="#{applicationBean.locale}">
-	<h:head>
-		<f:facet name="first">
-			<meta charset="utf-8" />
-			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
-			<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-			<link rel="icon" href="favicon.ico" />
-		</f:facet>
-		<h:outputStylesheet library="common" name="styles/common.css" />
-		<title>#{lang['title.Login']}</title>
-	</h:head>
-	
-	<h:body>
-		<h:form id="loginForm">
-			<p:outputPanel>
-				<div class="ui-grid ui-grid-responsive">
-					<div class="ui-grid-row" style="padding: 10px; background: #79c9ec;">
-						<div class="ui-grid-col-4">
-							<h:outputLink value="#{request.contextPath}/home.xhtml">
-								<p:graphicImage value="/resources.image/#{applicationBean.image}" height="30px" style="vertical-align: middle;" />
-							</h:outputLink>
-						</div>
-						<div class="ui-grid-col-4" style="line-height: 30px;"></div>
-						<div class="ui-grid-col-4" style="line-height: 30px;"></div>
-					</div>
-					<div class="ui-grid-row"
-						style="padding-top: 100px; padding-bottom: 100px; background: #79c9ec;">
-						<div class="ui-grid-col-4"></div>
-						<div class="ui-grid-col-4">
-							<p:messages id="messages" closable="true" />
-							<div class="ui-fluid" style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
-								<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
-									<h1 class="page-title" style="margin-bottom: 5px; text-transform: uppercase;">#{lang['title.Login']}</h1>
-									<p:inputText id="username" value="#{loginBean.inputUsername}" placeholder="#{lang['label.UsernameEmail']}" required="true" requiredMessage="#{lang['required.UsernameEmailCannotBeEmpty']}" />
-									<p:password id="password" value="#{loginBean.inputPassword}" placeholder="#{lang['label.Password']}" required="true" requiredMessage="#{lang['required.PasswordCannotBeEmpty']}" />
-									<p:commandButton value="#{lang['button.Login']}" actionListener="#{loginBean.doLogin()}" update=":loginForm" />
-								</p:panelGrid>
-							</div>
-						</div>
-						<div class="ui-grid-col-4"></div>
-					</div>
-					<div class="ui-grid-row"
-						style="border-top: 1px #79c9ec solid; padding-top: 10px;">
-						<div class="ui-grid-col-4"></div>
-						<div class="ui-grid-col-4" style="text-align: center">
-							
-						</div>
-						<div class="ui-grid-col-4"></div>
-					</div>
-				</div>
-			</p:outputPanel>
-		</h:form>
-	</h:body>
-</f:view>
+    <f:view locale="#{applicationBean.locale}">
+        <h:head>
+            <f:facet name="first">
+                <meta charset="utf-8" />
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+                <link rel="icon" href="favicon.ico" />
+            </f:facet>
+            <h:outputStylesheet library="common" name="styles/common.css" />
+            <title>#{lang['title.Login']}</title>
+        </h:head>
+
+        <h:body>
+            <h:form id="loginForm">
+                <p:outputPanel>
+                    <div class="ui-grid ui-grid-responsive">
+                        <div class="ui-grid-row" style="padding: 10px; background: #79c9ec;">
+                            <div class="ui-grid-col-4">
+                                <h:outputLink value="#{request.contextPath}/home.xhtml">
+                                    <p:graphicImage value="/resources.image/#{applicationBean.image}" height="30px" style="vertical-align: middle;" />
+                                </h:outputLink>
+                            </div>
+                            <div class="ui-grid-col-4" style="line-height: 30px;"></div>
+                            <div class="ui-grid-col-4" style="line-height: 30px;"></div>
+                        </div>
+                        <div class="ui-grid-row"
+                             style="padding-top: 100px; padding-bottom: 100px; background: #79c9ec;">
+                            <div class="ui-grid-col-4"></div>
+                            <div class="ui-grid-col-4">
+                                <p:messages id="messages" closable="true" />
+                                <div class="ui-fluid" style="background: #eee; padding: 6px 0; border-top: 4px solid #0078ae;">
+                                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+                                        <h1 class="page-title" style="margin-bottom: 5px; text-transform: uppercase;">#{lang['title.Login']}</h1>
+                                        <p:inputText id="username" value="#{loginBean.inputUsername}" placeholder="#{lang['label.UsernameEmail']}" required="true" requiredMessage="#{lang['required.UsernameEmailCannotBeEmpty']}" />
+                                        <p:password id="password" value="#{loginBean.inputPassword}" placeholder="#{lang['label.Password']}" required="true" requiredMessage="#{lang['required.PasswordCannotBeEmpty']}" />
+                                        <p:commandButton value="#{lang['button.Login']}" actionListener="#{loginBean.doLogin()}" update=":loginForm" />
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+                            <div class="ui-grid-col-4"></div>
+                        </div>
+
+                        <div class="ui-grid-row footer" >
+                            <div class="ui-grid-col-4">
+                                <h:outputText value="#{applicationBean.applicationInfo}" styleClass="text-version" />
+                            </div>
+                            <div class="ui-grid-col-4" style="text-align: center">
+
+                            </div>
+                            <div class="ui-grid-col-4"></div>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </h:body>
+    </f:view>
 </html>

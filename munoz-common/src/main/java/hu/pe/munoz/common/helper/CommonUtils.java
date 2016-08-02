@@ -40,9 +40,6 @@ public class CommonUtils {
     }
 
     public static String getExceptionMessage(Exception exception) {
-        if (exception == null){
-            return null;
-        }
         String message = exception.getMessage();
         return ((message == null) || "".equals(message)) ? exception.toString() : message;
     }

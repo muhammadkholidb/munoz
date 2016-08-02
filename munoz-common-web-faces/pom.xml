@@ -116,7 +116,7 @@
 
     <build>
         <finalName>munoz-common-web-faces</finalName>
-        <plugins>
+        <plugins> 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -126,6 +126,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <attachClasses>true</attachClasses>
+                    <packagingExcludes>WEB-INF/classes/openshift/</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -160,36 +161,19 @@
         </resources> 
     </build>
 
+    <properties>
+        <rest.HostUrl>localhost:8080/munoz-common-rest</rest.HostUrl>
+        <directory.path.Images>${user.home}/Server/images</directory.path.Images>
+        <directory.path.Logs>${user.home}/Server/logs</directory.path.Logs>
+    </properties>
+
     <profiles>
-        <profile>
-            <id>default-linux</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                </os>
-            </activation>
-            <properties>
-                <EnvUserHomeDir>HOME</EnvUserHomeDir>
-                <ApplicationDir>Server/</ApplicationDir>
-            </properties>
-        </profile>
-        <profile>
-            <id>default-windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <properties>
-                <EnvUserHomeDir>USERPROFILE</EnvUserHomeDir>
-                <ApplicationDir>Server/</ApplicationDir>
-            </properties>
-        </profile>
         <profile>
             <id>openshift</id>
             <properties>
-                <EnvUserHomeDir>OPENSHIFT_HOMEDIR</EnvUserHomeDir>
-                <ApplicationDir>app-root/data/</ApplicationDir>
+                <rest.HostUrl>tomcat7-eatonmunoz.rhcloud.com/munoz-common-rest</rest.HostUrl>
+                <directory.path.Images>/var/lib/openshift/579434267628e1a67100012e/app-root/data/images</directory.path.Images>
+                <directory.path.Logs>/var/lib/openshift/579434267628e1a67100012e/app-root/data/logs</directory.path.Logs>
             </properties>
         </profile>
     </profiles>

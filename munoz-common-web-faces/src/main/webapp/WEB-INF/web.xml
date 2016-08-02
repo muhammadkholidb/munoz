@@ -30,10 +30,22 @@
         <filter-name>LoginFilter</filter-name>
         <servlet-name>FacesServlet</servlet-name>
     </filter-mapping>
+    <!--
+    No need to set project stage. Default value is Production.
+    javax.faces.application.ProjectStage provides the following options:
+    - Production
+    - Development
+    - UnitTest
+    - SystemTest
+    - Extension
+    Reference: https://dzone.com/articles/jsf-20-new-feature-preview-ser
+    -->
+    <!--
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    -->
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>start</param-value>

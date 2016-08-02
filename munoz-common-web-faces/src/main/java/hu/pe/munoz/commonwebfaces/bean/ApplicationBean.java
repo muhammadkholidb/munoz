@@ -142,4 +142,8 @@ public class ApplicationBean implements Serializable {
         this.online = online;
     }
 
+    public String getApplicationInfo() {
+        return applicationProperties.getProperty("application.info.Name") + " " + applicationProperties.getProperty("application.info.Version");
+    }
+    
 }

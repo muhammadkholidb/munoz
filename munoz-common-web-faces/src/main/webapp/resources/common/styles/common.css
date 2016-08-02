@@ -489,3 +489,12 @@ th.ui-state-default {
 .ui-dialog .ui-widget-header .ui-state-focus {
     background: #79c9ec;
 }
+
+.footer {
+    border-top: 1px #79c9ec solid; 
+    padding: 10px 10px 50px;
+}
+
+.text-version {
+    color: #999;
+}

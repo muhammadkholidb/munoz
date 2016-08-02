@@ -23,22 +23,21 @@ public class ImageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
-        Properties applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
+        try {
+            Properties applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
 
-        String envUserDir = applicationProperties.getProperty("environment.UserHomeDir");
-        String applicationDir = applicationProperties.getProperty("directory.Application");
-        String imagesDir = applicationProperties.getProperty("directory.Images");
-        String userDir = System.getenv(envUserDir);
-
-        String fullImagesDir = userDir + applicationDir + imagesDir;
-        String filename = req.getPathInfo().substring(1);
-        
-        File file = new File(fullImagesDir, filename);
-        resp.setHeader("Content-Type", getServletContext().getMimeType(filename));
-        resp.setHeader("Content-Length", String.valueOf(file.length()));
-        resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-        Files.copy(file.toPath(), resp.getOutputStream());
+            String imagesDir = applicationProperties.getProperty("directory.path.Images");
+            String filename = req.getPathInfo().substring(1);
+            
+            File file = new File(imagesDir, filename);
+            resp.setHeader("Content-Type", getServletContext().getMimeType(filename));
+            resp.setHeader("Content-Length", String.valueOf(file.length()));
+            resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+            Files.copy(file.toPath(), resp.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }
