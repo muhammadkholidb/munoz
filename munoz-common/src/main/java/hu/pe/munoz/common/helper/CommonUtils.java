@@ -4,9 +4,7 @@ import java.util.Random;
 
 public class CommonUtils {
 
-    private static final int DEFAULT_LENGTH = 8;
-
-    public static String getRandomPassword(int length) {
+    public static String getRandomAlphanumeric(int length) {
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);
@@ -16,39 +14,9 @@ public class CommonUtils {
         return sb.toString();
     }
 
-    public static String getDefaultRandomPassword() {
-        return getRandomPassword(DEFAULT_LENGTH);
-    }
-
-    public static String toTitleCase(String text) {
-        StringBuilder titleCase = new StringBuilder();
-        boolean capitalize = true;
-        for (char c : text.toLowerCase().toCharArray()) {
-            if (Character.isSpaceChar(c)) {
-                titleCase.append(c);
-                capitalize = true;
-                continue;
-            }
-            if (capitalize) {
-                c = Character.toUpperCase(c);
-                capitalize = false;
-            }
-            titleCase.append(c);
-        }
-
-        return titleCase.toString();
-    }
-
     public static String getExceptionMessage(Exception exception) {
         String message = exception.getMessage();
         return ((message == null) || "".equals(message)) ? exception.toString() : message;
     }
     
-    public static void main(String[] args) {
-
-        System.out.println(toTitleCase("title apa saja"));
-        System.out.println(toTitleCase("TItle APA     saja"));
-
-    }
-
 }

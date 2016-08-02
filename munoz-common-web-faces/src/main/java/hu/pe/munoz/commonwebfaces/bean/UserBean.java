@@ -89,7 +89,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     }
 
     public void generateRandom() {
-        inputPassword = CommonUtils.getDefaultRandomPassword();
+        inputPassword = CommonUtils.getRandomAlphanumeric(8);
     }
 
     private void prepareAdd() {
