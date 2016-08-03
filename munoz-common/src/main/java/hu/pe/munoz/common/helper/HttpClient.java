@@ -151,7 +151,7 @@ public class HttpClient {
         if ((host == null) || "".equals(host)) {
         	throw new NullPointerException("Empty host.");
         }
-        
+       
         String prefixSchemeHttp = HTTP_SCHEME + "://";
         String prefixSchemeHttps = HTTPS_SCHEME + "://";
         
