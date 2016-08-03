@@ -18,6 +18,9 @@ public class HttpClient {
     public static final String GET = "GET";
     public static final String POST = "POST";
 
+    private final String HTTP_SCHEME = "http";
+    private final String HTTPS_SCHEME = "https";
+    
     private String method;
     private String host;
     private String path;
@@ -86,8 +89,25 @@ public class HttpClient {
     }
 
     public HttpClientResponse get() throws IOException {
+    	
         method = GET;
-        String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
+        
+        if ((host == null) || "".equals(host)) {
+        	throw new NullPointerException("Empty host.");
+        }
+        
+        String prefixSchemeHttp = HTTP_SCHEME + "://";
+        String prefixSchemeHttps = HTTPS_SCHEME + "://";
+        
+        if (host.toLowerCase().startsWith(prefixSchemeHttp)) {
+        	host = host.substring(prefixSchemeHttp.length() - 1);
+        	secure = false;
+        } else if (host.toLowerCase().startsWith(prefixSchemeHttps)) {
+        	host = host.substring(prefixSchemeHttps.length() - 1);
+        	secure = true;
+        }
+        
+        String strUrl = secure ? (prefixSchemeHttps + host + path) : (prefixSchemeHttp + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
         // Read http://slf4j.org/faq.html#logging_performance
@@ -125,8 +145,25 @@ public class HttpClient {
     }
 
     public HttpClientResponse post() throws IOException {
+    	
         method = POST;
-        String strUrl = secure ? ("https://" + host + path) : ("http://" + host + path);
+
+        if ((host == null) || "".equals(host)) {
+        	throw new NullPointerException("Empty host.");
+        }
+        
+        String prefixSchemeHttp = HTTP_SCHEME + "://";
+        String prefixSchemeHttps = HTTPS_SCHEME + "://";
+        
+        if (host.toLowerCase().startsWith(prefixSchemeHttp)) {
+        	host = host.substring(prefixSchemeHttp.length() - 1);
+        	secure = false;
+        } else if (host.toLowerCase().startsWith(prefixSchemeHttps)) {
+        	host = host.substring(prefixSchemeHttps.length() - 1);
+        	secure = true;
+        }
+        
+        String strUrl = secure ? (prefixSchemeHttps + host + path) : (prefixSchemeHttp + host + path);
         String queryStrings = buildQueryStrings(parameters);
 
         LOG.debug("Sending POST request to URL: {}", strUrl);
