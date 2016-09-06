@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebServlet("/resources.image/*")
 public class ImageServlet extends HttpServlet {
@@ -21,6 +23,8 @@ public class ImageServlet extends HttpServlet {
      */
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOG = LoggerFactory.getLogger(ImageServlet.class);
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -35,7 +39,7 @@ public class ImageServlet extends HttpServlet {
             resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
             Files.copy(file.toPath(), resp.getOutputStream());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.toString(), e);
             throw e;
         }
     }

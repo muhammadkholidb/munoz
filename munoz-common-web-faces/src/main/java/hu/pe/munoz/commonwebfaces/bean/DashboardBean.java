@@ -7,7 +7,7 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class HomeBean implements Serializable {
+public class DashboardBean implements Serializable {
 
     /**
      * 

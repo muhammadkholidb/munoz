@@ -1,313 +1,341 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>hu.pe.munoz</groupId>
-	<artifactId>munoz</artifactId>
-	<version>1.1-SNAPSHOT</version>
-	<name>Munoz</name>
-	<description>Munoz Top Level Project</description>
-	<packaging>pom</packaging>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>hu.pe.munoz</groupId>
+    <artifactId>munoz</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <name>Munoz</name>
+    <description>Munoz Top Level Project</description>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>munoz-common</module>
-		<module>munoz-common-data</module>
-		<module>munoz-common-rest</module>
-		<module>munoz-common-web-faces</module>
-	</modules>
+    <modules>
+        <module>munoz-common</module>
+        <module>munoz-common-data</module>
+        <module>munoz-common-rest</module>
+        <module>munoz-common-web-faces</module>
+    </modules>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
 
-		<version.munoz>${project.version}</version.munoz>
-		<version.spring>4.2.0.RELEASE</version.spring>
-		<version.hibernate>5.1.0.Final</version.hibernate>
-		<version.apache-httpcomponents>5.0-alpha1</version.apache-httpcomponents>
-		<version.json-simple>1.1.1</version.json-simple>
-		<version.jackson>2.4.1</version.jackson>
-		<version.javax-servlet>3.1.0</version.javax-servlet>
-		<version.javax-jsp>2.1</version.javax-jsp>
-		<version.mysql-connector>5.1.30</version.mysql-connector>
-		<version.c3p0>0.9.2.1</version.c3p0>
-		<version.slf4j>1.7.18</version.slf4j>
-		<version.junit>4.11</version.junit>
-		<version.jsf>2.2.12</version.jsf>
-		<version.jstl>1.2</version.jstl>
-		<version.primefaces>5.3</version.primefaces>
-		<version.primefaces-themes>1.0.10</version.primefaces-themes>
-		<version.cdi>1.2</version.cdi>
-		<version.h2database>1.4.191</version.h2database>
-		<version.omnifaces>1.13</version.omnifaces>
-		<version.dozer>5.4.0</version.dozer>
-		<version.commons-io>2.5</version.commons-io>
-		<version.commons-codec>1.10</version.commons-codec>
+        <version.munoz>${project.version}</version.munoz>
+        <version.spring>4.2.0.RELEASE</version.spring>
+        <version.hibernate>5.1.0.Final</version.hibernate>
+        <version.apache-httpcomponents>5.0-alpha1</version.apache-httpcomponents>
+        <version.json-simple>1.1.1</version.json-simple>
+        <version.jackson>2.4.1</version.jackson>
+        <version.javax-servlet>3.1.0</version.javax-servlet>
+        <version.javax-jsp>2.1</version.javax-jsp>
+        <version.mysql-connector>5.1.30</version.mysql-connector>
+        <version.c3p0>0.9.2.1</version.c3p0>
+        <version.slf4j>1.7.18</version.slf4j>
+        <version.junit>4.11</version.junit>
+        <version.jsf>2.2.12</version.jsf>
+        <version.jstl>1.2</version.jstl>
+        <version.primefaces>5.3</version.primefaces>
+        <version.primefaces-themes>1.0.10</version.primefaces-themes>
+        <version.cdi>1.2</version.cdi>
+        <version.h2database>1.4.191</version.h2database>
+        <version.omnifaces>1.13</version.omnifaces>
+        <version.dozer>5.4.0</version.dozer>
+        <version.commons-io>2.5</version.commons-io>
+        <version.commons-codec>1.10</version.commons-codec>
+        <version.commons-lang>3.4</version.commons-lang>
+        <version.commons-validator>1.5.1</version.commons-validator>
+        <version.dbunit>2.5.2</version.dbunit>
+        <version.postgresql>9.4-1200-jdbc4</version.postgresql>
 
-		<version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
-		<version.maven-war-plugin>2.6</version.maven-war-plugin>
-		<version.maven-jetty-plugin>9.2.11.v20150529</version.maven-jetty-plugin>
-		<version.maven-wagon-ftp>2.10</version.maven-wagon-ftp>
-	</properties>
+        <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
+        <version.maven-war-plugin>2.6</version.maven-war-plugin>
+        <version.maven-jetty-plugin>9.2.11.v20150529</version.maven-jetty-plugin>
+        <version.maven-wagon-ftp>2.10</version.maven-wagon-ftp>
+    </properties>
 
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
 
-			<!-- Munoz Project -->
+            <!-- Munoz Project -->
 
-			<dependency>
-				<groupId>hu.pe.munoz</groupId>
-				<artifactId>munoz-common</artifactId>
-				<version>${version.munoz}</version>
-				<type>jar</type>
-			</dependency>
+            <dependency>
+                <groupId>hu.pe.munoz</groupId>
+                <artifactId>munoz-common</artifactId>
+                <version>${version.munoz}</version>
+                <type>jar</type>
+            </dependency>
 
-			<dependency>
-				<groupId>hu.pe.munoz</groupId>
-				<artifactId>munoz-common-data</artifactId>
-				<version>${version.munoz}</version>
-				<type>jar</type>
-			</dependency>
+            <dependency>
+                <groupId>hu.pe.munoz</groupId>
+                <artifactId>munoz-common-data</artifactId>
+                <version>${version.munoz}</version>
+                <type>jar</type>
+            </dependency>
 
-			<dependency>
-				<groupId>hu.pe.munoz</groupId>
-				<artifactId>munoz-common-web-faces</artifactId>
-				<version>${version.munoz}</version>
-				<type>war</type>
-			</dependency>
+            <dependency>
+                <groupId>hu.pe.munoz</groupId>
+                <artifactId>munoz-common-web-faces</artifactId>
+                <version>${version.munoz}</version>
+                <type>war</type>
+            </dependency>
 
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>${version.hibernate}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${version.hibernate}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>
-				<version>${version.hibernate}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${version.hibernate}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.httpcomponents.client5</groupId>
-				<artifactId>httpclient5</artifactId>
-				<version>${version.apache-httpcomponents}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${version.apache-httpcomponents}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.googlecode.json-simple</groupId>
-				<artifactId>json-simple</artifactId>
-				<version>${version.json-simple}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.googlecode.json-simple</groupId>
+                <artifactId>json-simple</artifactId>
+                <version>${version.json-simple}</version>
+            </dependency>
 
-			<!-- Spring 4 dependencies -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${version.spring}</version>
-			</dependency>
+            <!-- Spring 4 dependencies -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${version.spring}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${version.spring}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${version.spring}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-tx</artifactId>
-				<version>${version.spring}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${version.spring}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-orm</artifactId>
-				<version>${version.spring}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${version.spring}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc</artifactId>
-				<version>${version.spring}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${version.spring}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${version.spring}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${version.spring}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${version.jackson}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>${version.javax-servlet}</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${version.javax-servlet}</version>
+            </dependency>
 
-			<!-- JSF -->
-			<dependency>
-				<groupId>com.sun.faces</groupId>
-				<artifactId>jsf-api</artifactId>
-				<version>${version.jsf}</version>
-			</dependency>
+            <!-- JSF -->
+            <dependency>
+                <groupId>com.sun.faces</groupId>
+                <artifactId>jsf-api</artifactId>
+                <version>${version.jsf}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.faces</groupId>
-				<artifactId>jsf-impl</artifactId>
-				<version>${version.jsf}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.faces</groupId>
+                <artifactId>jsf-impl</artifactId>
+                <version>${version.jsf}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>jstl</artifactId>
-				<version>${version.jstl}</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${version.jstl}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.servlet.jsp</groupId>
-				<artifactId>jsp-api</artifactId>
-				<version>${version.javax-jsp}</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>${version.javax-jsp}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.primefaces</groupId>
-				<artifactId>primefaces</artifactId>
-				<version>${version.primefaces}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>${version.primefaces}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.enterprise</groupId>
-				<artifactId>cdi-api</artifactId>
-				<version>${version.cdi}</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.enterprise</groupId>
+                <artifactId>cdi-api</artifactId>
+                <version>${version.cdi}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.primefaces.themes</groupId>
-				<artifactId>all-themes</artifactId>
-				<version>${version.primefaces-themes}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.primefaces.themes</groupId>
+                <artifactId>all-themes</artifactId>
+                <version>${version.primefaces-themes}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.primefaces.themes</groupId>
-				<artifactId>start</artifactId>
-				<version>${version.primefaces-themes}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.primefaces.themes</groupId>
+                <artifactId>start</artifactId>
+                <version>${version.primefaces-themes}</version>
+            </dependency>
 
-			<!-- MySQL Java Connector dependency -->
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${version.mysql-connector}</version>
-			</dependency>
+            <!-- MySQL Java Connector dependency -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${version.mysql-connector}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<version>${version.h2database}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${version.h2database}</version>
+            </dependency>
 
-			<!-- c3p0 -->
-			<dependency>
-				<groupId>com.mchange</groupId>
-				<artifactId>c3p0</artifactId>
-				<version>${version.c3p0}</version>
-			</dependency>
+            <!-- c3p0 -->
+            <dependency>
+                <groupId>com.mchange</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>${version.c3p0}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${version.slf4j}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${version.slf4j}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${version.slf4j}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${version.slf4j}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.omnifaces</groupId>
-				<artifactId>omnifaces</artifactId>
-				<version>${version.omnifaces}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.omnifaces</groupId>
+                <artifactId>omnifaces</artifactId>
+                <version>${version.omnifaces}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>net.sf.dozer</groupId>
-				<artifactId>dozer</artifactId>
-				<version>${version.dozer}</version>
-			</dependency>
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${version.dozer}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>${version.commons-io}</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${version.commons-io}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>${version.commons-codec}</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${version.commons-codec}</version>
+            </dependency>
 
-			<!-- Testing dependencies -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${version.junit}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.dbunit</groupId>
+                <artifactId>dbunit</artifactId>
+                <version>${version.dbunit}</version>
+            </dependency> 
+            
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${version.postgresql}</version>
+            </dependency>
 
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${version.commons-lang}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>${version.commons-validator}</version>
+            </dependency>
 
-	<distributionManagement>
-		<repository>
-			<id>munoz</id>
-			<url>ftp://ftp.munoz.pe.hu/maven-repo</url>
-		</repository>
-	</distributionManagement>
+            <!-- Testing dependencies -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${version.maven-compiler-plugin}</version>
-					<configuration>
-						<source>${maven.compiler.source}</source>
-						<target>${maven.compiler.target}</target>
-					</configuration>
-				</plugin>
+        </dependencies>
+    </dependencyManagement>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>${version.maven-war-plugin}</version>
-				</plugin>
+    <distributionManagement>
+        <repository>
+            <id>munoz</id>
+            <url>ftp://ftp.munoz.pe.hu/maven-repo</url>
+        </repository>
+    </distributionManagement>
 
-				<plugin>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-maven-plugin</artifactId>
-					<version>${version.maven-jetty-plugin}</version>
-				</plugin>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.maven-compiler-plugin}</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
 
-			</plugins>
-		</pluginManagement>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${version.maven-war-plugin}</version>
+                </plugin>
 
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>${version.maven-wagon-ftp}</version>
-			</extension>
-		</extensions>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>${version.maven-jetty-plugin}</version>
+                </plugin>
 
-	</build>
+            </plugins>
+        </pluginManagement>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>${version.maven-wagon-ftp}</version>
+            </extension>
+        </extensions>
+
+    </build>
 
 </project>

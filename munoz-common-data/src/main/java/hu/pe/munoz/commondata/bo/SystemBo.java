@@ -1,18 +1,18 @@
 package hu.pe.munoz.commondata.bo;
 
-import java.util.List;
 
 import hu.pe.munoz.common.exception.DataException;
-import hu.pe.munoz.commondata.entity.SystemEntity;
+import hu.pe.munoz.commondata.helper.Dto;
+import java.util.List;
 
 public interface SystemBo {
 
-    List<SystemEntity> getAllSystem();
+    List<Dto> getAllSystem(Dto dtoInput) throws DataException;
     
-    SystemEntity getSystemByKey(String key) throws DataException;
+    Dto getSystemByKey(Dto dtoInput) throws DataException;
     
-    List<SystemEntity> editSystemList(List<SystemEntity> systemList) throws DataException;
+    List<Dto> editSystemList(Dto dtoInput) throws DataException;
 
-    SystemEntity getOneSystem(Long id) throws DataException;
+    Dto getSystemById(Dto dtoInput) throws DataException;
     
 }

@@ -5,97 +5,99 @@
                 xmlns:p="http://primefaces.org/ui" >
 
     <h:form>
-    <div class="ui-grid-row" style="padding: 10px; background: #79c9ec;">
-        <div class="ui-grid-col-4">
-        	<a style="margin-right: 10px; color: #60a1bf; cursor: pointer;" id="btnToggleMenu"><i class="fa fa-chevron-down fa-lg" aria-hidden="true"></i></a>
-            <h:outputLink value="#{request.contextPath}/home.xhtml" >
-                <p:graphicImage value="/resources.image/#{applicationBean.image}" height="30px" style="vertical-align: middle;" />
-            </h:outputLink>
+        <div class="ui-grid-row" style="padding: 10px; background: #79c9ec;">
+            <div class="ui-grid-col-4">
+                <a style="margin-right: 10px; color: #60a1bf; cursor: pointer;" id="btnToggleMenu"><i class="fa fa-chevron-down fa-lg" aria-hidden="true"></i></a>
+                <h:outputLink value="#{request.contextPath}" >
+                    <p:graphicImage value="/resources.image/#{applicationBean.image}" height="30px" style="vertical-align: middle;" />
+                </h:outputLink>
+            </div>
+            <div class="ui-grid-col-4" style="line-height: 30px;" ></div>
+            <div class="ui-grid-col-4" style="line-height: 30px; float: right;" >
+                <h:panelGroup rendered="#{loginBean.isLoggedIn()}">                
+                    <ul class="top-nav">
+                        <li>
+                            <h:outputLink value="#{request.contextPath}/dashboard" >#{lang['label.Dashboard']}</h:outputLink> 
+                        </li>
+                        <li>
+                            <h:outputText value="#{loginBean.user.firstName} #{loginBean.user.lastName}" />
+                            <div>
+                                <ul>
+                                    <li>
+                                        <h:commandLink action="#{loginBean.doLogout()}" >
+                                            <i class="fa fa-times" style="margin-right: 10px; display: none;" />
+                                            <h:outputText value="#{lang['label.Logout']}" />
+                                        </h:commandLink>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </h:panelGroup>
+            </div>
         </div>
-        <div class="ui-grid-col-4" style="line-height: 30px;" ></div>
-        <div class="ui-grid-col-4" style="line-height: 30px; float: right;" >
-            <h:panelGroup rendered="#{loginBean.isLoggedIn()}">                
-                <ul class="top-nav">
-                    <li>
-                        <h:outputText value="#{loginBean.user.firstName} #{loginBean.user.lastName}" />
-		                <div>
-	                        <ul>
-	                            <li>
-	                                <h:commandLink action="#{loginBean.doLogout()}" >
-	                                	<i class="fa fa-times" style="margin-right: 10px; display: none;" />
-	                                	<h:outputText value="#{lang['label.Logout']}" />
-	                                </h:commandLink>
-	                            </li>
-	                        </ul>
-		                </div>
-                    </li>
-                </ul>
-            </h:panelGroup>
-        </div>
-    </div>
     </h:form>
-    
+
     <h:outputScript>
-   	
-   	function getCookie(name) {
-   		var cookies = document.cookie,
-   			split1 = cookies.split(";");
-   		for (var i = 0; i &lt; split1.length; i++) {
-   			console.log(split1[i]);
-   			var split2 = split1[i].trim().split("="),
-   				key = split2[0],
-   				val = split2[1];
-   			if (key == name) {
-   				return val;
-   			}
-   		}
-   		return "";
-   	}
 
-    $(document).ready(function() {
-	    
-	    function hideSidebar() {
-	    	$("div.sidebar").hide();
-   			$("a#btnToggleMenu i").removeClass("fa-chevron-down");
-   			$("a#btnToggleMenu i").addClass("fa-chevron-left");
-   			$("div.main-content").removeClass("ui-grid-col-10");
-   			$("div.main-content").addClass("ui-grid-col-12");
-   			$("div.main-content").css("margin-left", "0");
-	    }
-	
-		function showSidebar() {
-	    	$("div.sidebar").show();
-   			$("a#btnToggleMenu i").removeClass("fa-chevron-left");
-   			$("a#btnToggleMenu i").addClass("fa-chevron-down");
-   			$("div.main-content").removeClass("ui-grid-col-12");
-   			$("div.main-content").addClass("ui-grid-col-10");
-   			$("div.main-content").css("margin-left", "");
-		}
+        function getCookie(name) {
+            var cookies = document.cookie;
+            var split1 = cookies.split(";");
+            for (var i = 0; i &lt; split1.length; i++) {
+                var split2 = split1[i].trim().split("=");
+                var key = split2[0];
+                var val = split2[1];
+                if (key == name) {
+                    return val;
+                }
+            }
+            return "";
+        }
 
-	    var sidebarCookie = getCookie("sidebar");
-	    if ((sidebarCookie != "") &amp;&amp; (sidebarCookie == "hide")) {
-	    	hideSidebar();
-	    }
-	    
-    	$("a#btnToggleMenu").on("click", function() {
-    		var currSidebarCookie = getCookie("sidebar");
-    		var sidebar = $("div.sidebar");
-    		var sidebarVisible = false;
-    		if (currSidebarCookie == "") {
-    			sidebarVisible = $(sidebar).is(":visible");
-    		} else {
-    			sidebarVisible = (currSidebarCookie == "show"); 
-    		}
-    		if (sidebarVisible) {
-    			hideSidebar();
-    			document.cookie = "sidebar=hide;path=/";
-    		} else {
-    			showSidebar();
-    			document.cookie = "sidebar=show;path=/";
-    		}
-    	});
-    	
-    });
+        $(document).ready(function() {
+
+            function hideSidebar() {
+                $("div.sidebar").hide();
+                $("a#btnToggleMenu i").removeClass("fa-chevron-down");
+                $("a#btnToggleMenu i").addClass("fa-chevron-left");
+                $("div.main-content").removeClass("ui-grid-col-10");
+                $("div.main-content").addClass("ui-grid-col-12");
+                $("div.main-content").css("margin-left", "0");
+            }
+
+            function showSidebar() {
+                $("div.sidebar").show();
+                $("a#btnToggleMenu i").removeClass("fa-chevron-left");
+                $("a#btnToggleMenu i").addClass("fa-chevron-down");
+                $("div.main-content").removeClass("ui-grid-col-12");
+                $("div.main-content").addClass("ui-grid-col-10");
+                $("div.main-content").css("margin-left", "");
+            }
+
+            var sidebarCookie = getCookie("sidebar");
+            if ((sidebarCookie != "") &amp;&amp; (sidebarCookie == "hide")) {
+                hideSidebar();
+            }
+
+            $("a#btnToggleMenu").on("click", function() {
+                var currSidebarCookie = getCookie("sidebar");
+                var sidebar = $("div.sidebar");
+                var sidebarVisible = false;
+                if (currSidebarCookie == "") {
+                    sidebarVisible = $(sidebar).is(":visible");
+                } else {
+                    sidebarVisible = (currSidebarCookie == "show"); 
+                }
+                if (sidebarVisible) {
+                    hideSidebar();
+                    document.cookie = "sidebar=hide;path=/";
+                } else {
+                    showSidebar();
+                    document.cookie = "sidebar=show;path=/";
+                }
+            });
+
+        });
     </h:outputScript>
-    
+
 </ui:composition>

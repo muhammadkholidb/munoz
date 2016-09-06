@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import hu.pe.munoz.common.exception.DataException;
@@ -20,12 +19,12 @@ import hu.pe.munoz.common.exception.ExceptionCode;
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.bo.UserBo;
-import hu.pe.munoz.commondata.entity.UserEntity;
-import hu.pe.munoz.commondata.entity.UserGroupEntity;
+import hu.pe.munoz.commondata.helper.Dto;
+import hu.pe.munoz.commondata.test.AbstractTestDataImport;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
-public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
+public class TestUserBo extends AbstractTestDataImport {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestUserBo.class);
 
@@ -33,34 +32,34 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
     private UserBo userBo;
 
     @Before
-    public void init() {
-        // The SQL file is relative to the application context file
-        executeSqlScript("scripts/test-user.sql", false);
+    public void init() throws Exception {
+        processDataSet("dataset/test-user.dataset.xml");
     }
 
     @Test
     public void testGetAllUser() {
         LOG.debug("TEST get all user ...");
-        List<UserEntity> list = userBo.getAllUser();
+        List<Dto> list = userBo.getAllUserWithGroup(null);
+        LOG.debug("Result: " + list);
         assertEquals(2, list.size());
-        for (UserEntity user : list) {
-            Long id = user.getId();
+        for (Dto dto : list) {
+            Long id = dto.get("id");
+            Dto dtoUserGroup = dto.get("userGroup");
             if (id.equals(1L)) {
-                assertEquals("John", user.getFirstName());
-                assertEquals("Doe", user.getLastName());
-                assertEquals("johndoe", user.getUsername());
-                assertEquals("johndoe@yahoo.com", user.getEmail());
-                assertEquals(CommonConstants.YES, user.getActive());
-                assertEquals(1, user.getUserGroup().getId().longValue());
-                assertEquals("Administrator", user.getUserGroup().getName());
+                assertEquals("John", dto.get("firstName"));
+                assertEquals("Doe", dto.get("lastName"));
+                assertEquals("johndoe", dto.get("username"));
+                assertEquals("johndoe@yahoo.com", dto.get("email"));
+                assertEquals(CommonConstants.YES, dto.get("active"));
+                assertEquals(1L, dtoUserGroup.get("id"));
+                assertEquals("Administrator", dtoUserGroup.get("name"));
             } else if (id.equals(2L)) {
-                assertEquals("Fulan", user.getFirstName());
-                assertEquals(CommonConstants.EMPTY_STRING, user.getLastName());
-                assertEquals("fulan", user.getUsername());
-                assertEquals("fulan@yahoo.com", user.getEmail());
-                assertEquals(CommonConstants.YES, user.getActive());
-                assertEquals(2L, user.getUserGroup().getId().longValue());
-                assertEquals("User", user.getUserGroup().getName());
+                assertEquals("Fulan", dto.get("firstName"));
+                assertEquals("fulan", dto.get("username"));
+                assertEquals("fulan@yahoo.com", dto.get("email"));
+                assertEquals(CommonConstants.YES, dto.get("active"));
+                assertEquals(2L, dtoUserGroup.get("id"));
+                assertEquals("User", dtoUserGroup.get("name"));
             }
         }
     }
@@ -68,62 +67,66 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
     @Test
     public void testGetUserListByUserGroupId() {
         LOG.debug("TEST get user list by user group id ...");
-        Long userGroupId = 1L;
-        List<UserEntity> list = userBo.getUserListByUserGroupId(userGroupId);
-        assertEquals(1, list.size());
-        UserEntity user = list.get(0);
-        assertEquals("John", user.getFirstName());
-        assertEquals("Doe", user.getLastName());
-        assertEquals("johndoe", user.getUsername());
-        assertEquals("johndoe@yahoo.com", user.getEmail());
-        assertEquals(CommonConstants.YES, user.getActive());
-        assertEquals(userGroupId, user.getUserGroup().getId());
+        Dto dtoInput = new Dto();
+        dtoInput.put("userGroupId", 1L);
+        try {
+            List<Dto> list = userBo.getUserListByUserGroupId(dtoInput);
+            LOG.debug("Result: " + list);
+            assertEquals(1, list.size());
+            Dto dtoUser = list.get(0);
+            assertEquals("John", dtoUser.get("firstName"));
+            assertEquals("Doe", dtoUser.get("lastName"));
+            assertEquals("johndoe", dtoUser.get("username"));
+            assertEquals("johndoe@yahoo.com", dtoUser.get("email"));
+            assertEquals(CommonConstants.YES, dtoUser.get("active"));
+            assertEquals(1L, dtoUser.get("userGroupId"));
+        } catch (Exception e) {
+            LOG.error(e.toString(), e);
+            fail(e.toString());
+        }
     }
 
     @Test
     public void testAddUserSuccess() {
         LOG.debug("TEST SUCCESS add user ...");
-        UserGroupEntity userGroup = new UserGroupEntity();
-        userGroup.setId(1L);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setFirstName("Brian");
-        userEntity.setLastName("Mc Knight");
-        userEntity.setUsername("brian");
-        userEntity.setEmail("bryan.mckningt@yahoo.com");
-        userEntity.setPassword("pojh08ewn");
-        userEntity.setActive(CommonConstants.YES);
-        userEntity.setUserGroup(userGroup);
+        
+        Dto dtoInput = new Dto();
+        dtoInput.put("firstName", "Brian");
+        dtoInput.put("lastName", "Mc Knight");
+        dtoInput.put("username", "brian");
+        dtoInput.put("email", "bryan.mckningt@yahoo.com");
+        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("active", CommonConstants.YES);
+        dtoInput.put("userGroupId", 1L);
+        
         try {
-            userEntity = userBo.addUser(userEntity);
-            assertEquals(3L, userEntity.getId().longValue());
+            Dto result = userBo.addUser(dtoInput);
+            LOG.debug("Result: " + result);
         } catch (Exception e) {
-            e.printStackTrace();
-            LOG.debug(e.toString());
-            fail();
+            LOG.error(e.toString(), e);
+            fail(e.toString());
         }
     }
 
     @Test
     public void testAddUserFail() {
         LOG.debug("TEST FAIL add user ...");
-        UserGroupEntity userGroup = new UserGroupEntity();
-        userGroup.setId(1L);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setFirstName("John");
-        userEntity.setLastName("Doe");
-        userEntity.setUsername("johndoe");
-        userEntity.setEmail("johndoe@yahoo.com");
-        userEntity.setPassword("mbp0jhai");
-        userEntity.setActive(CommonConstants.YES);
-        userEntity.setUserGroup(userGroup);
+        
+        Dto dtoInput = new Dto();
+        dtoInput.put("firstName", "John");
+        dtoInput.put("lastName", "Doe");
+        dtoInput.put("username", "johndoe");
+        dtoInput.put("email", "johndoe@yahoo.com");
+        dtoInput.put("password", "mbp0jhai");
+        dtoInput.put("active", CommonConstants.YES);
+        dtoInput.put("userGroupId", 1L);
+        
         try {
-            userBo.addUser(userEntity);
+            userBo.addUser(dtoInput);
             fail();
         } catch (DataException e) {
             LOG.debug(e.toString());
-            assertEquals(ExceptionCode.D0003, e.getCode());
+            assertEquals(ExceptionCode.E1003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, e.getMessage());
         } catch (Exception e) {
             LOG.error(e.toString(), e);
@@ -134,54 +137,52 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
     @Test
     public void testEditUserSuccess() {
         LOG.debug("TEST SUCCESS edit user ...");
-        UserGroupEntity userGroup = new UserGroupEntity();
-        userGroup.setId(1L);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(2L);
-        userEntity.setFirstName("Fulan");
-        userEntity.setLastName("");
-        userEntity.setUsername("fulan2");
-        userEntity.setEmail("fulan2@yahoo.com");
-        userEntity.setPassword("pojh08ewn");
-        userEntity.setActive(CommonConstants.NO);
-        userEntity.setUserGroup(userGroup);
+        
+        Dto dtoInput = new Dto();
+        dtoInput.put("id", 2L);
+        dtoInput.put("firstName", "Fulan");
+        dtoInput.put("lastName", "");
+        dtoInput.put("username", "fulan2");
+        dtoInput.put("email", "fulan2@yahoo.com");
+        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("active", CommonConstants.NO);
+        dtoInput.put("userGroupId", 1L);
+        
         try {
-            userEntity = userBo.editUser(userEntity);
-            assertEquals("fulan2", userEntity.getUsername());
-            assertEquals("fulan2@yahoo.com", userEntity.getEmail());
-            assertEquals(CommonConstants.NO, userEntity.getActive());
+            Dto result = userBo.editUser(dtoInput);
+            LOG.debug("Result: " + result);
+            assertEquals("fulan2", result.get("username"));
+            assertEquals("fulan2@yahoo.com", result.get("email"));
+            assertEquals(CommonConstants.NO, result.get("active"));
         } catch (Exception e) {
-            e.printStackTrace();
-            LOG.debug(e.toString());
-            fail();
+            LOG.error(e.toString(), e);
+            fail(e.toString());
         }
     }
 
     @Test
     public void testEditUserFail1() {
         LOG.debug("TEST FAIL 1 edit user ...");
-        UserGroupEntity userGroup = new UserGroupEntity();
-        userGroup.setId(1L);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(20L);
-        userEntity.setFirstName("John");
-        userEntity.setLastName("Doe");
-        userEntity.setUsername("johndoe");
-        userEntity.setEmail("johndoe@yahoo.com");
-        userEntity.setPassword("mbp0jhai");
-        userEntity.setActive(CommonConstants.YES);
-        userEntity.setUserGroup(userGroup);
+        
+        Dto dtoInput = new Dto();
+        dtoInput.put("id", 20L);
+        dtoInput.put("firstName", "Fulan");
+        dtoInput.put("lastName", "");
+        dtoInput.put("username", "fulan2");
+        dtoInput.put("email", "fulan2@yahoo.com");
+        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("active", CommonConstants.NO);
+        dtoInput.put("userGroupId", 1L);
+        
         try {
-            userBo.editUser(userEntity);
+            userBo.editUser(dtoInput);
             fail();
         } catch (DataException e) {
             LOG.debug(e.toString());
-            assertEquals(ExceptionCode.D0001, e.getCode());
+            assertEquals(ExceptionCode.E1001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-            LOG.debug(e.toString());
+            LOG.error(e.toString(), e);
             fail(e.toString());
         }
     }
@@ -189,27 +190,25 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
     @Test
     public void testEditUserFail2() {
         LOG.debug("TEST FAIL 2 edit user ...");
-        UserGroupEntity userGroup = new UserGroupEntity();
-        userGroup.setId(1L);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(2L);
-        userEntity.setFirstName("John");
-        userEntity.setLastName("Doe");
-        userEntity.setUsername("johndoe2");
-        userEntity.setEmail("johndoe@yahoo.com");
-        userEntity.setPassword("mbp0jhai");
-        userEntity.setActive(CommonConstants.NO);
-        userEntity.setUserGroup(userGroup);
+        
+        Dto dtoInput = new Dto();
+        dtoInput.put("id", 2L);
+        dtoInput.put("firstName", "John");
+        dtoInput.put("lastName", "Doe");
+        dtoInput.put("username", "johndoe2");
+        dtoInput.put("email", "johndoe@yahoo.com");
+        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("active", CommonConstants.NO);
+        dtoInput.put("userGroupId", 1L);
+        
         try {
-            userBo.editUser(userEntity);
+            userBo.editUser(dtoInput);
             fail();
         } catch (DataException e) {
             LOG.debug(e.toString());
-            assertEquals(ExceptionCode.D0003, e.getCode());
+            assertEquals(ExceptionCode.E1003, e.getCode());
             assertEquals(ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
             LOG.error(e.toString(), e);
             fail(e.toString());
         }
@@ -218,29 +217,32 @@ public class TestUserBo extends AbstractTransactionalJUnit4SpringContextTests {
     @Test
     public void testRemoveUserSuccess() {
         LOG.debug("TEST SUCCESS remove user ...");
-        Long id = 2L;
+        
+        Dto dtoInput = new Dto();
+        dtoInput.put("id", 2L);
+        
         try {
-            userBo.removeUser(id);
+            userBo.removeUser(dtoInput);
         } catch (Exception e) {
-            e.printStackTrace();
-            LOG.debug(e.toString());
-            fail();
+            LOG.error(e.toString(), e);
+            fail(e.toString());
         }
     }
 
     @Test
     public void testRemoveUserFail() {
         LOG.debug("TEST FAIL remove user ...");
-        Long id = 100L;
+        Dto dtoInput = new Dto();
+        dtoInput.put("id", 298L);
         try {
-            userBo.removeUser(id);
+            userBo.removeUser(dtoInput);
             fail();
         } catch (DataException e) {
             LOG.debug(e.toString());
-            assertEquals(ExceptionCode.D0001, e.getCode());
+            assertEquals(ExceptionCode.E1001, e.getCode());
             assertEquals(ErrorMessageConstants.USER_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-            LOG.debug(e.toString());
+            LOG.error(e.toString(), e);
             fail(e.toString());
         }
     }

@@ -7,7 +7,6 @@ import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_TEMPLATE_CODE
 
 import java.io.Serializable;
 import java.util.Locale;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
-import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
+import java.util.ResourceBundle;
 
 @ManagedBean
 @ApplicationScoped
@@ -41,14 +40,13 @@ public class ApplicationBean implements Serializable {
     private String image;
     private String online;
 
-    private Properties applicationProperties;
+    protected ResourceBundle applicationBundle = ResourceBundle.getBundle("application");
     private String hostUrl;
 
     @PostConstruct
     public void postConstruct() {
         LOG.debug("Post construct ApplicationBean ...");
-        applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-        hostUrl = applicationProperties.getProperty("rest.HostUrl");
+        hostUrl = applicationBundle.getString("rest.HostUrl");
 
         try {
             HttpClientResponse response = new HttpClient()
@@ -143,7 +141,7 @@ public class ApplicationBean implements Serializable {
     }
 
     public String getApplicationInfo() {
-        return applicationProperties.getProperty("application.info.Name") + " " + applicationProperties.getProperty("application.info.Version");
+        return applicationBundle.getString("application.info.Name") + " " + applicationBundle.getString("application.info.Version");
     }
-    
+
 }

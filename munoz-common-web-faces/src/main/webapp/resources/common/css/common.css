@@ -127,10 +127,17 @@ ul.top-nav > li {
     text-align: center;
     padding: 0 10px;
 }
+ul.top-nav > li > a {
+    color: #000;
+    text-decoration: none;
+}
 ul.top-nav > li:hover {
     color: #fff;
     cursor: pointer;
     background: #60a1bf;
+}
+ul.top-nav > li:hover > a {
+    color: #fff;
 }
 ul.top-nav > li:hover div {
     visibility: visible;
@@ -225,7 +232,7 @@ ul.top-nav > li div ul li a {
 }
 
 .ui-panel .ui-panel-titlebar {
-    padding: 8px 10px !important;
+    padding: 6px 10px !important;
 }
 
 .ui-panel {
@@ -403,7 +410,7 @@ th.ui-state-default {
 
 .ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer {
     text-align: left !important;
-    padding: 8px 10px !important;
+    padding: 6px 10px !important;
     font-weight: bold;
 }
 
@@ -415,9 +422,13 @@ th.ui-state-default {
     border: 1px solid #a6c9e2 !important;
 }
 
-.ui-datatable tbody td.wrap {
+.ui-datatable tbody td.wrap-break {
     white-space: normal;
     word-wrap: break-word;
+}
+
+.ui-datatable tbody td.wrap-ellipsis {
+    text-overflow: ellipsis;
 }
 
 .ui-chkbox .ui-state-default, 
@@ -497,4 +508,14 @@ th.ui-state-default {
 
 .text-version {
     color: #999;
+}
+.ui-messages-info-summary, 
+.ui-messages-warn-summary, 
+.ui-messages-error-summary, 
+.ui-messages-fatal-summary, 
+.ui-message-info-summary, 
+.ui-message-warn-summary, 
+.ui-message-error-summary, 
+.ui-message-fatal-summary {
+    display: block;
 }

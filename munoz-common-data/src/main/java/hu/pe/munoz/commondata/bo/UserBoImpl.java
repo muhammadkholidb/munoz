@@ -8,114 +8,322 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.common.exception.ExceptionCode;
+import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.dao.UserDao;
+import hu.pe.munoz.commondata.dao.UserGroupDao;
+import hu.pe.munoz.commondata.dao.UserGroupMenuPermissionDao;
 import hu.pe.munoz.commondata.entity.UserEntity;
+import hu.pe.munoz.commondata.entity.UserGroupEntity;
+import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
+import hu.pe.munoz.commondata.helper.DataValidation;
+import hu.pe.munoz.commondata.helper.Dto;
+import hu.pe.munoz.commondata.helper.DtoUtils;
+import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class UserBoImpl implements UserBo {
 
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private UserGroupDao userGroupDao;
+    
+    @Autowired
+    private UserGroupMenuPermissionDao userGroupMenuPermissionDao;
+    
     @Override
-    public List<UserEntity> getAllUser() {
-        return userDao.findAllWithUserGroup();
-    }
-
-    @Override
-    public List<UserEntity> getUserListByUserGroupId(Long userGroupId) {
-        return userDao.findByUserGroupId(userGroupId);
-    }
-
-    @Override
-    public UserEntity getUser(Long id) throws DataException {
-        UserEntity user = userDao.findById(id);
-        if (user == null) {
-            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND);
+    public List<Dto> getAllUserWithGroup(Dto dtoInput) {
+        
+        // No validation
+        
+        List<Object[]> list = userDao.findAllJoinUserGroup();
+        List<Dto> listDto = new ArrayList<Dto>();
+        for (Object[] objects : list) {
+            Dto dtoUser = DtoUtils.toDto(objects[0]);
+            Dto dtoUserGroup = DtoUtils.toDto(objects[1]);
+            Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+            dto.put("userGroup", DtoUtils.omit(dtoUserGroup, "lowerName", "createdAt", "modifiedAt"));
+            listDto.add(dto);
         }
-        return user;
+        return listDto;
     }
 
     @Override
-    public UserEntity getUser(String email, String username) throws DataException {
-        UserEntity user = userDao.findByEmailOrUsername(email, username);
-        if (user == null) {
-            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND);
+    public List<Dto> getUserListByUserGroupId(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "userGroupId");
+        
+        // Validate values
+        String strUserGroupId = dtoInput.getStringValue("userGroupId");
+        DataValidation.validateNumeric(strUserGroupId, "User Group ID");
+        
+        List<UserEntity> list = userDao.findByUserGroupId(Long.valueOf(strUserGroupId));
+        List<Dto> listDto = new ArrayList<Dto>();
+        for (UserEntity user : list) {
+            Dto dtoUser = DtoUtils.toDto(user);
+            Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+            listDto.add(dto);
         }
-        return user;
+        return listDto;
     }
 
     @Override
-    public UserEntity getUserByEmail(String email) throws DataException {
-        UserEntity user = userDao.findByEmail(email);
+    public Dto getUserById(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "id");
+        
+        // Validate values
+        String strUserId = dtoInput.getStringValue("id");
+        DataValidation.validateNumeric(strUserId, "User ID");
+        
+        UserEntity user = userDao.findById(Long.valueOf(strUserId));
         if (user == null) {
-            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND, new Object[]{email});
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
         }
-        return null;
+        
+        Dto dtoUser = DtoUtils.toDto(user);
+        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        return dto;
     }
 
     @Override
-    public UserEntity getUserByUsername(String username) throws DataException {
-        UserEntity user = userDao.findByUsername(username);
+    public Dto login(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "password", "username");
+        
+        String strPassword = dtoInput.get("password");
+        String strUsername = dtoInput.get("username");
+        
+        // Validate values
+        // DataValidation.validateEmail(strEmail);
+        // DataValidation.validateUsername(strUsername);
+        
+        Object[] objects = userDao.findOneByEmailOrUsernameJoinUserGroup(strUsername, strUsername);
+        if (objects == null) {
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
+        }
+        
+        UserEntity user = (UserEntity) objects[0];
+        UserGroupEntity userGroup = (UserGroupEntity) objects[1];
+        
+        if (!user.getPassword().equals(strPassword)) {
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
+        }
+                
+        if (CommonConstants.NO.equals(user.getActive())) {
+            throw new DataException(ExceptionCode.E1008, ErrorMessageConstants.CANT_LOGIN_CAUSE_USER_NOT_ACTIVE);
+        }
+
+        if (CommonConstants.NO.equals(userGroup.getActive())) {
+            throw new DataException(ExceptionCode.E1008, ErrorMessageConstants.CANT_LOGIN_CAUSE_USER_GROUP_NOT_ACTIVE);
+        }
+
+        List<UserGroupMenuPermissionEntity> menuPermissions = userGroupMenuPermissionDao.findByUserGroupId(user.getUserGroupId());
+        List<Dto> listDtoMenuPermission = new ArrayList<Dto>();
+        for (UserGroupMenuPermissionEntity menuPermission : menuPermissions) {
+            Dto dtoMenuPermission = DtoUtils.toDto(menuPermission);
+            listDtoMenuPermission.add(DtoUtils.omit(dtoMenuPermission, "createdAt", "modifiedAt"));
+        }
+        
+        Dto dtoUser = DtoUtils.toDto(user);
+        Dto dtoUserGroup = DtoUtils.toDto(userGroup);
+        dtoUserGroup.put("menuPermissions", listDtoMenuPermission);
+        
+        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        dto.put("userGroup", DtoUtils.omit(dtoUserGroup, "lowerName", "createdAt", "modifiedAt"));
+        return dto;
+    }
+
+    @Override
+    public Dto getUserByEmail(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "email");
+        
+        String strEmail = dtoInput.get("email");
+        
+        // Validate values
+        DataValidation.validateEmail(strEmail);
+        
+        UserEntity user = userDao.findOneByEmail(strEmail);
         if (user == null) {
-            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND, new Object[]{username});
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND, new Object[]{strEmail});
         }
-        return null;
+        
+        Dto dtoUser = DtoUtils.toDto(user);
+        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        return dto;
     }
 
     @Override
-    public UserEntity addUser(UserEntity userEntity) throws DataException {
-        UserEntity findUser = userDao.findByEmailOrUsername(userEntity.getEmail(), userEntity.getUsername());
+    public Dto getUserByUsername(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "username");
+        
+        String strUsername = dtoInput.get("username");
+        
+        // Validate values
+        DataValidation.validateUsername(strUsername);
+        
+        UserEntity user = userDao.findOneByUsername(strUsername);
+        if (user == null) {
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND, new Object[]{strUsername});
+        }
+        
+        Dto dtoUser = DtoUtils.toDto(user);
+        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        return dto;
+    }
+
+    @Override
+    public Dto addUser(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "firstName", "email", "username", "password", "active", "userGroupId");
+        
+        String strFirstName = dtoInput.get("firstName");
+        String strLastName = dtoInput.get("lastName");
+        String strEmail = dtoInput.get("email");
+        String strUsername = dtoInput.get("username");
+        String strPassword = dtoInput.get("password");
+        String strActive = dtoInput.get("active");
+        String strUserGroupId = dtoInput.getStringValue("userGroupId");
+        
+        // Validate values
+        DataValidation.validateEmpty(strFirstName, "First Name");
+        DataValidation.validateEmpty(strPassword, "Password");
+        DataValidation.validateEmail(strEmail);
+        DataValidation.validateUsername(strUsername);
+        DataValidation.validateNumeric(strUserGroupId, "User Group ID");
+        DataValidation.validateYesNo(strActive, "Active");
+        
+        UserEntity findUser = userDao.findOneByEmailOrUsername(strEmail, strUsername);
         if (findUser != null) {
             // Chek username
-            String userUsername = userEntity.getUsername();
-            if (findUser.getUsernameUpper().equals(userUsername.toUpperCase())) {
-                throw new DataException(ExceptionCode.D0003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, new Object[]{userUsername});
+            if (findUser.getLowerUsername().equals(strUsername.toLowerCase())) {
+                throw new DataException(ExceptionCode.E1003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, new Object[] {strUsername});
             }
             // Chek email
-            String userEmail = userEntity.getEmail();
-            if (findUser.getEmailUpper().equals(userEmail.toUpperCase())) {
-                throw new DataException(ExceptionCode.D0003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, new Object[]{userEmail});
+            if (findUser.getLowerEmail().equals(strEmail.toLowerCase())) {
+                throw new DataException(ExceptionCode.E1003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, new Object[] {strEmail});
             }
         }
-        return userDao.insert(userEntity);
+        
+        // Find user group by ID
+        UserGroupEntity findUserGroupById = userGroupDao.findById(Long.valueOf(strUserGroupId));
+        if (findUserGroupById == null) {
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
+        }
+
+        UserEntity addUser = new UserEntity();
+        addUser.setFirstName(strFirstName);
+        addUser.setLastName(strLastName);
+        addUser.setEmail(strEmail);
+        addUser.setUsername(strUsername);
+        addUser.setPassword(strPassword);
+        addUser.setActive(strActive.toLowerCase());
+        addUser.setUserGroupId(Long.valueOf(strUserGroupId));
+        addUser.setLowerUsername(strUsername.toLowerCase());
+        addUser.setLowerEmail(strEmail.toLowerCase());
+        
+        UserEntity added = userDao.insert(addUser);
+        
+        Dto dtoUserAdded = DtoUtils.toDto(added);
+        Dto dto = DtoUtils.omit(dtoUserAdded, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        return dto;
     }
 
     @Override
-    public UserEntity editUser(UserEntity userEntity) throws DataException {
-        UserEntity findUserById = userDao.findById(userEntity.getId());
+    public Dto editUser(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "id", "firstName", "email", "username", "active", "userGroupId");
+        
+        String strId = dtoInput.getStringValue("id");
+        String strFirstName = dtoInput.get("firstName");
+        String strLastName = dtoInput.get("lastName");
+        String strEmail = dtoInput.get("email");
+        String strUsername = dtoInput.get("username");
+        String strPassword = dtoInput.get("password");
+        String strActive = dtoInput.get("active");
+        String strUserGroupId = dtoInput.getStringValue("userGroupId");
+        
+        // Validate values
+        DataValidation.validateNumeric(strId, "User ID");
+        DataValidation.validateEmpty(strFirstName, "First Name");
+        DataValidation.validateEmail(strEmail);
+        DataValidation.validateUsername(strUsername);
+        DataValidation.validateNumeric(strUserGroupId, "User Group ID");
+        DataValidation.validateYesNo(strActive, "Active");
+        
+        UserEntity findUserById = userDao.findById(Long.valueOf(strId));
         if (findUserById == null) {
-            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND);
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
         }
-        UserEntity findUserByUsernameEmail = userDao.findByEmailOrUsername(userEntity.getEmail(), userEntity.getUsername());
-        if ((findUserByUsernameEmail != null) && (findUserByUsernameEmail.getId() != userEntity.getId())) {
+        
+        // Find other user with specified email and username
+        UserEntity findUserByUsernameEmail = userDao.findOneByEmailOrUsername(strEmail, strUsername);
+        if ((findUserByUsernameEmail != null) && (!Objects.equals(findUserByUsernameEmail.getId(), Long.valueOf(strId)))) {
             // Chek username
-            String userUsername = userEntity.getUsername();
-            if (findUserByUsernameEmail.getUsernameUpper().equals(userUsername.toUpperCase())) {
-                throw new DataException(ExceptionCode.D0003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, new Object[]{userUsername});
+            if (findUserByUsernameEmail.getLowerUsername().equals(strUsername.toLowerCase())) {
+                throw new DataException(ExceptionCode.E1003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_USERNAME, new Object[] {strUsername});
             }
             // Chek email
-            String userEmail = userEntity.getEmail();
-            if (findUserByUsernameEmail.getEmailUpper().equals(userEmail.toUpperCase())) {
-                throw new DataException(ExceptionCode.D0003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, new Object[]{userEmail});
+            if (findUserByUsernameEmail.getLowerEmail().equals(strEmail.toLowerCase())) {
+                throw new DataException(ExceptionCode.E1003, ErrorMessageConstants.USER_ALREADY_EXISTS_WITH_EMAIL, new Object[] {strEmail});
             }
         }
-        return userDao.update(userEntity);
+        
+        // Find user group by ID
+        UserGroupEntity findUserGroupById = userGroupDao.findById(Long.valueOf(strUserGroupId));
+        if (findUserGroupById == null) {
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
+        }
+
+        findUserById.setFirstName(strFirstName);
+        findUserById.setLastName(strLastName);
+        findUserById.setUsername(strUsername);
+        findUserById.setEmail(strEmail);
+        findUserById.setActive(strActive.toLowerCase());
+        findUserById.setUserGroupId(Long.valueOf(strUserGroupId));
+        findUserById.setLowerEmail(strEmail.toLowerCase());
+        findUserById.setLowerUsername(strUsername.toLowerCase());
+        
+        if ((strPassword != null) && !strPassword.trim().isEmpty()) {
+            findUserById.setPassword(strPassword);
+        }
+        
+        UserEntity updated = userDao.update(findUserById);
+        
+        Dto dtoUserUpdated = DtoUtils.toDto(updated);
+        Dto dto = DtoUtils.omit(dtoUserUpdated, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        return dto;
     }
 
     @Override
-    public void removeUser(Long id) throws DataException {
-        UserEntity findUserById = userDao.findById(id);
+    public void removeUser(Dto dtoInput) throws DataException {
+        
+        // Validate dtoInput
+        DataValidation.containsRequiredData(dtoInput, "id");
+        
+        // Validate values
+        String strUserId = dtoInput.getStringValue("id");
+        DataValidation.validateNumeric(strUserId, "User Id");
+        
+        UserEntity findUserById = userDao.findById(Long.valueOf(strUserId));
         if (findUserById == null) {
-            throw new DataException(ExceptionCode.D0001, ErrorMessageConstants.USER_NOT_FOUND);
+            throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
         }
-        try {
-            userDao.deleteById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+        userDao.delete(findUserById);
     }
 
 }

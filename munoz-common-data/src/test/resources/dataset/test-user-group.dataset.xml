@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset reset_sequences="mn_user_group_id_seq, mn_user_id_seq, mn_user_group_menu_permission_id_seq">
+    
+    <mn_user_group 
+        name="Administrator" 
+        lower_name="administrator" 
+        active="y" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    <mn_user_group 
+        name="User" 
+        lower_name="user" 
+        active="y" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    <mn_user_group 
+        name="Marketing" 
+        lower_name="marketing" 
+        active="y" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    
+    <mn_user  
+        first_name="John" 
+        last_name="Doe" 
+        username="johndoe" 
+        password="abc" 
+        email="johndoe@yahoo.com" 
+        active="y" 
+        user_group_id="1" 
+        lower_username="johndoe" 
+        lower_email="johndoe@yahoo.com" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    <mn_user 
+        first_name="Fulan" 
+             
+        username="fulan" 
+        password="abc" 
+        email="fulan@yahoo.com" 
+        active="y" 
+        user_group_id="2" 
+        lower_username="fulan" 
+        lower_email="fulan@yahoo.com" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    
+    <mn_user_group_menu_permission user_group_id="1" menu_code="menu.settings" view="y" modify="y" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="1" menu_code="menu.settings.system" view="y" modify="y" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="1" menu_code="menu.settings.user" view="y" modify="y" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="1" menu_code="menu.settings.usergroup" view="y" modify="y" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="2" menu_code="menu.settings" view="n" modify="n" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="2" menu_code="menu.settings.system" view="n" modify="n" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="2" menu_code="menu.settings.user" view="n" modify="n" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    <mn_user_group_menu_permission user_group_id="2" menu_code="menu.settings.usergroup" view="n" modify="n" created_at="{currentMillis}" modified_at="{currentMillis}" />
+    
+</dataset>

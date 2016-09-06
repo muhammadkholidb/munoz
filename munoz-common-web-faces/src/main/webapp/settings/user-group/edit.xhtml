@@ -12,7 +12,7 @@
 
     <ui:define name="title">#{lang['title.UserGroup']}</ui:define>
 
-    <ui:define name="inner">
+    <ui:define name="main">
 
         <h:form id="formEdit">
 
@@ -29,21 +29,30 @@
                         <p:inputText value="#{userGroupBean.inputGroupName}" placeholder="#{lang['label.Name']}" required="true" requiredMessage="#{lang['required.NameCannotBeEmpty']}" />
 
                         <h:outputText value="#{lang['label.MenuPermissions']}" />
-                        <p:dataTable var="menu" value="#{userGroupBean.inputMenus}" reflow="true" rowIndexVar="rowIndex" > 
+                        <p:dataTable var="menu" value="#{userGroupBean.inputMenus}" reflow="#{userGroupBean.inputMenus.size() == 0}" rowIndexVar="rowIndex" styleClass="tusergroupmenu" emptyMessage="#{lang['message.NoRecords']}" > 
 
-                            <p:column headerText="#{lang['label.Name']}" styleClass="wrap" >
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column headerText="#{lang['label.Name']}" styleClass="tusergroupmenu-name" ></p:column>
+                                    <p:column headerText="#{lang['label.Description']}" styleClass="tusergroupmenu-description" ></p:column>
+                                    <p:column headerText="#{lang['label.View']}" styleClass="tusergroupmenu-view" ></p:column>
+                                    <p:column headerText="#{lang['label.Modify']}" styleClass="tusergroupmenu-modify" ></p:column>
+                                </p:row>
+                            </p:columnGroup>
+
+                            <p:column styleClass="wrap-break" >
                                 <h:outputText value="#{menu.label[applicationBean.languageCode]}" /> 
                             </p:column>
 
-                            <p:column headerText="#{lang['label.Description']}" styleClass="wrap" >
+                            <p:column styleClass="wrap-break" >
                                 <h:outputText value="#{menu.description}" />
                             </p:column>
 
-                            <p:column headerText="#{lang['label.View']}" styleClass="wrap" style="text-align: center;" >
+                            <p:column styleClass="wrap-break" style="text-align: center;" >
                                 <p:selectBooleanCheckbox value="#{menu.viewBoolean}" widgetVar="chkv#{rowIndex}"  />
                             </p:column>
 
-                            <p:column headerText="#{lang['label.Modify']}" styleClass="wrap" style="text-align: center;" >
+                            <p:column styleClass="wrap-break" style="text-align: center;" >
                                 <p:selectBooleanCheckbox value="#{menu.modifyBoolean}" widgetVar="chkm#{rowIndex}" />
                             </p:column>
 
@@ -51,8 +60,8 @@
 
                         <h:outputText value="#{lang['label.Active']}" />
                         <p:selectOneMenu value="#{userGroupBean.inputGroupActive}"> 
-                            <f:selectItem itemLabel="#{lang['label.Yes']}" itemValue="Y" />
-                            <f:selectItem itemLabel="#{lang['label.No']}" itemValue="N" />
+                            <f:selectItem itemLabel="#{lang['label.Yes']}" itemValue="y" />
+                            <f:selectItem itemLabel="#{lang['label.No']}" itemValue="n" />
                         </p:selectOneMenu>
 
                     </p:panelGrid>
@@ -71,6 +80,26 @@
 
         </h:form>
 
+    </ui:define>
+
+    <ui:define name="bottoms">
+        <h:outputScript library="footable" name="js/footable.js" />
+        <h:outputScript>
+            $(document).ready(function() {
+            <c:if test="#{userGroupBean.inputMenus.size() > 0}" >
+                $("th.tusergroupmenu-name").attr("data-toggle", "true");
+                $("th.tusergroupmenu-description").attr("data-hide", "phone,tablet");
+                $("th.tusergroupmenu-view").attr("data-hide", "phone");
+                $("th.tusergroupmenu-modify").attr("data-hide", "phone");
+
+                $("div.tusergroupmenu table").addClass("toggle-arrow").footable();
+            </c:if>
+            });
+        </h:outputScript>
+    </ui:define>
+    
+    <ui:define name="tops">
+        <h:outputStylesheet library="footable" name="css/footable.core.css" />
     </ui:define>
 
 </ui:composition>

@@ -6,6 +6,6 @@ import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 
 public interface UserGroupMenuPermissionDao extends GenericDao<UserGroupMenuPermissionEntity> {
 
-	List<UserGroupMenuPermissionEntity> findByUserGroupId(Long userGroupId);
+    List<UserGroupMenuPermissionEntity> findByUserGroupId(Long userGroupId);
 
 }

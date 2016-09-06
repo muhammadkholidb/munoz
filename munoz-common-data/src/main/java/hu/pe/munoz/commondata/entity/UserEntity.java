@@ -4,19 +4,18 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = UserEntity.TABLE_NAME, uniqueConstraints = {
-    @UniqueConstraint(columnNames = { "username_upper" }),
-    @UniqueConstraint(columnNames = { "email_upper" }) })
+    @UniqueConstraint(columnNames = {"lower_username"}),
+    @UniqueConstraint(columnNames = {"lower_email"})
+})
 public class UserEntity extends BaseEntity implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -31,24 +30,23 @@ public class UserEntity extends BaseEntity implements Serializable {
     @Column(name = "username", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "username_upper", length = 50, columnDefinition = "varchar(50) as upper(username)")
-    private String usernameUpper;
-    
     @Column(name = "email", length = 50, nullable = false)
     private String email;
 
-    @Column(name = "email_upper", length = 50, columnDefinition = "varchar(50) as upper(email)")
-    private String emailUpper;
-    
     @Column(name = "password", length = 50, nullable = false)
     private String password;
 
     @Column(name = "active", length = 1, nullable = false)
     private String active;
 
-    @ManyToOne
-    @JoinColumn(name = "user_group_id", nullable = false)
-    private UserGroupEntity userGroup;
+    @Column(name = "lower_username", length = 50, nullable = false)
+    private String lowerUsername;
+
+    @Column(name = "lower_email", length = 50, nullable = false)
+    private String lowerEmail;
+
+    @Column(name = "user_group_id")
+    private Long userGroupId;
 
     public String getFirstName() {
         return firstName;
@@ -98,28 +96,28 @@ public class UserEntity extends BaseEntity implements Serializable {
         this.active = active;
     }
 
-    public UserGroupEntity getUserGroup() {
-        return userGroup;
+    public String getLowerUsername() {
+        return lowerUsername;
     }
 
-    public void setUserGroup(UserGroupEntity userGroup) {
-        this.userGroup = userGroup;
+    public void setLowerUsername(String lowerUsername) {
+        this.lowerUsername = lowerUsername;
     }
 
-	public String getUsernameUpper() {
-		return usernameUpper;
-	}
+    public String getLowerEmail() {
+        return lowerEmail;
+    }
 
-	public void setUsernameUpper(String usernameUpper) {
-		this.usernameUpper = usernameUpper;
-	}
+    public void setLowerEmail(String lowerEmail) {
+        this.lowerEmail = lowerEmail;
+    }
 
-	public String getEmailUpper() {
-		return emailUpper;
-	}
+    public Long getUserGroupId() {
+        return userGroupId;
+    }
 
-	public void setEmailUpper(String emailUpper) {
-		this.emailUpper = emailUpper;
-	}
-
+    public void setUserGroupId(Long userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+    
 }

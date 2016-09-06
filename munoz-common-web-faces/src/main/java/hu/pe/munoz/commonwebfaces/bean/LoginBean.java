@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.servlet.ServletException;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.json.simple.JSONArray;
@@ -15,10 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
-import hu.pe.munoz.common.helper.HttpClient;
+import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.HttpClientResponse;
-import hu.pe.munoz.common.helper.SuperAdmin;
+import hu.pe.munoz.common.helper.DefaultUser;
+import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 @ManagedBean
 @SessionScoped
@@ -31,8 +32,9 @@ public class LoginBean extends RESTBean implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
 
-    private String inputUsername;
+    private ResourceBundle userBundle = ResourceBundle.getBundle("users");
 
+    private String inputUsername;
     private String inputPassword;
 
     private JSONObject user;
@@ -48,10 +50,13 @@ public class LoginBean extends RESTBean implements Serializable {
     @SuppressWarnings("unchecked")
     public void doLogin() {
 
+        String paramUsername = inputUsername.trim();
+        String paramPassword = DigestUtils.sha1Hex(inputPassword);
+        
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/login")
                     .addParameter("username", inputUsername.trim())
-                    .addParameter("password", inputPassword)
+                    .addParameter("password", paramPassword)
                     .post();
             if (response != null) {
                 String status = response.getStatus();
@@ -59,10 +64,10 @@ public class LoginBean extends RESTBean implements Serializable {
                 if (CommonConstants.SUCCESS.equals(status)) {
                     user = (JSONObject) response.getData();
                     userGroup = (JSONObject) user.get("userGroup");
-                    menuPermissions = (JSONArray) userGroup.get("userGroupMenuPermissions");
+                    menuPermissions = (JSONArray) userGroup.get("menuPermissions");
                 } else {
-                    // Try servlet login
-                    doServletLogin(inputUsername.trim(), inputPassword);
+                    // Check default users
+                    checkDefaultUser(paramUsername, paramPassword);
                 }
                 if (user == null) {
                     Messages.addGlobalError(message);
@@ -71,8 +76,7 @@ public class LoginBean extends RESTBean implements Serializable {
             }
         } catch (Exception e) {
             LOG.error(e.toString(), e); 
-            String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
-            Messages.addGlobalError(message);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
             return;
         }
         
@@ -86,7 +90,7 @@ public class LoginBean extends RESTBean implements Serializable {
                 Faces.redirect(redirect);
                 return;
             }
-            Faces.redirect("home.xhtml");
+            Faces.redirect("dashboard.xhtml");
         } catch (Exception e) {
             LOG.error(e.toString(), e);
             Messages.addGlobalError(e.getMessage(), new Object[]{});
@@ -94,25 +98,49 @@ public class LoginBean extends RESTBean implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    private void doServletLogin(String username, String password) {
+    private void checkDefaultUser(String username, String password) {
+        String defaultUser = null;
         try {
-            String hash = DigestUtils.sha1Hex(password);
-            Faces.login(username, hash);
-            if (Faces.isUserInRole(SuperAdmin.USER_GROUP_NAME)) {
-                userGroup = new JSONObject();
-                userGroup.put("id", SuperAdmin.USER_GROUP_ID);
-                userGroup.put("name", SuperAdmin.USER_GROUP_NAME);
-                user = new JSONObject();
-                user.put("username", Faces.getRemoteUser());
-                user.put("firstName", SuperAdmin.FIRST_NAME);
-                user.put("lastName", SuperAdmin.LAST_NAME);
-                user.put("userGroup", userGroup);
-            }
-        } catch (ServletException e) {
-            LOG.debug(e.toString());
+            defaultUser = userBundle.getString(username);
+        } catch (MissingResourceException e) {
+            LOG.debug(e.getMessage());
+        }
+        if ((defaultUser == null) || defaultUser.trim().isEmpty()) {
+            return;
+        }
+        String defaultUserFirstName = CommonConstants.EMPTY_STRING;
+        String defaultUserLastName = CommonConstants.EMPTY_STRING;
+        String[] dataUserSplit = defaultUser.split(",");
+        switch (dataUserSplit.length) {
+            case 1 :    // Only contains password
+                String[] name = DefaultUser.chooseName();
+                defaultUserFirstName = name[0];
+                defaultUserLastName = name[1];
+                break;
+            case 2 :    // Only contains password and first name
+                defaultUserFirstName = dataUserSplit[1].trim() ;
+                break;
+            case 3 :    // Contains password, first name, and last name
+                defaultUserFirstName = dataUserSplit[1].trim();
+                defaultUserLastName = dataUserSplit[2].trim() ;
+                break;
+            default:
+                
+        }
+        String defaultUserPassword = dataUserSplit[0].trim();
+        if ((defaultUserPassword != null) && defaultUserPassword.equals(password)) {
+            userGroup = new JSONObject();
+            userGroup.put("id", DefaultUser.USER_GROUP_ID);
+            userGroup.put("name", DefaultUser.USER_GROUP_NAME);
+            user = new JSONObject();
+            user.put("id", DefaultUser.USER_ID);
+            user.put("username", username);
+            user.put("firstName", defaultUserFirstName);
+            user.put("lastName", defaultUserLastName);
+            user.put("userGroup", userGroup);
         }
     }
-
+    
     public boolean isLoggedIn() {
         return user != null;
     }
@@ -123,21 +151,21 @@ public class LoginBean extends RESTBean implements Serializable {
     }
 
     private boolean checkPermission(String menuCode, String type) {
-        if (Objects.equals((Long) userGroup.get("id"), SuperAdmin.USER_GROUP_ID)) {
+        if (Objects.equals((Long) userGroup.get("id"), DefaultUser.USER_GROUP_ID)) {
             return true;
         }
         switch (type) {
             case "view":
-                for (int i = 0; i < menuPermissions.size(); i++) {
-                    JSONObject permission = (JSONObject) menuPermissions.get(i);
+                for (Object menuPermission : menuPermissions) {
+                    JSONObject permission = (JSONObject) menuPermission;
                     if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("view"))) {
                         return true;
                     }
                 }
                 break;
             case "modify":
-                for (int i = 0; i < menuPermissions.size(); i++) {
-                    JSONObject permission = (JSONObject) menuPermissions.get(i);
+                for (Object menuPermission : menuPermissions) {
+                    JSONObject permission = (JSONObject) menuPermission;
                     if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("modify"))) {
                         return true;
                     }

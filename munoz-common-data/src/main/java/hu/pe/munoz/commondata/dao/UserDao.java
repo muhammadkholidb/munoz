@@ -6,14 +6,16 @@ import hu.pe.munoz.commondata.entity.UserEntity;
 
 public interface UserDao extends GenericDao<UserEntity> {
 
-    List<UserEntity> findAllWithUserGroup();
+    List<Object[]> findAllJoinUserGroup();
     
     List<UserEntity> findByUserGroupId(Long userGroupId);
 
-    UserEntity findByEmailOrUsername(String email, String username);
+    Object[] findOneByEmailOrUsernameJoinUserGroup(String email, String username);
     
-    UserEntity findByUsername(String username);
+    UserEntity findOneByEmailOrUsername(String email, String username);
     
-    UserEntity findByEmail(String email);
+    UserEntity findOneByUsername(String username);
+    
+    UserEntity findOneByEmail(String email);
     
 }

@@ -12,7 +12,7 @@
 
     <ui:define name="title">#{lang['title.User']}</ui:define>
 
-    <ui:define name="inner">
+    <ui:define name="main">
 
         <h:form>
 
@@ -24,33 +24,46 @@
                                  ajax="false" />
             </h:panelGroup>
 
-            <p:dataTable var="user" value="#{userBean.users}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom" >
+            <p:dataTable var="user" value="#{userBean.users}" reflow="#{userBean.users.size() == 0}" rows="10" paginator="true" paginatorPosition="bottom" styleClass="tuser" >
 
+                <p:ajax event="page" oncomplete="redrawFootableUser()" />
+                
                 <f:facet name="header">
                     <h:outputText value="#{lang['label.UserList']}" /> 
                 </f:facet>
 
-                <p:column headerText="#{lang['label.Name']}" styleClass="wrap" >
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column headerText="#{lang['label.Name']}" styleClass="tuser-name" ></p:column>
+                        <p:column headerText="#{lang['label.Username']}" styleClass="tuser-username" ></p:column>
+                        <p:column headerText="#{lang['label.Email']}" styleClass="tuser-email" ></p:column>
+                        <p:column headerText="#{lang['label.Active']}" styleClass="tuser-active" ></p:column>
+                        <p:column headerText="#{lang['label.Group']}" styleClass="tuser-group" ></p:column>
+                        <p:column headerText="#{lang['label.Action']}" styleClass="tuser-action" ></p:column>
+                    </p:row>
+                </p:columnGroup>
+                
+                <p:column styleClass="wrap-break" >
                     <h:outputText value="#{user.firstName} #{user.lastName}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Username']}" styleClass="wrap" >
+                <p:column styleClass="wrap-break" >
                     <h:outputText value="#{user.username}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Email']}" styleClass="wrap" >
+                <p:column styleClass="wrap-break" >
                     <h:outputText value="#{user.email}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Active']}" style="text-align: center;" styleClass="wrap" >
-                    <h:outputText value="#{user.active eq 'Y' ? lang['label.Yes'] : lang['label.No']}" />
+                <p:column style="text-align: center;" styleClass="wrap-break" >
+                    <h:outputText value="#{user.active eq 'y' ? lang['label.Yes'] : lang['label.No']}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Group']}" style="text-align: center;" styleClass="wrap" >
+                <p:column style="text-align: center;" styleClass="wrap-break" >
                     <h:outputText value="#{user.userGroup.name}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Action']}" style="text-align: center;" styleClass="wrap" >
+                <p:column style="text-align: center;" >
                     <h:panelGroup layout="block">
                         <p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userBean.gotoEdit(user.id)}" rendered="#{userBean.isModifyAllowed()}" />
                         <p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" style="margin-left: 5px;" 
@@ -75,4 +88,31 @@
 
     </ui:define>
 
+    <ui:define name="bottoms">
+        <h:outputScript library="footable" name="js/footable.js" />
+        <h:outputScript>
+            function initFootableUser() {
+                $("th.tuser-name").attr("data-toggle", "true");
+                $("th.tuser-username").attr("data-hide", "phone,tablet");
+                $("th.tuser-email").attr("data-hide", "phone,tablet");
+                $("th.tuser-group").attr("data-hide", "phone");
+                $("th.tuser-action").attr("data-hide", "phone,tablet");
+                
+                $("div.tuser table").addClass("toggle-arrow").footable();
+            }
+            function redrawFootableUser() {
+                $('div.tuser table').trigger('footable_redraw');
+            }
+            $(document).ready(function() {
+            <c:if test="#{userBean.users.size() > 0}" >
+                initFootableUser();
+            </c:if>
+            });
+        </h:outputScript>
+    </ui:define>
+    
+    <ui:define name="tops">
+        <h:outputStylesheet library="footable" name="css/footable.core.css" />
+    </ui:define>
+    
 </ui:composition>

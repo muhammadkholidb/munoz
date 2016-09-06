@@ -1,28 +1,28 @@
 package hu.pe.munoz.commondata.bo;
 
-import java.util.List;
 
 import hu.pe.munoz.common.exception.DataException;
-import hu.pe.munoz.commondata.entity.UserEntity;
+import hu.pe.munoz.commondata.helper.Dto;
+import java.util.List;
 
 public interface UserBo {
 
-    List<UserEntity> getAllUser();
+    List<Dto> getAllUserWithGroup(Dto dtoInput);
 
-    List<UserEntity> getUserListByUserGroupId(Long userGroupId);
+    List<Dto> getUserListByUserGroupId(Dto dtoInput) throws DataException;
 
-    UserEntity addUser(UserEntity userEntity) throws DataException;
+    Dto addUser(Dto dtoInput) throws DataException;
 
-    UserEntity editUser(UserEntity userEntity) throws DataException;
+    Dto editUser(Dto dtoInput) throws DataException;
 
-    void removeUser(Long id) throws DataException;
+    void removeUser(Dto dtoInput) throws DataException;
 
-	UserEntity getUser(Long id) throws DataException;
-    
-	UserEntity getUser(String email, String username) throws DataException;
+    Dto getUserById(Dto dtoInput) throws DataException;
 
-	UserEntity getUserByEmail(String email) throws DataException;
+    Dto login(Dto dtoInput) throws DataException;
 
-	UserEntity getUserByUsername(String username) throws DataException;
+    Dto getUserByEmail(Dto dtoInput) throws DataException;
+
+    Dto getUserByUsername(Dto dtoInput) throws DataException;
 
 }

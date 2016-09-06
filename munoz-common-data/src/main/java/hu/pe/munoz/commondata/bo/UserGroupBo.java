@@ -1,23 +1,22 @@
 package hu.pe.munoz.commondata.bo;
 
-import java.util.List;
 
 import hu.pe.munoz.common.exception.DataException;
-import hu.pe.munoz.commondata.entity.UserGroupEntity;
-import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
+import hu.pe.munoz.commondata.helper.Dto;
+import java.util.List;
 
 public interface UserGroupBo {
 
-    List<UserGroupEntity> getAllUserGroup();
+    List<Dto> getAllUserGroup(Dto dtoInput);
 
-    void removeUserGroup(Long id) throws DataException;
+    void removeUserGroup(Dto dtoInput) throws DataException;
 
-    UserGroupEntity getOneUserGroup(Long id) throws DataException;
+    Dto getOneUserGroup(Dto dtoInput) throws DataException;
 
-	UserGroupEntity getOneUserGroupWithMenuPermissions(Long id) throws DataException;
+    Dto getOneUserGroupWithMenuPermissions(Dto dtoInput) throws DataException;
 
-	UserGroupEntity editUserGroup(UserGroupEntity userGroupEntity, List<UserGroupMenuPermissionEntity> listMenuPermission) throws DataException;
+    Dto editUserGroup(Dto dtoInput) throws DataException;
 
-	UserGroupEntity addUserGroup(UserGroupEntity userGroupEntity, List<UserGroupMenuPermissionEntity> listMenuPermission) throws DataException;
+    Dto addUserGroup(Dto dtoInput) throws DataException;
 
 }

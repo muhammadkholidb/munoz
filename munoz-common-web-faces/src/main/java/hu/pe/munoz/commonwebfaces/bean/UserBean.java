@@ -105,8 +105,8 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
             return "";
         }
         
-        JSONObject jsonUserGroup = new JSONObject();
-        jsonUserGroup.put("id", inputUserGroupId);
+//        JSONObject jsonUserGroup = new JSONObject();
+//        jsonUserGroup.put("id", inputUserGroupId);
 
         JSONObject jsonUser = new JSONObject();
         jsonUser.put("firstName", inputFirstName.trim());
@@ -115,16 +115,16 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         jsonUser.put("email", inputEmail.trim());
         jsonUser.put("password", DigestUtils.sha1Hex(inputPassword));
         jsonUser.put("active", CommonConstants.YES);
-        jsonUser.put("userGroup", jsonUserGroup);
+        jsonUser.put("userGroupId", inputUserGroupId);
 
-        JSONObject parameters = new JSONObject();
-        parameters.put("user", jsonUser);
+//        JSONObject parameters = new JSONObject();
+//        parameters.put("user", jsonUser);
 
         try {
             HttpClientResponse response = getHttpClient()
                     .setHost(hostUrl)
                     .setPath("/settings/user/add")
-                    .setParameters(parameters)
+                    .setParameters(jsonUser)
                     .post();
             if (response != null) {
                 if (null != response.getStatus()) {
@@ -156,7 +156,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     @SuppressWarnings("unchecked")
     public String doRemoveUser() {
         JSONObject parameters = new JSONObject();
-        parameters.put("userId", removeId);
+        parameters.put("id", removeId);
 
         try {
             HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/remove", parameters);
@@ -186,7 +186,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     public void prepareEdit() {
         Long editId = (Long) Faces.getFlash().get("editId");
         JSONObject parameters = new JSONObject();
-        parameters.put("userId", editId);
+        parameters.put("id", editId);
 
         try {
             HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/find");
@@ -210,12 +210,13 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         inputUsername = (String) editUser.get("username");
         inputEmail = (String) editUser.get("email");
         inputActive = (String) editUser.get("active");
-        inputUserGroupId = (Long) ((JSONObject) editUser.get("userGroup")).get("id");
+        inputUserGroupId = (Long) editUser.get("userGroupId");
         loadUserGroups();
     }
 
     @SuppressWarnings("unchecked")
     public String doSaveEdit() {
+        editUser.put("userGroupId", inputUserGroupId);
         editUser.put("firstName", inputFirstName.trim());
         editUser.put("lastName", inputLastName.trim());
         editUser.put("username", inputUsername.trim());
@@ -224,22 +225,20 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         if ((inputPassword != null) && !CommonConstants.EMPTY_STRING.equals(inputPassword)) {
             editUser.put("password", DigestUtils.sha1Hex(inputPassword));
         }
-        JSONObject userGroup = new JSONObject();
-        userGroup.put("id", inputUserGroupId);
-        editUser.put("userGroup", userGroup);
-
-        JSONObject parameters = new JSONObject();
-        parameters.put("user", editUser);
 
         try {
             HttpClient httpClient = getHttpClient(hostUrl, "/settings/user/edit");
-            httpClient.setParameters(parameters);
+            httpClient.setParameters(editUser);
             HttpClientResponse response = httpClient.post();
             if (response != null) {
                 if (null != response.getStatus()) {
                     switch (response.getStatus()) {
                         case CommonConstants.SUCCESS:
                             Messages.addFlashGlobalInfo(response.getMessage());
+                            JSONObject updated = (JSONObject) response.getData();
+                            if (loginBean.getUser().get("id").equals(updated.get("id")) && CommonConstants.NO.equals(updated.get("active"))) {
+                                return loginBean.doLogout();
+                            }
                             break;
                         case CommonConstants.FAIL:
                             Messages.addGlobalError(response.getMessage());

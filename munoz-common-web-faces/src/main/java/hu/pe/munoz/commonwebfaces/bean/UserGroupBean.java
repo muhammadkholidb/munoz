@@ -145,14 +145,14 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     private void prepareEdit() {
         Long editId = (Long) Faces.getFlash().get("editId");
         JSONObject parameters = new JSONObject();
-        parameters.put("userGroupId", editId);
+        parameters.put("id", editId);
 
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/find", parameters).get();
             if (response != null) {
                 if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                     editUserGroup = (JSONObject) response.getData();
-                    editMenuPermissions = (JSONArray) editUserGroup.get("userGroupMenuPermissions");
+                    editMenuPermissions = (JSONArray) editUserGroup.get("menuPermissions");
                 } else if (CommonConstants.FAIL.equals(response.getStatus())) {
                     Messages.addGlobalError(response.getMessage());
                     return;
@@ -178,6 +178,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     }
 
     private boolean getPermissionBoolean(String key, String code, JSONArray menuPermissions) {
+        if ((menuPermissions == null) || menuPermissions.isEmpty()) return false;
         for (Object o : menuPermissions) {
             JSONObject permission = (JSONObject) o;
             if (code.equals(permission.get("menuCode"))) {
@@ -215,7 +216,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
                         case CommonConstants.SUCCESS:
                             Messages.addFlashGlobalInfo(response.getMessage());
                             JSONObject updated = (JSONObject) response.getData();
-                            if (loginBean.getUserGroup().get("id").equals(updated.get("id"))) {
+                            if (loginBean.getUserGroup().get("id").equals(updated.get("id")) && CommonConstants.NO.equals(updated.get("active"))) {
                                 return loginBean.doLogout();
                             }
                             break;
@@ -242,7 +243,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
     @SuppressWarnings("unchecked")
     public String doRemoveUserGroup() {
         JSONObject parameters = new JSONObject();
-        parameters.put("userGroupId", removeId);
+        parameters.put("id", removeId);
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/remove", parameters).post();
             if (response != null) {

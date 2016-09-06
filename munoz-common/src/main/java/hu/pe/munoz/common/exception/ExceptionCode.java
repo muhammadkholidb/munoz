@@ -2,23 +2,47 @@ package hu.pe.munoz.common.exception;
 
 public enum ExceptionCode {
     
+    // E1 = Exception in data
+    // E2 = Exception in rest
+    // E3 = Exception in web
+    
     /**
      * Entity not found
      */
-    D0001, 
+    E1001, 
     
     /**
      * Can't remove cause other entity
      */
-    D0002, 
+    E1002, 
     
     /**
      * Entity already exists
      */
-    D0003,
+    E1003,
+
+    /**
+     * Parameter key not found
+     */
+    E1004,
+    
+    /**
+     * (Validation) invalid data type or format
+     */
+    E1005,
+    
+    /**
+     * (Validation) invalid data length
+     */
+    E1006, 
+    
+    /**
+     * Error import dataset
+     */
+    E1007,
     
     /**
      * Data status not active
      */
-    R0001
+    E1008
 }

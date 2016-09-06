@@ -1,35 +1,28 @@
 package hu.pe.munoz.commondata.entity;
 
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = UserGroupMenuPermissionEntity.TABLE_NAME, uniqueConstraints = 
-	    @UniqueConstraint(columnNames = { "user_group_id", "menu_code" })) // Let hibernate give its constraint name
+@Table(name = UserGroupMenuPermissionEntity.TABLE_NAME, uniqueConstraints
+        = @UniqueConstraint(columnNames = {"user_group_id", "menu_code"})) // Let hibernate give its constraint name
 @NamedQueries({
-    @NamedQuery(name = "USER_GROUP_MENU_PERMISSION.FIND_BY_USER_GROUP_ID", query = "SELECT e FROM UserGroupMenuPermissionEntity e WHERE e.userGroup.id = :userGroupId") })
+    @NamedQuery(name = "USER_GROUP_MENU_PERMISSION.FIND_BY_USER_GROUP_ID", query = "SELECT e FROM UserGroupMenuPermissionEntity e WHERE e.userGroupId = :userGroupId")})
 public class UserGroupMenuPermissionEntity extends BaseEntity implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     public static final String TABLE_NAME = "mn_user_group_menu_permission";
 
-    @ManyToOne
-    @JoinColumn(name = "user_group_id", nullable = false)
-    private UserGroupEntity userGroup;
-    
     @Column(name = "menu_code", length = 50, nullable = false)
     private String menuCode;
 
@@ -38,16 +31,11 @@ public class UserGroupMenuPermissionEntity extends BaseEntity implements Seriali
 
     @Column(name = "modify", length = 1, nullable = false)
     private String modify;
-    
-    public UserGroupEntity getUserGroup() {
-		return userGroup;
-	}
 
-	public void setUserGroup(UserGroupEntity userGroup) {
-		this.userGroup = userGroup;
-	}
+    @Column(name = "user_group_id")
+    private Long userGroupId;
 
-	public String getMenuCode() {
+    public String getMenuCode() {
         return menuCode;
     }
 
@@ -70,5 +58,13 @@ public class UserGroupMenuPermissionEntity extends BaseEntity implements Seriali
     public void setModify(String modify) {
         this.modify = modify;
     }
-    
+
+    public Long getUserGroupId() {
+        return userGroupId;
+    }
+
+    public void setUserGroupId(Long userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+
 }

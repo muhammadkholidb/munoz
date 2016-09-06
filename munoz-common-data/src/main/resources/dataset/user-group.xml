@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    
+    <mn_user_group 
+        name="Administrator" 
+        lower_name="administrator"
+        active="y" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    
+    <mn_user_group 
+        name="User"
+        lower_name="user" 
+        active="y" 
+        created_at="{currentMillis}" 
+        modified_at="{currentMillis}" />
+    
+</dataset>

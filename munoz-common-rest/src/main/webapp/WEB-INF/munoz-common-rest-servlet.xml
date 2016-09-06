@@ -20,13 +20,5 @@
 
     <!-- Enables the Spring MVC @Controller programming model --> 
     <mvc:annotation-driven/> 
-	
-    <bean id="dozerMapper" class="org.dozer.DozerBeanMapper">
-        <property name="mappingFiles">
-            <list>
-                <value>hu/pe/munoz/commonrest/dozer/user-mapping.xml</value>
-            </list>
-        </property>
-    </bean>
-	 
+ 
 </beans>

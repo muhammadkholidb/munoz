@@ -1,11 +1,12 @@
 package hu.pe.munoz.commondata.dao;
 
 import hu.pe.munoz.commondata.entity.UserGroupEntity;
+import java.util.List;
 
 public interface UserGroupDao extends GenericDao<UserGroupEntity> {
 
-    UserGroupEntity findByName(String name);
+    UserGroupEntity findOneByName(String name);
 
-	UserGroupEntity findByIdWithMenuPermissions(Long id);
+    List<Object[]> findByIdJoinMenuPermissions(Long id);
 
 }

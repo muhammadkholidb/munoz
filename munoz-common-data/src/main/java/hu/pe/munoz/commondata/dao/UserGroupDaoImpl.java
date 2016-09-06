@@ -13,7 +13,7 @@ import hu.pe.munoz.commondata.entity.UserGroupEntity;
 public class UserGroupDaoImpl extends GenericDaoImpl<UserGroupEntity> implements UserGroupDao {
 
     @Override
-    public UserGroupEntity findByName(String name) {
+    public UserGroupEntity findOneByName(String name) {
         Query query = em.createNamedQuery("USER_GROUP.FIND_BY_NAME");
         query.setParameter("name", name);
         try {
@@ -22,17 +22,14 @@ public class UserGroupDaoImpl extends GenericDaoImpl<UserGroupEntity> implements
             return null;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-	@Override
-    public UserGroupEntity findByIdWithMenuPermissions(Long id) {
-    	Query query = em.createQuery("FROM UserGroupEntity a JOIN FETCH a.userGroupMenuPermissions b WHERE a.id = :id ").setMaxResults(1);
+    @Override
+    public List<Object[]> findByIdJoinMenuPermissions(Long id) {
+        Query query = em.createQuery("SELECT a, b FROM UserGroupEntity a LEFT JOIN UserGroupMenuPermissionEntity b ON b.userGroupId = a.id WHERE a.id = :id ");
         query.setParameter("id", id);
-        List<UserGroupEntity> list = query.getResultList();
-        if (list != null && list.size() > 0) {
-            return list.get(0);
-        }
-        return null;
+        List<Object[]> list = query.getResultList();
+        return list;
     }
-    
+
 }

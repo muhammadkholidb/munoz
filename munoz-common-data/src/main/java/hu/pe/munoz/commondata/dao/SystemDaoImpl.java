@@ -11,7 +11,7 @@ import hu.pe.munoz.commondata.entity.SystemEntity;
 public class SystemDaoImpl extends GenericDaoImpl<SystemEntity> implements SystemDao {
 
     @Override
-    public SystemEntity findByKey(String key) {
+    public SystemEntity findOneByKey(String key) {
         Query query = em.createNamedQuery("SYSTEM.FIND_BY_KEY");
         query.setParameter("key", key);
         try {

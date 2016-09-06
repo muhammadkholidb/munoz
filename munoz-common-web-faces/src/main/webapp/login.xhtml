@@ -14,7 +14,7 @@
                 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
                 <link rel="icon" href="favicon.ico" />
             </f:facet>
-            <h:outputStylesheet library="common" name="styles/common.css" />
+            <h:outputStylesheet library="common" name="css/common.css" />
             <title>#{lang['title.Login']}</title>
         </h:head>
 
@@ -24,7 +24,7 @@
                     <div class="ui-grid ui-grid-responsive">
                         <div class="ui-grid-row" style="padding: 10px; background: #79c9ec;">
                             <div class="ui-grid-col-4">
-                                <h:outputLink value="#{request.contextPath}/home.xhtml">
+                                <h:outputLink value="#{request.contextPath}">
                                     <p:graphicImage value="/resources.image/#{applicationBean.image}" height="30px" style="vertical-align: middle;" />
                                 </h:outputLink>
                             </div>

@@ -12,10 +12,12 @@
 
     <ui:define name="title">#{lang['title.User']}</ui:define>
 
-    <ui:define name="inner">
+    <ui:define name="main">
 
         <h:form id="formAdd">
-
+            
+            <p:defaultCommand target="btnSave" />
+            
             <p:messages id="messages" closable="true" />
 
             <p:panel header="#{lang['label.AddUser']}"> 
@@ -57,7 +59,7 @@
             </p:panel>
 
             <h:panelGroup styleClass="form-buttons aleft bottom-buttons stick" layout="block" >
-                <p:commandButton value="#{lang['button.Save']}" styleClass="button-green" action="#{userBean.doSaveAdd()}" ajax="false" /> 
+                <p:commandButton value="#{lang['button.Save']}" styleClass="button-green" action="#{userBean.doSaveAdd()}" ajax="false" id="btnSave" /> 
                 <p:commandButton value="#{lang['button.Cancel']}" styleClass="button-grey" action="#{userBean.gotoIndex()}" ajax="false" immediate="true" />
             </h:panelGroup>
 

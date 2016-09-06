@@ -1,17 +1,16 @@
 package hu.pe.munoz.commonwebfaces.bean;
 
 import hu.pe.munoz.common.helper.HttpClient;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 
-import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
+import java.util.ResourceBundle;
 import org.json.simple.JSONObject;
 
 public abstract class RESTBean {
 
-    protected Properties applicationProperties;
+    protected ResourceBundle applicationBundle = ResourceBundle.getBundle("application");
     protected String hostUrl;
 
     @ManagedProperty(value = "#{applicationBean}")
@@ -23,8 +22,7 @@ public abstract class RESTBean {
 
     @PostConstruct
     protected void postConstruct() {
-        applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-        hostUrl = applicationProperties.getProperty("rest.HostUrl");
+        hostUrl = applicationBundle.getString("rest.HostUrl");
     }
 
     protected HttpClient getHttpClient() {

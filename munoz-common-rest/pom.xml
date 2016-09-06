@@ -144,6 +144,25 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources> 
     </build>
+
+    <properties>
+        <directory.path.Logs>${user.home}/Server/logs</directory.path.Logs>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>openshift</id>
+            <properties>
+                <directory.path.Logs>/var/lib/openshift/579434267628e1a67100012e/app-root/data/logs</directory.path.Logs>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

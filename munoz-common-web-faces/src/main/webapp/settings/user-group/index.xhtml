@@ -12,7 +12,7 @@
 
     <ui:define name="title">#{lang['title.UserGroup']}</ui:define>
 
-    <ui:define name="inner">
+    <ui:define name="main">
         <h:form>
 
             <p:messages id="messages" closable="true" />
@@ -23,21 +23,31 @@
                                  ajax="false" />
             </h:panelGroup>
 
-            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom" >
+            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="#{userGroupBean.userGroups.size() == 0}" rows="10" paginator="true" paginatorPosition="bottom" styleClass="tusergroup" >
 
+                <p:ajax event="page" oncomplete="redrawFootableUserGroup()" />
+                
                 <f:facet name="header">
                     <h:outputText value="#{lang['label.UserGroupList']}" />
                 </f:facet>
 
-                <p:column headerText="#{lang['label.Name']}">
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column headerText="#{lang['label.Name']}" styleClass="tusergroup-name" ></p:column>
+                        <p:column headerText="#{lang['label.Active']}" styleClass="tusergroup-active" ></p:column>
+                        <p:column headerText="#{lang['label.Action']}" styleClass="tusergroup-action" ></p:column>
+                    </p:row>
+                </p:columnGroup>
+
+                <p:column>
                     <h:outputText value="#{group.name}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Active']}" style="text-align: center;" >
-                    <h:outputText value="#{group.active eq 'Y' ? lang['label.Yes'] : lang['label.No']}" />
+                <p:column style="text-align: center;">
+                    <h:outputText value="#{group.active eq 'y' ? lang['label.Yes'] : lang['label.No']}" />
                 </p:column>
 
-                <p:column headerText="#{lang['label.Action']}" style="text-align: center;" >
+                <p:column style="text-align: center;">
                     <h:panelGroup layout="block" >
                         <p:commandButton value="#{lang['button.Edit']}" styleClass="button-green" action="#{userGroupBean.gotoEdit(group.id)}" rendered="#{userGroupBean.isModifyAllowed()}" />
                         <p:commandButton value="#{lang['button.Delete']}" styleClass="button-red" 
@@ -60,6 +70,37 @@
             </h:form>
         </p:confirmDialog>
 
+    </ui:define>
+
+    <ui:define name="bottoms">
+        <h:outputScript library="footable" name="js/footable.js" />
+        <h:outputScript>
+            function initFootableUserGroup() {
+                $("th.tusergroup-name").attr("data-toggle", "true");
+                $("th.tusergroup-action").attr("data-hide", "phone,tablet");
+                
+                $("div.tusergroup table").addClass("toggle-arrow").footable();
+            }
+            function redrawFootableUserGroup() {
+                $('div.tusergroup table').trigger('footable_redraw');
+            }
+            $(document).ready(function() {
+            <c:if test="#{userGroupBean.userGroups.size() > 0}" >
+                initFootableUserGroup();
+            </c:if>
+            });
+            
+            // http://forum.primefaces.org/viewtopic.php?f=3&amp;t=41989
+            // http://stackoverflow.com/questions/32501994/how-to-get-the-source-element-of-primefaces-pfajaxstart-event-in-jquery
+            $(document).on('pfAjaxComplete', function(event, xhr, object) {
+                
+            }); 
+            
+        </h:outputScript>
+    </ui:define>
+    
+    <ui:define name="tops">
+        <h:outputStylesheet library="footable" name="css/footable.core.css" />
     </ui:define>
 
 </ui:composition>

@@ -90,6 +90,16 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+            
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -126,7 +136,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <attachClasses>true</attachClasses>
-                    <packagingExcludes>WEB-INF/classes/openshift/</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>

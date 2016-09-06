@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -32,6 +31,12 @@ import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
 import hu.pe.munoz.commonwebfaces.helper.MessageHelper;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.util.Date;
+import javax.imageio.ImageIO;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 @ManagedBean
 @ViewScoped
@@ -91,27 +96,35 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
                 return "";
             }
 
-            String imagesDir = applicationProperties.getProperty("directory.path.Images");
+            String imagesDir = applicationBundle.getString("directory.path.Images");
             String uploadedFileName = imageUpload.getFileName();
+            String uploadedFileExtension = uploadedFileName.substring(uploadedFileName.lastIndexOf(".") + 1);
 
-            newFileName = UUID.randomUUID().toString() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
+            newFileName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss")
+                    + "-"
+                    + CommonUtils.getRandomAlphanumeric(8).toUpperCase()
+                    + "."
+                    + uploadedFileExtension;
 
             LOG.debug("Upload image ({}) to {}", newFileName, imagesDir);
 
             // http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
-            InputStream input = null;
-            OutputStream output = null;
+            // InputStream input = null;
+            // OutputStream output = null;
             try {
-                input = imageUpload.getInputstream();
-                output = new FileOutputStream(new File(imagesDir, newFileName));
-                IOUtils.copy(input, output);
+
+                BufferedImage bufferedImage = resizeImage(imageUpload.getInputstream());
+                ImageIO.write(bufferedImage, uploadedFileExtension, new File(imagesDir, newFileName));
+                // input = imageUpload.getInputstream();
+                // output = new FileOutputStream(new File(imagesDir, newFileName));
+                // IOUtils.copy(input, output);
                 uploaded = true;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
                 Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
             } finally {
-                IOUtils.closeQuietly(input);
-                IOUtils.closeQuietly(output);
+                // IOUtils.closeQuietly(input);
+                // IOUtils.closeQuietly(output);
             }
         }
 
@@ -171,6 +184,21 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             return "";
         }
         return gotoIndex();
+    }
+
+    private BufferedImage resizeImage(InputStream is) throws Exception {
+        BufferedImage originalImage = ImageIO.read(is);
+        int type = (originalImage.getType() == 0) ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+
+        // http://stackoverflow.com/questions/11959758/java-maintaining-aspect-ratio-of-jpanel-background-image/11959928#11959928
+        Image scaledImage = originalImage.getScaledInstance(-1, 30, BufferedImage.SCALE_SMOOTH);
+        BufferedImage resizedImage = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), type);
+
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.drawImage(scaledImage, 0, 0, null);
+        g2d.dispose();
+
+        return resizedImage;
     }
 
     public String getLanguageCode() {

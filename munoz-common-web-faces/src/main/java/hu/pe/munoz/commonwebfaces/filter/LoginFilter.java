@@ -23,7 +23,7 @@ public class LoginFilter implements Filter {
             "/page-not-found.xhtml",
             "/server-error.xhtml"
     );
-    private static final String HOME_PAGE = "/home.xhtml";
+    private static final String DASHBOARD_PAGE = "/dashboard.xhtml";
     private static final String LOGIN_PAGE = "/login.xhtml";
     private static final String LOGOUT_PAGE = "/logout.xhtml";
 
@@ -39,7 +39,7 @@ public class LoginFilter implements Filter {
         String contextPath = httpRequest.getContextPath();
         String loginUrl = contextPath + LOGIN_PAGE;
         String logoutUrl = contextPath + LOGOUT_PAGE;
-        String homeUrl = contextPath + HOME_PAGE;
+        String dashboardUrl = contextPath + DASHBOARD_PAGE;
 
         boolean loggedIn = (httpSession != null) && (Boolean.valueOf(String.valueOf(httpSession.getAttribute(CommonConstants.SESSKEY_IS_LOGGED_IN))));
         boolean loginRequest = requestUrl.equals(loginUrl) || requestUrl.equals(loginUrl.substring(0, loginUrl.indexOf(".xhtml")));
@@ -71,7 +71,7 @@ public class LoginFilter implements Filter {
         else if (logoutRequest) {
             // If the user has logged in, then redirect to home page
             if (loggedIn) {
-                httpResponse.sendRedirect(homeUrl);
+                httpResponse.sendRedirect(dashboardUrl);
             } 
             // If the user has not logged in, then continue the request
             else {
@@ -83,7 +83,7 @@ public class LoginFilter implements Filter {
         else if (loginRequest) {
             // If the user has logged in, then redirect to home page
             if (loggedIn) {
-                httpResponse.sendRedirect(homeUrl);
+                httpResponse.sendRedirect(dashboardUrl);
             } 
             // If the user has not logged in, then continue the request
             else {

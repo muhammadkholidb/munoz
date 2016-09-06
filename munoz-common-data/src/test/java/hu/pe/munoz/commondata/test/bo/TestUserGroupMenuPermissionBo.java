@@ -1,6 +1,7 @@
 package hu.pe.munoz.commondata.test.bo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -11,15 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import hu.pe.munoz.commondata.bo.UserGroupMenuPermissionBo;
-import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
+import hu.pe.munoz.commondata.helper.Dto;
+import hu.pe.munoz.commondata.test.AbstractTestDataImport;
 
 @ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestUserGroupMenuPermissionBo extends AbstractTransactionalJUnit4SpringContextTests {
+public class TestUserGroupMenuPermissionBo extends AbstractTestDataImport {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestUserGroupMenuPermissionBo.class);
 
@@ -27,24 +28,29 @@ public class TestUserGroupMenuPermissionBo extends AbstractTransactionalJUnit4Sp
     private UserGroupMenuPermissionBo userGroupMenuPermissionBo;
 
     @Before
-    public void init() {
-        // The SQL file is relative to the application context file
-        executeSqlScript("scripts/test-user-group-menu-permission.sql", false);
+    public void init() throws Exception {
+        processDataSet("dataset/test-user-group-menu-permission.dataset.xml");
     }
 
     @Test
     public void testGetAllUserGroupMenuPermission() {
         LOG.debug("TEST get all user group menu permission ...");
-        List<UserGroupMenuPermissionEntity> list = userGroupMenuPermissionBo.getAllUserGroupMenuPermission();
+        List<Dto> list = userGroupMenuPermissionBo.getAllUserGroupMenuPermission(null);
         assertEquals(8, list.size());
     }
 
     @Test
     public void testGetUserGroupMenuPermissionListByUserGroupId() {
         LOG.debug("TEST get user group menu permission by user group id ...");
-        Long userGroupId = 1L;
-        List<UserGroupMenuPermissionEntity> list = userGroupMenuPermissionBo.getUserGroupMenuPermissionListByUserGroupId(userGroupId);
-        assertEquals(4, list.size());
+        Dto dtoInput = new Dto();
+        dtoInput.put("userGroupId", 1L);
+        try {
+            List<Dto> list = userGroupMenuPermissionBo.getUserGroupMenuPermissionListByUserGroupId(dtoInput);
+            assertEquals(4, list.size());
+        } catch (Exception e) {
+            LOG.error(e.toString(), e);
+            fail(e.toString());
+        }
     }
 
 }
