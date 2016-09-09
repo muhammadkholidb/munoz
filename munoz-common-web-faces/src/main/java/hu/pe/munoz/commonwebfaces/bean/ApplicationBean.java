@@ -7,6 +7,7 @@ import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_TEMPLATE_CODE
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
-import java.util.ResourceBundle;
 
 @ManagedBean
 @ApplicationScoped
@@ -75,8 +75,8 @@ public class ApplicationBean implements Serializable {
         for (Object o : systems) {
 
             JSONObject json = (JSONObject) o;
-            String key = (String) json.get("key");
-            String value = (String) json.get("value");
+            String key = (String) json.get("dataKey");
+            String value = (String) json.get("dataValue");
 
             switch (key) {
                 case SYSTEM_KEY_LANGUAGE_CODE:
@@ -140,8 +140,12 @@ public class ApplicationBean implements Serializable {
         this.online = online;
     }
 
-    public String getApplicationInfo() {
-        return applicationBundle.getString("application.info.Name") + " " + applicationBundle.getString("application.info.Version");
+    public String getApplicationName() {
+        return applicationBundle.getString("application.info.Name");
+    }
+
+    public String getApplicationVersion() {
+        return applicationBundle.getString("application.info.Version");
     }
 
 }

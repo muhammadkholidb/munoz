@@ -4,20 +4,25 @@ import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_IMAGE;
 import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_LANGUAGE_CODE;
 import static hu.pe.munoz.common.helper.CommonConstants.SYSTEM_KEY_ONLINE;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.util.Faces;
@@ -31,12 +36,6 @@ import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.HttpClient;
 import hu.pe.munoz.common.helper.HttpClientResponse;
 import hu.pe.munoz.commonwebfaces.helper.MessageHelper;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.util.Date;
-import javax.imageio.ImageIO;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 @ManagedBean
 @ViewScoped
@@ -87,7 +86,8 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
     public String saveForm() {
 
         boolean uploaded = false;
-        String newFileName = null;
+        String resizedFileName = null;
+        String originalFileName = null;
 
         if (imageUpload != null && imageUpload.getSize() > 0) {
 
@@ -99,32 +99,40 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             String imagesDir = applicationBundle.getString("directory.path.Images");
             String uploadedFileName = imageUpload.getFileName();
             String uploadedFileExtension = uploadedFileName.substring(uploadedFileName.lastIndexOf(".") + 1);
-
-            newFileName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss")
-                    + "-"
-                    + CommonUtils.getRandomAlphanumeric(8).toUpperCase()
-                    + "."
-                    + uploadedFileExtension;
-
-            LOG.debug("Upload image ({}) to {}", newFileName, imagesDir);
+            String baseName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "-" + CommonUtils.getRandomAlphanumeric(8).toUpperCase();
+            
+            resizedFileName = baseName + "." + uploadedFileExtension;
+            originalFileName = baseName + "-ORI." + uploadedFileExtension;
 
             // http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
             // InputStream input = null;
-            // OutputStream output = null;
+            OutputStream output = null;
+            
             try {
+            	
+            	// Can't use InputStream twice, always read from source 
+            	// input = imageUpload.getInputstream();
 
+                // Save original image
+                LOG.debug("Copy image ({}) to {}", originalFileName, imagesDir);
+		        output = new FileOutputStream(new File(imagesDir, originalFileName));
+		        IOUtils.copy(imageUpload.getInputstream(), output);
+		        
+                // Save resized image
+		        LOG.debug("Copy image ({}) to {}", resizedFileName, imagesDir);
                 BufferedImage bufferedImage = resizeImage(imageUpload.getInputstream());
-                ImageIO.write(bufferedImage, uploadedFileExtension, new File(imagesDir, newFileName));
-                // input = imageUpload.getInputstream();
-                // output = new FileOutputStream(new File(imagesDir, newFileName));
-                // IOUtils.copy(input, output);
+                ImageIO.write(bufferedImage, uploadedFileExtension, new File(imagesDir, resizedFileName));
+                
                 uploaded = true;
+                
             } catch (Exception e) {
-                LOG.error(e.getMessage(), e);
+                
+            	LOG.error(e.getMessage(), e);
                 Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
+                
             } finally {
                 // IOUtils.closeQuietly(input);
-                // IOUtils.closeQuietly(output);
+                IOUtils.closeQuietly(output);
             }
         }
 
@@ -132,16 +140,16 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 
         for (Object object : systems) {
             JSONObject system = (JSONObject) object;
-            String key = (String) system.get("key");
+            String key = (String) system.get("dataKey");
             switch (key) {
                 case SYSTEM_KEY_LANGUAGE_CODE:
-                    system.put("value", languageCode);
+                    system.put("dataValue", languageCode);
                     break;
                 case SYSTEM_KEY_ONLINE:
-                    system.put("value", online);
+                    system.put("dataValue", online);
                     break;
                 case SYSTEM_KEY_IMAGE:
-                    system.put("value", uploaded ? newFileName : image);
+                    system.put("dataValue", uploaded ? resizedFileName : image);
                     break;
                 default:
                     break;
