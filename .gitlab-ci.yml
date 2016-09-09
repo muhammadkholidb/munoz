@@ -1,11 +1,11 @@
 image: maven
 
- stages:
+stages:
    - test
    - build
    - deploy
    
- testJob:
+testJob:
    stage: test
    script:
    - mvn test -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
@@ -20,3 +20,4 @@ deployJob:
   script: 
   - mvn deploy -DskipTests -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
   
+
