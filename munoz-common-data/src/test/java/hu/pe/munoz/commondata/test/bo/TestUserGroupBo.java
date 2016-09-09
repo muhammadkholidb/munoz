@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,13 @@ public class TestUserGroupBo extends AbstractTestDataImport {
 
     @Before
     public void init() throws Exception {
-        processDataSet("dataset/test-user-group.dataset.xml");
+        processDataSets("dataset/test-user-group.dataset.xml");
+    }
+
+    @After
+    public void finish() throws Exception {
+    	LOG.debug("Test done, clearing data ...");
+    	clearDataSets();
     }
 
     @Test

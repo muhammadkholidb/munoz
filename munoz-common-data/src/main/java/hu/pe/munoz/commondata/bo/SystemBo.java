@@ -9,7 +9,7 @@ public interface SystemBo {
 
     List<Dto> getAllSystem(Dto dtoInput) throws DataException;
     
-    Dto getSystemByKey(Dto dtoInput) throws DataException;
+    Dto getSystemByDataKey(Dto dtoInput) throws DataException;
     
     List<Dto> editSystemList(Dto dtoInput) throws DataException;
 

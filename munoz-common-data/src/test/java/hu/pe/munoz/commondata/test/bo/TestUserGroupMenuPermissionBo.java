@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,13 @@ public class TestUserGroupMenuPermissionBo extends AbstractTestDataImport {
 
     @Before
     public void init() throws Exception {
-        processDataSet("dataset/test-user-group-menu-permission.dataset.xml");
+        processDataSets("dataset/test-user-group-menu-permission.dataset.xml");
+    }
+
+    @After
+    public void finish() throws Exception {
+    	LOG.debug("Test done, clearing data ...");
+    	clearDataSets();
     }
 
     @Test

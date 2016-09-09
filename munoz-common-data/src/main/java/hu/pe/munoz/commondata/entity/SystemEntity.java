@@ -13,9 +13,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name = SystemEntity.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = { "key" }))
+@Table(name = SystemEntity.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = { "data_key" }))
 @NamedQueries({
-    @NamedQuery(name = "SYSTEM.FIND_BY_KEY", query = "SELECT e FROM SystemEntity e WHERE e.key = :key") })
+    @NamedQuery(name = "SYSTEM.FIND_BY_KEY", query = "SELECT e FROM SystemEntity e WHERE e.dataKey = :dataKey") })
 @DynamicInsert
 @DynamicUpdate
 public class SystemEntity extends BaseEntity implements Serializable {
@@ -27,26 +27,26 @@ public class SystemEntity extends BaseEntity implements Serializable {
 
     public static final String TABLE_NAME = "mn_system";
 
-    @Column(name = "key", length = 50, nullable = false)
-    private String key;
+    @Column(name = "data_key", length = 50, nullable = false)
+    private String dataKey;
 
-    @Column(name = "value", length = 50, nullable = false)
-    private String value;
+    @Column(name = "data_value", length = 50, nullable = false)
+    private String dataValue;
 
-    public String getKey() {
-        return key;
+    public String getDataKey() {
+        return dataKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setDataKey(String dataKey) {
+        this.dataKey = dataKey;
     }
 
-    public String getValue() {
-        return value;
+    public String getDataValue() {
+        return dataValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setDataValue(String dataValue) {
+        this.dataValue = dataValue;
     }
 
 }

@@ -109,6 +109,11 @@
         </dependency>
 
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
         </dependency>
@@ -155,10 +160,23 @@
     </build>
 
     <properties>
-        <jdbc.driver>org.postgresql.Driver</jdbc.driver>
-        <jdbc.url>jdbc:postgresql://localhost:5432/munozdb</jdbc.url>
-        <jdbc.username>postgres</jdbc.username>
-        <jdbc.password>postgres</jdbc.password>
+<!--         <jdbc.driver>org.postgresql.Driver</jdbc.driver> -->
+<!--         <jdbc.url>jdbc:postgresql://localhost:5432/munozdb</jdbc.url> -->
+<!--         <jdbc.username>postgres</jdbc.username> -->
+<!--         <jdbc.password>postgres</jdbc.password> -->
+<!--         <hibernate.dialect>org.hibernate.dialect.PostgreSQL9Dialect</hibernate.dialect> -->
+<!--         <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto> -->
+        
+        <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+        <jdbc.url>jdbc:mysql://localhost:3306/munozdb</jdbc.url>
+        <jdbc.username>root</jdbc.username>
+        <jdbc.password></jdbc.password>
+        <hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</hibernate.dialect>
+        <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+        
+        <c3p0.maxStatements>100</c3p0.maxStatements>
+        <c3p0.maxPoolSize>100</c3p0.maxPoolSize>
+        <c3p0.minPoolSize>10</c3p0.minPoolSize>
     </properties>
 
     <profiles>

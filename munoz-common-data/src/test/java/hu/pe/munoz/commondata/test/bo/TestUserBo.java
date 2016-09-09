@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,13 @@ public class TestUserBo extends AbstractTestDataImport {
 
     @Before
     public void init() throws Exception {
-        processDataSet("dataset/test-user.dataset.xml");
+        processDataSets("dataset/test-user.dataset.xml");
+    }
+
+    @After
+    public void finish() throws Exception {
+    	LOG.debug("Test done, clearing data ...");
+    	clearDataSets();
     }
 
     @Test

@@ -25,10 +25,12 @@ public class TestDataImporter {
     public void testImport() {
         LOG.debug("Test import ...");
         // Read: http://jlorenzen.blogspot.co.id/2007/06/proper-way-to-access-file-resources-in.html
-        URL url = this.getClass().getResource("/dataset/test-importer.dataset.xml");
+        URL url1 = this.getClass().getResource("/dataset/test-importer-system.dataset.xml");
+        URL url2 = this.getClass().getResource("/dataset/test-importer-user-group.dataset.xml");
         try {
-            importer.addFileDataSet(new File(url.getFile()));
-            importer.process();
+            importer.addFileDataSet(new File(url1.getFile()));
+            importer.addFileDataSet(new File(url2.getFile()));
+            importer.importAll();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }

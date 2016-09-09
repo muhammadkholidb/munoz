@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.commonrest.helper.MessageHelper;
 import hu.pe.munoz.commonrest.helper.ResponseWrapper;
 
@@ -46,7 +47,7 @@ public abstract class BaseController {
     @ExceptionHandler(Exception.class)
     public ResponseWrapper handleOtherException(Exception e) {
         LOG.debug("Other exception caught!", e);
-        return new ResponseWrapper(CommonConstants.FAIL, e.toString());
+        return new ResponseWrapper(CommonConstants.FAIL, CommonUtils.getExceptionMessage(e));
     }
 
 }

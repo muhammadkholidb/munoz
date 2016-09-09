@@ -6,8 +6,9 @@
 package hu.pe.munoz.commondata.helper;
 
 import java.util.Map;
+
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
+
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 

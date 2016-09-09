@@ -4,5 +4,5 @@ import hu.pe.munoz.commondata.entity.SystemEntity;
 
 public interface SystemDao extends GenericDao<SystemEntity> {
 
-    SystemEntity findOneByKey(String key);
+    SystemEntity findOneByDataKey(String dataKey);
 }

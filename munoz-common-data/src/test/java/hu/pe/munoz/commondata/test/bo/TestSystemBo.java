@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,9 +36,15 @@ public class TestSystemBo extends AbstractTestDataImport {
 
     @Before
     public void init() throws Exception {
-        processDataSet("dataset/test-system.dataset.xml");
+        processDataSets("dataset/test-system.dataset.xml");
     }
 
+    @After
+    public void finish() throws Exception {
+    	LOG.debug("Test done, clearing data ...");
+    	clearDataSets();
+    }
+    
     @Test
     public void testGetAllSystem() {
         LOG.debug("TEST get all system ...");
@@ -52,28 +59,13 @@ public class TestSystemBo extends AbstractTestDataImport {
     }
 
     @Test
-    public void testGetAllSystemEmpty() {
-        LOG.debug("TEST get all system empty ...");
-        try {
-            processDataSet("dataset/test-system-empty.xml");
-            
-            List<Dto> list = systemBo.getAllSystem(null);
-            LOG.debug("Result: " + list);
-            assertEquals(4, list.size());
-        } catch (Exception ex) {
-            LOG.error(ex.toString(), ex);
-            fail(ex.toString());
-        }
-    }
-
-    @Test
     public void testGetSystemByKeySuccess() {
         LOG.debug("TEST SUCCESS get system by key ...");
         Dto dtoInput = new Dto();
-        dtoInput.put("key", CommonConstants.SYSTEM_KEY_LANGUAGE_CODE);
+        dtoInput.put("dataKey", CommonConstants.SYSTEM_KEY_LANGUAGE_CODE);
         try {
-            Dto result = systemBo.getSystemByKey(dtoInput);
-            assertEquals("en", result.get("value"));
+            Dto result = systemBo.getSystemByDataKey(dtoInput);
+            assertEquals("en", result.get("dataValue"));
         } catch (Exception e) {
             LOG.error(e.toString(), e);
             fail(e.toString());
@@ -84,9 +76,9 @@ public class TestSystemBo extends AbstractTestDataImport {
     public void testGetSystemByKeyFail() {
         LOG.debug("TEST FAIL get system by key ...");
         Dto dtoInput = new Dto();
-        dtoInput.put("key", "unknown");
+        dtoInput.put("dataKey", "unknown");
         try {
-            systemBo.getSystemByKey(dtoInput);
+            systemBo.getSystemByDataKey(dtoInput);
             fail();
         } catch (DataException e) {
             LOG.debug(e.toString());
@@ -105,13 +97,13 @@ public class TestSystemBo extends AbstractTestDataImport {
 
         JSONObject systemLanguageCode = new JSONObject();
         systemLanguageCode.put("id", 1L);
-        systemLanguageCode.put("key", CommonConstants.SYSTEM_KEY_LANGUAGE_CODE);
-        systemLanguageCode.put("value", CommonConstants.LANGUAGE_CODE_INDONESIA);
+        systemLanguageCode.put("dataKey", CommonConstants.SYSTEM_KEY_LANGUAGE_CODE);
+        systemLanguageCode.put("dataValue", CommonConstants.LANGUAGE_CODE_INDONESIA);
 
         JSONObject systemOnline = new JSONObject();
         systemOnline.put("id", 4L);
-        systemOnline.put("key", CommonConstants.SYSTEM_KEY_ONLINE);
-        systemOnline.put("value", CommonConstants.YES);
+        systemOnline.put("dataKey", CommonConstants.SYSTEM_KEY_ONLINE);
+        systemOnline.put("dataValue", CommonConstants.YES);
 
         JSONArray systemList = new JSONArray();
         systemList.add(systemLanguageCode);
@@ -126,11 +118,11 @@ public class TestSystemBo extends AbstractTestDataImport {
             for (Dto dto : result) {
                 Long id = dto.get("id");
                 if (id == 1L) {
-                    assertEquals(CommonConstants.SYSTEM_KEY_LANGUAGE_CODE, dto.get("key"));
-                    assertEquals(CommonConstants.LANGUAGE_CODE_INDONESIA, dto.get("value"));
+                    assertEquals(CommonConstants.SYSTEM_KEY_LANGUAGE_CODE, dto.get("dataKey"));
+                    assertEquals(CommonConstants.LANGUAGE_CODE_INDONESIA, dto.get("dataValue"));
                 } else if (id == 4L) {
-                    assertEquals(CommonConstants.SYSTEM_KEY_ONLINE, dto.get("key"));
-                    assertEquals(CommonConstants.YES, dto.get("value"));
+                    assertEquals(CommonConstants.SYSTEM_KEY_ONLINE, dto.get("dataKey"));
+                    assertEquals(CommonConstants.YES, dto.get("dataValue"));
                 }
             }
         } catch (Exception e) {
@@ -146,8 +138,8 @@ public class TestSystemBo extends AbstractTestDataImport {
 
         JSONObject systemUnknown = new JSONObject();
         systemUnknown.put("id", 10L);
-        systemUnknown.put("key", "unknown");
-        systemUnknown.put("value", 0);
+        systemUnknown.put("dataKey", "unknown");
+        systemUnknown.put("dataValue", 0);
 
         JSONArray systemList = new JSONArray();
         systemList.add(systemUnknown);
