@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.pe.munoz.common.helper.CommonConstants;
@@ -29,25 +28,25 @@ public class UserGroupController extends BaseController {
 
     @RequestMapping(value = "/user-group/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseWrapper getAllUserGroup() {
-        
+        LOG.info("Get all user group ...");
         List<Dto> list = userGroupBo.getAllUserGroup(null);
-        
+
         return new ResponseWrapper(CommonConstants.SUCCESS, list);
     }
 
     @RequestMapping(value = "/user-group/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseWrapper getUserGroup() throws Exception {
-        
+
         Dto dto = userGroupBo.getOneUserGroupWithMenuPermissions(DtoUtils.fromServletRequest(request));
-        
+
         return new ResponseWrapper(CommonConstants.SUCCESS, dto);
     }
 
     @RequestMapping(value = "/user-group/remove", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseWrapper removeUserGroup() throws Exception {
-        
+
         userGroupBo.removeUserGroup(DtoUtils.fromServletRequest(request));
-        
+
         return new ResponseWrapper(CommonConstants.SUCCESS, getResponseMessage("success.SuccessfullyRemoveUserGroup"));
     }
 
@@ -55,16 +54,18 @@ public class UserGroupController extends BaseController {
     public ResponseWrapper addUserGroup() throws Exception {
 
         Dto added = userGroupBo.addUserGroup(DtoUtils.fromServletRequest(request));
-        
-        return new ResponseWrapper(CommonConstants.SUCCESS, added, getResponseMessage("success.SuccessfullyAddUserGroup"));
+
+        return new ResponseWrapper(CommonConstants.SUCCESS, added,
+                getResponseMessage("success.SuccessfullyAddUserGroup"));
     }
 
     @RequestMapping(value = "/user-group/edit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseWrapper editUserGroup() throws Exception {
 
         Dto updated = userGroupBo.editUserGroup(DtoUtils.fromServletRequest(request));
-        
-        return new ResponseWrapper(CommonConstants.SUCCESS, updated, getResponseMessage("success.SuccessfullyEditUserGroup"));
+
+        return new ResponseWrapper(CommonConstants.SUCCESS, updated,
+                getResponseMessage("success.SuccessfullyEditUserGroup"));
     }
 
 }

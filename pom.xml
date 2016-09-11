@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>hu.pe.munoz</groupId>
     <artifactId>munoz</artifactId>
@@ -21,7 +21,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <version.munoz>${project.version}</version.munoz>
-        <version.spring>4.2.0.RELEASE</version.spring>
+        <version.spring>4.3.2.RELEASE</version.spring>
         <version.hibernate>5.1.0.Final</version.hibernate>
         <version.apache-httpcomponents>5.0-alpha1</version.apache-httpcomponents>
         <version.json-simple>1.1.1</version.json-simple>
@@ -29,9 +29,9 @@
         <version.javax-servlet>3.1.0</version.javax-servlet>
         <version.javax-jsp>2.1</version.javax-jsp>
         <version.mysql-connector>5.1.30</version.mysql-connector>
-        <version.c3p0>0.9.2.1</version.c3p0>
+        <version.c3p0>0.9.5.2</version.c3p0>
         <version.slf4j>1.7.18</version.slf4j>
-        <version.junit>4.11</version.junit>
+        <version.junit>4.12</version.junit>
         <version.jsf>2.2.12</version.jsf>
         <version.jstl>1.2</version.jstl>
         <version.primefaces>5.3</version.primefaces>
@@ -262,12 +262,18 @@
                 <groupId>org.dbunit</groupId>
                 <artifactId>dbunit</artifactId>
                 <version>${version.dbunit}</version>
-            </dependency> 
-            
+            </dependency>
+
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${version.postgresql}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -275,7 +281,7 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${version.commons-lang}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>

@@ -84,7 +84,7 @@
         <!-- Testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <artifactId>junit</artifactId> 
             <scope>test</scope>
         </dependency>
 

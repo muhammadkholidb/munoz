@@ -99,37 +99,38 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             String imagesDir = applicationBundle.getString("directory.path.Images");
             String uploadedFileName = imageUpload.getFileName();
             String uploadedFileExtension = uploadedFileName.substring(uploadedFileName.lastIndexOf(".") + 1);
-            String baseName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "-" + CommonUtils.getRandomAlphanumeric(8).toUpperCase();
-            
+            String baseName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "-"
+                    + CommonUtils.getRandomAlphanumeric(8).toUpperCase();
+
             resizedFileName = baseName + "." + uploadedFileExtension;
             originalFileName = baseName + "-ORI." + uploadedFileExtension;
 
             // http://stackoverflow.com/questions/11829958/where-is-the-pfileupload-uploaded-file-saved-and-how-do-i-change-it#answer-11830143
             // InputStream input = null;
             OutputStream output = null;
-            
+
             try {
-            	
-            	// Can't use InputStream twice, always read from source 
-            	// input = imageUpload.getInputstream();
+
+                // Can't use InputStream twice, always read from source
+                // input = imageUpload.getInputstream();
 
                 // Save original image
                 LOG.debug("Copy image ({}) to {}", originalFileName, imagesDir);
-		        output = new FileOutputStream(new File(imagesDir, originalFileName));
-		        IOUtils.copy(imageUpload.getInputstream(), output);
-		        
+                output = new FileOutputStream(new File(imagesDir, originalFileName));
+                IOUtils.copy(imageUpload.getInputstream(), output);
+
                 // Save resized image
-		        LOG.debug("Copy image ({}) to {}", resizedFileName, imagesDir);
+                LOG.debug("Copy image ({}) to {}", resizedFileName, imagesDir);
                 BufferedImage bufferedImage = resizeImage(imageUpload.getInputstream());
                 ImageIO.write(bufferedImage, uploadedFileExtension, new File(imagesDir, resizedFileName));
-                
+
                 uploaded = true;
-                
+
             } catch (Exception e) {
-                
-            	LOG.error(e.getMessage(), e);
+
+                LOG.error(e.getMessage(), e);
                 Messages.addFlashGlobalError(CommonUtils.getExceptionMessage(e));
-                
+
             } finally {
                 // IOUtils.closeQuietly(input);
                 IOUtils.closeQuietly(output);
@@ -142,17 +143,17 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             JSONObject system = (JSONObject) object;
             String key = (String) system.get("dataKey");
             switch (key) {
-                case SYSTEM_KEY_LANGUAGE_CODE:
-                    system.put("dataValue", languageCode);
-                    break;
-                case SYSTEM_KEY_ONLINE:
-                    system.put("dataValue", online);
-                    break;
-                case SYSTEM_KEY_IMAGE:
-                    system.put("dataValue", uploaded ? resizedFileName : image);
-                    break;
-                default:
-                    break;
+            case SYSTEM_KEY_LANGUAGE_CODE:
+                system.put("dataValue", languageCode);
+                break;
+            case SYSTEM_KEY_ONLINE:
+                system.put("dataValue", online);
+                break;
+            case SYSTEM_KEY_IMAGE:
+                system.put("dataValue", uploaded ? resizedFileName : image);
+                break;
+            default:
+                break;
             }
         }
 
@@ -160,9 +161,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
         params.put("systems", systems);
 
         try {
-            HttpClient httpClient = getHttpClient()
-                    .setHost(hostUrl)
-                    .setPath("/settings/system/edit")
+            HttpClient httpClient = getHttpClient().setHost(hostUrl).setPath("/settings/system/edit")
                     .setParameters(params);
 
             // Update header Accept-Language in restClient if language changed
@@ -176,13 +175,13 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             if (response != null) {
                 if (null != response.getStatus()) {
                     switch (response.getStatus()) {
-                        case CommonConstants.SUCCESS:
-                            applicationBean.setSystems((JSONArray) response.getData());
-                            Messages.addFlashGlobalInfo(response.getMessage());
-                            break;
-                        case CommonConstants.FAIL:
-                            Messages.addGlobalError(response.getMessage());
-                            return "";
+                    case CommonConstants.SUCCESS:
+                        applicationBean.setSystems((JSONArray) response.getData());
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        break;
+                    case CommonConstants.FAIL:
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
                     }
                 }
             }

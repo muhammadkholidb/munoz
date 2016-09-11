@@ -23,16 +23,16 @@
         </h:head>
 
         <h:body>
+            <style>
+                @media (min-width: 768px) {
+                    .sidebar-main {
+                        min-height: 500px;
+                    }
+                }
+            </style>
             <p:outputPanel>
                 <div class="ui-grid ui-grid-responsive">
                     <ui:include src="/WEB-INF/templates/common/top.xhtml" />
-                    <style>
-                        @media (min-width: 768px) {
-                            .sidebar-main {
-                                min-height: 500px;
-                            }
-                        }
-                    </style>
                     <div class="ui-grid-row sidebar-main" >
                         <div class="ui-grid-col-2 sidebar" >
                             <p:inputText style="margin-bottom: 10px; display: none;" placeholder="Search..." />

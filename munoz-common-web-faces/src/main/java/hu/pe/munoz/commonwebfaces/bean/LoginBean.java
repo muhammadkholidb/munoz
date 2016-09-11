@@ -1,6 +1,9 @@
 package hu.pe.munoz.commonwebfaces.bean;
 
 import java.io.Serializable;
+import java.util.MissingResourceException;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -15,11 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.CommonUtils;
-import hu.pe.munoz.common.helper.HttpClientResponse;
 import hu.pe.munoz.common.helper.DefaultUser;
-import java.util.MissingResourceException;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import hu.pe.munoz.common.helper.HttpClientResponse;
 
 @ManagedBean
 @SessionScoped
@@ -47,7 +47,6 @@ public class LoginBean extends RESTBean implements Serializable {
         LOG.info("Post construct LoginBean ...");
     }
 
-    @SuppressWarnings("unchecked")
     public void doLogin() {
 
         String paramUsername = inputUsername.trim();
