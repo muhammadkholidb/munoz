@@ -106,6 +106,7 @@ public class UserGroupBoImpl implements UserGroupBo {
         return dto;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Dto addUserGroup(Dto dtoInput) throws DataException {
 
@@ -183,6 +184,7 @@ public class UserGroupBoImpl implements UserGroupBo {
         return dto;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Dto editUserGroup(Dto dtoInput) throws DataException {
 

@@ -20,6 +20,7 @@ import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.DefaultUser;
 import hu.pe.munoz.common.helper.HttpClientResponse;
+import hu.pe.munoz.common.helper.PasswordUtils;
 
 @ManagedBean
 @SessionScoped
@@ -50,11 +51,11 @@ public class LoginBean extends RESTBean implements Serializable {
     public void doLogin() {
 
         String paramUsername = inputUsername.trim();
-        String paramPassword = DigestUtils.sha1Hex(inputPassword);
+        String paramPassword = inputPassword.trim();
         
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/login")
-                    .addParameter("username", inputUsername.trim())
+                    .addParameter("username", paramUsername)
                     .addParameter("password", paramPassword)
                     .post();
             if (response != null) {
@@ -127,7 +128,8 @@ public class LoginBean extends RESTBean implements Serializable {
                 
         }
         String defaultUserPassword = dataUserSplit[0].trim();
-        if ((defaultUserPassword != null) && defaultUserPassword.equals(password)) {
+        String stirredPassword = PasswordUtils.stir(password);
+        if ((defaultUserPassword != null) && defaultUserPassword.equals(stirredPassword)) {
             userGroup = new JSONObject();
             userGroup.put("id", DefaultUser.USER_GROUP_ID);
             userGroup.put("name", DefaultUser.USER_GROUP_NAME);

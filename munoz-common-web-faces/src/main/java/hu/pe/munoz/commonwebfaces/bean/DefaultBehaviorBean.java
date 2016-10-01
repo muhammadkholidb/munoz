@@ -51,7 +51,7 @@ public abstract class DefaultBehaviorBean extends RESTBean {
         if (LIST_PATH_FOR_MODIFY.contains(pathLastPart)) {
             if (!isModifyAllowed()) {
                 try {
-                    Faces.redirect("error.xhtml");
+                    Faces.getExternalContext().dispatch("error.xhtml"); // Forwards to error page (browser's URL is not changed)
                 } catch (IOException e) {
                     LOG.error(e.toString(), e);
                 }
@@ -61,7 +61,7 @@ public abstract class DefaultBehaviorBean extends RESTBean {
         if (LIST_PATH_FOR_VIEW.contains(pathLastPart)) {
             if (!isViewAllowed()) {
                 try {
-                    Faces.redirect("error.xhtml");
+                    Faces.getExternalContext().dispatch("error.xhtml"); // Forwards to error page (browser's URL is not changed)
                 } catch (IOException e) {
                     LOG.error(e.toString(), e);
                 }

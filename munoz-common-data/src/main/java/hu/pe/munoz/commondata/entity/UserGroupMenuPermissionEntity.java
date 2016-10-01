@@ -23,7 +23,7 @@ public class UserGroupMenuPermissionEntity extends BaseEntity implements Seriali
 
     public static final String TABLE_NAME = "mn_user_group_menu_permission";
 
-    @Column(name = "menu_code", length = 50, nullable = false)
+    @Column(name = "menu_code", length = 64, nullable = false)
     private String menuCode;
 
     @Column(name = "view", length = 1, nullable = false)

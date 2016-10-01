@@ -86,7 +86,7 @@ public class MenuBean implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    private JSONArray getChildren(JSONArray submenus, String parentCode) {
+    public JSONArray getChildren(JSONArray submenus, String parentCode) {
         JSONArray children = new JSONArray();
         for (int i = 0; i < submenus.size(); i++) {
             JSONObject json = (JSONObject) submenus.get(i);

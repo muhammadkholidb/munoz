@@ -21,28 +21,31 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     public static final String TABLE_NAME = "mn_user";
 
-    @Column(name = "first_name", length = 50, nullable = false)
+    @Column(name = "first_name", length = 128, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", length = 50)
+    @Column(name = "last_name", length = 128)
     private String lastName;
 
-    @Column(name = "username", length = 50, nullable = false)
+    @Column(name = "username", length = 128, nullable = false)
     private String username;
 
-    @Column(name = "email", length = 50, nullable = false)
+    @Column(name = "email", length = 128, nullable = false)
     private String email;
 
-    @Column(name = "password", length = 50, nullable = false)
+    @Column(name = "password", length = 64, nullable = false)
     private String password;
+
+    @Column(name = "salt", length = 32, nullable = false)
+    private String salt;
 
     @Column(name = "active", length = 1, nullable = false)
     private String active;
 
-    @Column(name = "lower_username", length = 50, nullable = false)
+    @Column(name = "lower_username", length = 128, nullable = false)
     private String lowerUsername;
 
-    @Column(name = "lower_email", length = 50, nullable = false)
+    @Column(name = "lower_email", length = 128, nullable = false)
     private String lowerEmail;
 
     @Column(name = "user_group_id")
@@ -86,6 +89,14 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getActive() {

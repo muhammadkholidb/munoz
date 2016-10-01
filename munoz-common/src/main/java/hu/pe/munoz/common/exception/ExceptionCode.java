@@ -22,7 +22,7 @@ public enum ExceptionCode {
     E1003,
 
     /**
-     * Parameter key not found
+     * Parameter not found
      */
     E1004,
     

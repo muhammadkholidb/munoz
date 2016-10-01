@@ -22,6 +22,11 @@
         <location>/error.xhtml</location>
     </error-page>
 	
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.xhtml</location>
+    </error-page>
+    
     <filter>
         <filter-name>LoginFilter</filter-name>
         <filter-class>hu.pe.munoz.commonwebfaces.filter.LoginFilter</filter-class>

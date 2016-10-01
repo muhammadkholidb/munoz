@@ -28,10 +28,10 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
 
     public static final String TABLE_NAME = "mn_user_group";
     
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", length = 128, nullable = false)
     private String name;
     
-    @Column(name = "lower_name", length = 50, nullable = false)
+    @Column(name = "lower_name", length = 128, nullable = false)
     private String lowerName;
 
     @Column(name = "active", length = 1, nullable = false)

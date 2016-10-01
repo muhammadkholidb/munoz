@@ -1,69 +1,79 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<groupId>hu.pe.munoz</groupId>
-		<artifactId>munoz</artifactId>
-		<version>1.1-SNAPSHOT</version> 
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>munoz-common</artifactId>
-	<name>Munoz Common</name>
-	<description>Munoz Common</description>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>hu.pe.munoz</groupId>
+        <artifactId>munoz</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>munoz-common</artifactId>
+    <name>Munoz Common</name>
+    <description>Munoz Common</description>
 
-	<dependencies>
+    <dependencies>
 
-		<!-- Hibernate dependencies -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
+        <!-- Hibernate dependencies -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
-	<repositories>
-		
-		<repository>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <repositories>
+
+        <repository>
             <id>maven-central</id>
-			<name>Central Repository</name>
+            <name>Central Repository</name>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
 
-		<repository>
-			<id>munoz</id>
-			<name>Munoz Maven Repository</name>
-			<url>http://munoz.pe.hu/maven-repo</url>
-		</repository>
+        <repository>
+            <id>munoz</id>
+            <name>Munoz Maven Repository</name>
+            <url>http://munoz.pe.hu/maven-repo</url>
+        </repository>
 
-	</repositories>
+    </repositories>
 
-	<build>
-		<finalName>munoz-common</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <finalName>munoz-common</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

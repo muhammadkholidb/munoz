@@ -9,7 +9,6 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.util.Faces;
@@ -69,9 +68,11 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
                 users = (JSONArray) response.getData();
             } else {
                 LOG.debug(response.getMessage());
+                Messages.addGlobalError(response.getMessage());
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
         }
     }
 
@@ -80,11 +81,16 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/list").get();
             if (CommonConstants.SUCCESS.equals(response.getStatus())) {
                 userGroups = (JSONArray) response.getData();
+                if (userGroups == null || userGroups.isEmpty()) {
+                    Messages.addGlobalWarn(MessageHelper.getStringByEL("lang", "warn.EmptyUserGroup"));
+                }
             } else {
                 LOG.debug(response.getMessage());
+                Messages.addGlobalError(response.getMessage());
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e));
         }
     }
 
@@ -104,21 +110,15 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
             Messages.addGlobalError(MessageHelper.getStringByEL("lang", "error.UserGroupCannotBeEmpty"));
             return "";
         }
-        
-//        JSONObject jsonUserGroup = new JSONObject();
-//        jsonUserGroup.put("id", inputUserGroupId);
 
         JSONObject jsonUser = new JSONObject();
         jsonUser.put("firstName", inputFirstName.trim());
         jsonUser.put("lastName", inputLastName.trim());
         jsonUser.put("username", inputUsername.trim());
         jsonUser.put("email", inputEmail.trim());
-        jsonUser.put("password", DigestUtils.sha1Hex(inputPassword));
+        jsonUser.put("password", inputPassword.trim());
         jsonUser.put("active", CommonConstants.YES);
         jsonUser.put("userGroupId", inputUserGroupId);
-
-//        JSONObject parameters = new JSONObject();
-//        parameters.put("user", jsonUser);
 
         try {
             HttpClientResponse response = getHttpClient()
@@ -223,7 +223,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         editUser.put("email", inputEmail.trim());
         editUser.put("active", inputActive);
         if ((inputPassword != null) && !CommonConstants.EMPTY_STRING.equals(inputPassword)) {
-            editUser.put("password", DigestUtils.sha1Hex(inputPassword));
+            editUser.put("password", inputPassword.trim());
         }
 
         try {

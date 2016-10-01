@@ -23,7 +23,8 @@
                                  ajax="false" />
             </h:panelGroup>
 
-            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="#{userGroupBean.userGroups.size() == 0}" rows="10" paginator="true" paginatorPosition="bottom" styleClass="tusergroup" >
+            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="#{userGroupBean.userGroups.size() == 0}" 
+                rows="10" paginator="true" paginatorPosition="bottom" styleClass="tusergroup" emptyMessage="#{lang['message.NoRecords']}" >
 
                 <p:ajax event="page" oncomplete="redrawFootableUserGroup()" />
                 

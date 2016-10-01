@@ -101,6 +101,7 @@ public class SystemBoImpl implements SystemBo {
         return dto;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Dto> editSystemList(Dto dtoInput) throws DataException {
         

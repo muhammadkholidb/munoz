@@ -13,6 +13,11 @@ import java.util.HashMap;
  */
 public class Dto extends HashMap<Object, Object> {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     @SuppressWarnings("unchecked")
     public <T> T get(String key) {
         return (T) super.get(key);

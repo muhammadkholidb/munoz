@@ -1,6 +1,8 @@
 package hu.pe.munoz.commondata.bo;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.common.exception.ExceptionCode;
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.common.helper.CommonUtils;
+import hu.pe.munoz.common.helper.PasswordUtils;
 import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.dao.UserDao;
 import hu.pe.munoz.commondata.dao.UserGroupDao;
@@ -19,13 +23,13 @@ import hu.pe.munoz.commondata.entity.UserGroupMenuPermissionEntity;
 import hu.pe.munoz.commondata.helper.DataValidation;
 import hu.pe.munoz.commondata.helper.Dto;
 import hu.pe.munoz.commondata.helper.DtoUtils;
-import java.util.ArrayList;
-import java.util.Objects;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class UserBoImpl implements UserBo {
 
+    // private static final Logger LOG = LoggerFactory.getLogger(UserBoImpl.class);
+    
     @Autowired
     private UserDao userDao;
 
@@ -45,7 +49,7 @@ public class UserBoImpl implements UserBo {
         for (Object[] objects : list) {
             Dto dtoUser = DtoUtils.toDto(objects[0]);
             Dto dtoUserGroup = DtoUtils.toDto(objects[1]);
-            Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+            Dto dto = DtoUtils.omit(dtoUser, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
             dto.put("userGroup", DtoUtils.omit(dtoUserGroup, "lowerName", "createdAt", "modifiedAt"));
             listDto.add(dto);
         }
@@ -66,7 +70,7 @@ public class UserBoImpl implements UserBo {
         List<Dto> listDto = new ArrayList<Dto>();
         for (UserEntity user : list) {
             Dto dtoUser = DtoUtils.toDto(user);
-            Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+            Dto dto = DtoUtils.omit(dtoUser, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
             listDto.add(dto);
         }
         return listDto;
@@ -88,7 +92,7 @@ public class UserBoImpl implements UserBo {
         }
         
         Dto dtoUser = DtoUtils.toDto(user);
-        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        Dto dto = DtoUtils.omit(dtoUser, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
         return dto;
     }
 
@@ -101,10 +105,6 @@ public class UserBoImpl implements UserBo {
         String strPassword = dtoInput.get("password");
         String strUsername = dtoInput.get("username");
         
-        // Validate values
-        // DataValidation.validateEmail(strEmail);
-        // DataValidation.validateUsername(strUsername);
-        
         Object[] objects = userDao.findOneByEmailOrUsernameJoinUserGroup(strUsername, strUsername);
         if (objects == null) {
             throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
@@ -113,7 +113,9 @@ public class UserBoImpl implements UserBo {
         UserEntity user = (UserEntity) objects[0];
         UserGroupEntity userGroup = (UserGroupEntity) objects[1];
         
-        if (!user.getPassword().equals(strPassword)) {
+        String stirredPassword = PasswordUtils.stirWithSalt(strPassword, user.getSalt());
+        
+        if (!user.getPassword().equals(stirredPassword)) {
             throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_NOT_FOUND);
         }
                 
@@ -136,7 +138,7 @@ public class UserBoImpl implements UserBo {
         Dto dtoUserGroup = DtoUtils.toDto(userGroup);
         dtoUserGroup.put("menuPermissions", listDtoMenuPermission);
         
-        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        Dto dto = DtoUtils.omit(dtoUser, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
         dto.put("userGroup", DtoUtils.omit(dtoUserGroup, "lowerName", "createdAt", "modifiedAt"));
         return dto;
     }
@@ -158,7 +160,7 @@ public class UserBoImpl implements UserBo {
         }
         
         Dto dtoUser = DtoUtils.toDto(user);
-        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        Dto dto = DtoUtils.omit(dtoUser, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
         return dto;
     }
 
@@ -179,7 +181,7 @@ public class UserBoImpl implements UserBo {
         }
         
         Dto dtoUser = DtoUtils.toDto(user);
-        Dto dto = DtoUtils.omit(dtoUser, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        Dto dto = DtoUtils.omit(dtoUser, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
         return dto;
     }
 
@@ -223,12 +225,16 @@ public class UserBoImpl implements UserBo {
             throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }
 
+        String salt = CommonUtils.getRandomAlphanumeric(32);
+        String stirredPassword = PasswordUtils.stirWithSalt(strPassword, salt);
+        
         UserEntity addUser = new UserEntity();
         addUser.setFirstName(strFirstName);
         addUser.setLastName(strLastName);
         addUser.setEmail(strEmail);
         addUser.setUsername(strUsername);
-        addUser.setPassword(strPassword);
+        addUser.setPassword(stirredPassword);
+        addUser.setSalt(salt);
         addUser.setActive(strActive.toLowerCase());
         addUser.setUserGroupId(Long.valueOf(strUserGroupId));
         addUser.setLowerUsername(strUsername.toLowerCase());
@@ -237,7 +243,7 @@ public class UserBoImpl implements UserBo {
         UserEntity added = userDao.insert(addUser);
         
         Dto dtoUserAdded = DtoUtils.toDto(added);
-        Dto dto = DtoUtils.omit(dtoUserAdded, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        Dto dto = DtoUtils.omit(dtoUserAdded, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
         return dto;
     }
 
@@ -298,13 +304,14 @@ public class UserBoImpl implements UserBo {
         findUserById.setLowerUsername(strUsername.toLowerCase());
         
         if ((strPassword != null) && !strPassword.trim().isEmpty()) {
-            findUserById.setPassword(strPassword);
+            String stirredPassword = PasswordUtils.stirWithSalt(strPassword, findUserById.getSalt());
+            findUserById.setPassword(stirredPassword);
         }
         
         UserEntity updated = userDao.update(findUserById);
         
         Dto dtoUserUpdated = DtoUtils.toDto(updated);
-        Dto dto = DtoUtils.omit(dtoUserUpdated, "password", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
+        Dto dto = DtoUtils.omit(dtoUserUpdated, "password", "salt", "lowerUsername", "lowerEmail", "createdAt", "modifiedAt");
         return dto;
     }
 

@@ -3,6 +3,7 @@ package hu.pe.munoz.commondata;
 public class ErrorMessageConstants {
 
     // Validation
+    public static final String REQUIRED_PARAMETERS_NOT_FOUND = "error.commondata.validation.RequiredParametersNotFound";
     public static final String REQUIRED_PARAMETER_NOT_FOUND = "error.commondata.validation.RequiredParameterNotFound";
     public static final String INVALID_EMAIL_ADDRESS = "error.commondata.validation.InvalidEmailAddress";
     public static final String INVALID_NUMERIC = "error.commondata.validation.InvalidNumeric"; // Invalid numeric {0} for data {1}
@@ -30,6 +31,6 @@ public class ErrorMessageConstants {
     public static final String CANT_LOGIN_CAUSE_USER_GROUP_NOT_ACTIVE = "error.commonrest.CantLoginCauseUserGroupNotActive";
 
     // User Group Menu Permission
-    public static final String USER_GROUP_MENU_PERMISSION_NOT_FOUND = "error.commondata.UserGroupMenuPermissionNotFound";;
+    public static final String USER_GROUP_MENU_PERMISSION_NOT_FOUND = "error.commondata.UserGroupMenuPermissionNotFound";
     
 }

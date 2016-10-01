@@ -19,6 +19,8 @@ import hu.pe.munoz.common.helper.CommonConstants;
 
 public class LoginFilter implements Filter {
 
+    // private static final Logger LOG = LoggerFactory.getLogger(LoginFilter.class);
+    
     private static final List<String> LIST_FILTER_EXCLUDED_PAGES = Arrays.asList(
             "/page-not-found.xhtml",
             "/server-error.xhtml"
@@ -45,7 +47,7 @@ public class LoginFilter implements Filter {
         boolean loginRequest = requestUrl.equals(loginUrl) || requestUrl.equals(loginUrl.substring(0, loginUrl.indexOf(".xhtml")));
         boolean logoutRequest = requestUrl.equals(logoutUrl) || requestUrl.equals(logoutUrl.substring(0, logoutUrl.indexOf(".xhtml")));
         boolean resourceRequest = requestUrl.startsWith(contextPath + ResourceHandler.RESOURCE_IDENTIFIER + "/");
-
+        
         // Read http://stackoverflow.com/questions/14526574/jsf-page-style-missing-when-using-login-filter
         
         if (!resourceRequest) {

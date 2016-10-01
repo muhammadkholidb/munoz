@@ -44,12 +44,12 @@
 
                         <h:outputText />
                         <p:commandButton value="#{lang['button.Random']}" actionListener="#{userBean.generateRandom()}" 
-                                         update="inputPassword" styleClass="button-red no-responsive" immediate="true" process="@this" >
+                                         update="inputPassword" styleClass="no-responsive" immediate="true" process="@this" >
                             <p:resetInput target="inputPassword" />
                         </p:commandButton>
 
                         <h:outputText value="#{lang['label.UserGroup']}" />
-                        <p:selectOneMenu value="#{userBean.inputUserGroupId}"> 
+                        <p:selectOneMenu value="#{userBean.inputUserGroupId}" required="true" requiredMessage="#{lang['required.UserGroupCannotBeEmpty']}" > 
                             <f:selectItems value="#{userBean.userGroups}" var="group" itemLabel="#{group.name}" itemValue="#{group.id}" />
                         </p:selectOneMenu>
 

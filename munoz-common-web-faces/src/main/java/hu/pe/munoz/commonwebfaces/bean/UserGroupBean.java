@@ -69,12 +69,96 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
                 userGroups = (JSONArray) response.getData();
             } else {
                 LOG.debug(response.getMessage());
+                Messages.addGlobalError(response.getMessage());
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+            Messages.addGlobalError(CommonUtils.getExceptionMessage(e)); 
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public void onCheckboxViewPermissionChanged(String menuCode) {
+        String selectedParentCode = null;
+        boolean viewBoolean = false;
+        for(Object object : inputMenus) {
+            JSONObject menu = (JSONObject) object;
+            if (menuCode.equals(menu.get("code"))) {
+                selectedParentCode = (String) menu.get("parentCode");
+                viewBoolean = (boolean) menu.get("viewBoolean");
+                menu.put("modifyBoolean", false);
+                break;
+            }
+        }
+        boolean checkParentView = true;
+        boolean checkParentModify = true;
+        for (Object object : inputMenus) {
+            JSONObject menu = (JSONObject) object;
+            String parentCode = (String) menu.get("parentCode");
+            if ((parentCode != null) && menuCode.equals(parentCode)) {
+                menu.put("viewBoolean", viewBoolean);
+                menu.put("modifyBoolean", false);
+            }
+            if (selectedParentCode != null && selectedParentCode.equals(parentCode)) {
+                boolean currentViewBoolean = (boolean) menu.get("viewBoolean");
+                boolean currentModifyBoolean = (boolean) menu.get("modifyBoolean");
+                checkParentView = checkParentView && currentViewBoolean;
+                checkParentModify = checkParentModify && currentModifyBoolean;
+            }
+        }
+        if (selectedParentCode != null) {
+            for(Object object : inputMenus) {
+                JSONObject menu = (JSONObject) object;
+                if (selectedParentCode.equals(menu.get("code"))) {
+                    menu.put("viewBoolean", checkParentView);
+                    menu.put("modifyBoolean", checkParentModify);
+                    break;
+                }
+            }    
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void onCheckboxModifyPermissionChanged(String menuCode) {
+        String selectedParentCode = null;
+        boolean modifyBoolean = false;
+        for(Object object : inputMenus) {
+            JSONObject menu = (JSONObject) object;
+            if (menuCode.equals(menu.get("code"))) {
+                selectedParentCode = (String) menu.get("parentCode");
+                modifyBoolean = (boolean) menu.get("modifyBoolean");
+                menu.put("viewBoolean", true);
+                break;
+            }
+        }
+        boolean checkParentModify = true;
+        boolean checkParentView = true;
+        for (Object object : inputMenus) {
+            JSONObject menu = (JSONObject) object;
+            String parentCode = (String) menu.get("parentCode");
+            if ((parentCode != null) && menuCode.equals(parentCode)) {
+                menu.put("viewBoolean", true);
+                menu.put("modifyBoolean", modifyBoolean);
+            }
+            if (selectedParentCode != null && selectedParentCode.equals(parentCode)) {
+                boolean currentModifyBoolean = (boolean) menu.get("modifyBoolean");
+                boolean currentViewBoolean = (boolean) menu.get("viewBoolean");
+                checkParentModify = checkParentModify && currentModifyBoolean;
+                checkParentView = checkParentView && currentViewBoolean;
+            }
+        }
+        if (selectedParentCode != null) {
+            for(Object object : inputMenus) {
+                JSONObject menu = (JSONObject) object;
+                if (selectedParentCode.equals(menu.get("code"))) {
+                    menu.put("modifyBoolean", checkParentModify);
+                    menu.put("viewBoolean", checkParentView);
+                    break;
+                }
+            }    
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     private void prepareAdd() {
         // Load menus

@@ -56,11 +56,6 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>start</artifactId>
         </dependency>

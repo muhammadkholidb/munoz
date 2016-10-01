@@ -27,10 +27,10 @@ public class SystemEntity extends BaseEntity implements Serializable {
 
     public static final String TABLE_NAME = "mn_system";
 
-    @Column(name = "data_key", length = 50, nullable = false)
+    @Column(name = "data_key", length = 64, nullable = false)
     private String dataKey;
 
-    @Column(name = "data_value", length = 50, nullable = false)
+    @Column(name = "data_value", length = 64, nullable = false)
     private String dataValue;
 
     public String getDataKey() {

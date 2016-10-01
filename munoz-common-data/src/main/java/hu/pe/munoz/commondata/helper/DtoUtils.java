@@ -21,6 +21,7 @@ public class DtoUtils {
     private static final Mapper MAPPER = new DozerBeanMapper();
     
     public static Dto fromServletRequest(ServletRequest request) {
+        if (request == null) return null;
         Dto dto = new Dto();
         Map<String, String[]> parameters = request.getParameterMap();
         for (String key : parameters.keySet()) {
@@ -38,12 +39,12 @@ public class DtoUtils {
     
     public static Dto toDto(Object object) {
         if (object == null) return null;
-        return DtoUtils.MAPPER.map(object, Dto.class);
+        return MAPPER.map(object, Dto.class);
     }
     
     public static <T> T toObject(Dto dto, Class<T> t) {
         if (dto == null) return null;
-        return DtoUtils.MAPPER.map(dto, t);
+        return MAPPER.map(dto, t);
     }
     
     public static Dto omit(Dto dto, String... keys) {
