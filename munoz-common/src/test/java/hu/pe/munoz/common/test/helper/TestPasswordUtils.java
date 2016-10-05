@@ -2,11 +2,11 @@ package hu.pe.munoz.common.test.helper;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.PasswordUtils;
 
 public class TestPasswordUtils {
@@ -17,7 +17,7 @@ public class TestPasswordUtils {
     public void testStirWithSalt() {
         LOG.debug("Test stir with salt ...");
         String password = "12345678";
-        String salt = CommonUtils.getRandomAlphanumeric(32);
+        String salt = RandomStringUtils.randomAlphanumeric(32);
         LOG.debug("Password: " + password);
         LOG.debug("Salt: " + salt);
         String result = PasswordUtils.stirWithSalt(password, salt);

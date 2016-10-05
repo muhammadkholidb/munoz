@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>hu.pe.munoz</groupId>
         <artifactId>munoz</artifactId>
@@ -89,7 +89,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-            
+
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
@@ -121,7 +121,7 @@
 
     <build>
         <finalName>munoz-common-web-faces</finalName>
-        <plugins> 
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -162,7 +162,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
-        </resources> 
+        </resources>
     </build>
 
     <properties>
@@ -180,6 +180,26 @@
                 <directory.path.Logs>/var/lib/openshift/579434267628e1a67100012e/app-root/data/logs</directory.path.Logs>
             </properties>
         </profile>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <classpathPrefix>lib/</classpathPrefix>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
-    
+
 </project>

@@ -18,6 +18,6 @@ buildJob:
 deployJob:
   stage: deploy
   script: 
-  - mvn deploy -DskipTests -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
+  - mvn deploy -DskipTests -Pdeploy -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
   
 

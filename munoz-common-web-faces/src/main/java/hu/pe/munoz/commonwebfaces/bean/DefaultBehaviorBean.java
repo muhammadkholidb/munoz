@@ -12,7 +12,7 @@ import hu.pe.munoz.commonwebfaces.helper.PageMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class DefaultBehaviorBean extends RESTBean {
+public abstract class DefaultBehaviorBean extends HttpClientBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBehaviorBean.class);
 

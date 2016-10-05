@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedProperty;
 import java.util.ResourceBundle;
 import org.json.simple.JSONObject;
 
-public abstract class RESTBean {
+public abstract class HttpClientBean {
 
     protected ResourceBundle applicationBundle = ResourceBundle.getBundle("application");
     protected String hostUrl;

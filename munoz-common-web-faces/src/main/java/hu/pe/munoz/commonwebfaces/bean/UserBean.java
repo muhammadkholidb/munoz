@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.util.Faces;
@@ -95,7 +97,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
     }
 
     public void generateRandom() {
-        inputPassword = CommonUtils.getRandomAlphanumeric(8);
+        inputPassword = RandomStringUtils.randomAlphanumeric(8);
     }
 
     private void prepareAdd() {
@@ -222,7 +224,7 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
         editUser.put("username", inputUsername.trim());
         editUser.put("email", inputEmail.trim());
         editUser.put("active", inputActive);
-        if ((inputPassword != null) && !CommonConstants.EMPTY_STRING.equals(inputPassword)) {
+        if ((inputPassword != null) && !StringUtils.EMPTY.equals(inputPassword)) {
             editUser.put("password", inputPassword.trim());
         }
 
