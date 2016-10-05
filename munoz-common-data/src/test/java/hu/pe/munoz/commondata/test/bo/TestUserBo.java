@@ -102,7 +102,8 @@ public class TestUserBo extends AbstractTestDataImport {
         dtoInput.put("lastName", "Mc Knight");
         dtoInput.put("username", "brian");
         dtoInput.put("email", "bryan.mckningt@yahoo.com");
-        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("password", "123");
+        dtoInput.put("salt", "abc");
         dtoInput.put("active", CommonConstants.YES);
         dtoInput.put("userGroupId", 1L);
         
@@ -124,7 +125,8 @@ public class TestUserBo extends AbstractTestDataImport {
         dtoInput.put("lastName", "Doe");
         dtoInput.put("username", "johndoe");
         dtoInput.put("email", "johndoe@yahoo.com");
-        dtoInput.put("password", "mbp0jhai");
+        dtoInput.put("password", "123");
+        dtoInput.put("salt", "abc");
         dtoInput.put("active", CommonConstants.YES);
         dtoInput.put("userGroupId", 1L);
         
@@ -151,7 +153,8 @@ public class TestUserBo extends AbstractTestDataImport {
         dtoInput.put("lastName", "");
         dtoInput.put("username", "fulan2");
         dtoInput.put("email", "fulan2@yahoo.com");
-        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("password", "123");
+        dtoInput.put("salt", "abc");
         dtoInput.put("active", CommonConstants.NO);
         dtoInput.put("userGroupId", 1L);
         
@@ -177,7 +180,8 @@ public class TestUserBo extends AbstractTestDataImport {
         dtoInput.put("lastName", "");
         dtoInput.put("username", "fulan2");
         dtoInput.put("email", "fulan2@yahoo.com");
-        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("password", "123");
+        dtoInput.put("salt", "abc");
         dtoInput.put("active", CommonConstants.NO);
         dtoInput.put("userGroupId", 1L);
         
@@ -204,7 +208,8 @@ public class TestUserBo extends AbstractTestDataImport {
         dtoInput.put("lastName", "Doe");
         dtoInput.put("username", "johndoe2");
         dtoInput.put("email", "johndoe@yahoo.com");
-        dtoInput.put("password", "pojh08ewn");
+        dtoInput.put("password", "123");
+        dtoInput.put("salt", "abc");
         dtoInput.put("active", CommonConstants.NO);
         dtoInput.put("userGroupId", 1L);
         
