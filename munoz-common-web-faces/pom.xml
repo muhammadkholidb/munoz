@@ -181,7 +181,7 @@
             </properties>
         </profile>
         <profile>
-            <id>deploy</id>
+            <id>skinny-war</id>
             <build>
                 <plugins>
                     <plugin>
