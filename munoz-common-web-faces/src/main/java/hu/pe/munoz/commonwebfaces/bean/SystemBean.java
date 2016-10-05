@@ -22,6 +22,7 @@ import javax.faces.bean.ViewScoped;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -99,8 +100,7 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             String imagesDir = applicationBundle.getString("directory.path.Images");
             String uploadedFileName = imageUpload.getFileName();
             String uploadedFileExtension = uploadedFileName.substring(uploadedFileName.lastIndexOf(".") + 1);
-            String baseName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "-"
-                    + CommonUtils.getRandomAlphanumeric(8).toUpperCase();
+            String baseName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "-" + RandomStringUtils.randomAlphanumeric(8).toUpperCase();
 
             resizedFileName = baseName + "." + uploadedFileExtension;
             originalFileName = baseName + "-ORI." + uploadedFileExtension;

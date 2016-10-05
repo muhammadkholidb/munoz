@@ -4,8 +4,8 @@ public class CommonConstants {
 
     private CommonConstants() {}
 
-    public static final String EMPTY_STRING = "";
-    public static final String SPACE = " ";
+//    public static final String EMPTY_STRING = "";
+//    public static final String SPACE = " ";
 
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";

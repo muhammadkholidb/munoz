@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.common.exception.ExceptionCode;
 import hu.pe.munoz.common.helper.CommonConstants;
-import hu.pe.munoz.common.helper.CommonUtils;
 import hu.pe.munoz.common.helper.PasswordUtils;
 import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.dao.UserDao;
@@ -225,7 +225,7 @@ public class UserBoImpl implements UserBo {
             throw new DataException(ExceptionCode.E1001, ErrorMessageConstants.USER_GROUP_NOT_FOUND);
         }
 
-        String salt = CommonUtils.getRandomAlphanumeric(32);
+        String salt = RandomStringUtils.randomAlphanumeric(32);
         String stirredPassword = PasswordUtils.stirWithSalt(strPassword, salt);
         
         UserEntity addUser = new UserEntity();

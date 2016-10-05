@@ -3,7 +3,7 @@ package hu.pe.munoz.commonwebfaces.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import hu.pe.munoz.commonwebfaces.helper.WebAppHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +23,13 @@ public class ImageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageServlet.class);
+
+    protected ResourceBundle applicationBundle = ResourceBundle.getBundle("application");
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            Properties applicationProperties = WebAppHelper.getApplicationProperties(Thread.currentThread().getContextClassLoader());
-
-            String imagesDir = applicationProperties.getProperty("directory.path.Images");
+            String imagesDir = applicationBundle.getString("directory.path.Images");
             String filename = req.getPathInfo().substring(1);
             
             File file = new File(imagesDir, filename);
