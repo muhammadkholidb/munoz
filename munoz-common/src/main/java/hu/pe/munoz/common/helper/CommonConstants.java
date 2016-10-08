@@ -1,11 +1,25 @@
 package hu.pe.munoz.common.helper;
 
+import java.io.File;
+
 public class CommonConstants {
 
     private CommonConstants() {}
 
-//    public static final String EMPTY_STRING = "";
-//    public static final String SPACE = " ";
+    public static final String EMPTY_STRING = "";
+    public static final String SPACE = " ";
+    public static final String FILE_SEPARATOR = File.separator;
+    public static final String LINE_BREAK = System.lineSeparator();
+    public static final String TAB = "\t";
+    public static final String SINGLE_QUOTE = "'";
+    public static final String DOUBLE_QUOTE = "\"";
+    public static final String DOT = ".";
+    public static final String COMMA = ",";
+    public static final String COLON = ":";
+    public static final String SEMICOLON = ";";
+    public static final String PLUS = "+";
+    public static final String MINUS = "-";
+    public static final String UNDERSCORE = "_";
 
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";
