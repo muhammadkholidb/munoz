@@ -6,7 +6,8 @@ stages:
    - deploy
    
 testJob:
-   image: jboss/base
+   services:
+   - jboss/base
    stage: test
    script:
    - mvn test -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
