@@ -7,7 +7,7 @@ stages:
    
 testJob:
    services:
-   - jboss/base
+   - postgres:9.4
    stage: test
    script:
    - mvn test -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
