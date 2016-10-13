@@ -6,8 +6,6 @@ stages:
    - deploy
    
 testJob:
-   services:
-   - andreptb/jboss-as:5.1.0.GA
    stage: test
    script:
    - ls -l /opt
