@@ -8,6 +8,7 @@ stages:
 testJob:
    stage: test
    script:
+   - ls -l /opt
    - mvn test -s prerequisites/.m2/settings.xml -Dsettings.security=prerequisites/.m2/settings-security.xml
   
 buildJob:
