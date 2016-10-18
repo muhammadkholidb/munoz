@@ -46,6 +46,7 @@
         <version.commons-validator>1.5.1</version.commons-validator>
         <version.dbunit>2.5.2</version.dbunit>
         <version.postgresql>9.4-1200-jdbc4</version.postgresql>
+        <version.json-path>2.2.0</version.json-path>
 
         <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
         <version.maven-war-plugin>2.6</version.maven-war-plugin>
@@ -296,6 +297,12 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+                <version>${version.json-path}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

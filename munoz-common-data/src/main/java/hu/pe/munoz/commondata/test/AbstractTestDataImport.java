@@ -1,4 +1,4 @@
-package hu.pe.munoz.commondata;
+package hu.pe.munoz.commondata.test;
 
 import java.io.File;
 import java.net.URL;
