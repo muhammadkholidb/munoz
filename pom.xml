@@ -34,7 +34,7 @@
         <version.junit>4.12</version.junit>
         <version.jsf>2.2.12</version.jsf>
         <version.jstl>1.2</version.jstl>
-        <version.primefaces>5.3</version.primefaces>
+        <version.primefaces>6.0</version.primefaces>
         <version.primefaces-themes>1.0.10</version.primefaces-themes>
         <version.cdi>1.2</version.cdi>
         <version.h2database>1.4.191</version.h2database>

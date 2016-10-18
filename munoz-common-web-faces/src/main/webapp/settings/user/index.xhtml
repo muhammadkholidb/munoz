@@ -17,16 +17,7 @@
         <h:form>
 
             <p:messages id="messages" closable="true" />
-            
-            <p:fieldset legend="#{lang['label.Search']}" toggleable="true" styleClass="search-box" style="margin-bottom: 10px;" >
-                                
-                <h:panelGroup styleClass="form-buttons aright bottom-buttons" layout="block" >
-                    <p:commandButton value="#{lang['button.Search']}" styleClass="button-green" />
-                    <p:commandButton value="#{lang['button.Reset']}" styleClass="button-grey" />
-                </h:panelGroup>
-                
-            </p:fieldset>
-            
+        
             <h:panelGroup styleClass="form-buttons aleft top-buttons"
                 layout="block" rendered="#{userBean.isModifyAllowed()}">
                 <p:commandButton value="#{lang['button.Add']}"
@@ -34,7 +25,7 @@
                     action="#{userBean.gotoAdd()}" ajax="false" />
             </h:panelGroup>
 
-            <p:dataTable var="user" value="#{userBean.users}"
+            <p:dataTable var="user" value="#{userBean.users}" sortBy="#{user.firstName}"
                 reflow="#{userBean.users.size() == 0}" rows="10"
                 paginator="true" paginatorPosition="bottom"
                 styleClass="tuser" emptyMessage="#{lang['message.NoRecords']}" >
@@ -47,18 +38,12 @@
 
                 <p:columnGroup type="header">
                     <p:row>
-                        <p:column headerText="#{lang['label.Name']}"
-                            styleClass="tuser-name"></p:column>
-                        <p:column headerText="#{lang['label.Username']}"
-                            styleClass="tuser-username"></p:column>
-                        <p:column headerText="#{lang['label.Email']}"
-                            styleClass="tuser-email"></p:column>
-                        <p:column headerText="#{lang['label.Active']}"
-                            styleClass="tuser-active"></p:column>
-                        <p:column headerText="#{lang['label.Group']}"
-                            styleClass="tuser-group"></p:column>
-                        <p:column headerText="#{lang['label.Action']}"
-                            styleClass="tuser-action"></p:column>
+                        <p:column headerText="#{lang['label.Name']}" styleClass="tuser-name" sortBy="#{user.firstName}" />
+                        <p:column headerText="#{lang['label.Username']}" styleClass="tuser-username" sortBy="#{user.username}" />
+                        <p:column headerText="#{lang['label.Email']}" styleClass="tuser-email" sortBy="#{user.email}" />
+                        <p:column headerText="#{lang['label.Active']}" styleClass="tuser-active" sortBy="#{user.active}" />
+                        <p:column headerText="#{lang['label.Group']}" styleClass="tuser-group" sortBy="#{user.userGroup.name}" />
+                        <p:column headerText="#{lang['label.Action']}" styleClass="tuser-action" />
                     </p:row>
                 </p:columnGroup>
 

@@ -9,7 +9,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.util.Faces;
@@ -109,8 +108,8 @@ public class LoginBean extends HttpClientBean implements Serializable {
         if ((defaultUser == null) || defaultUser.trim().isEmpty()) {
             return;
         }
-        String defaultUserFirstName = StringUtils.EMPTY;
-        String defaultUserLastName = StringUtils.EMPTY;
+        String defaultUserFirstName = CommonConstants.EMPTY_STRING;
+        String defaultUserLastName = CommonConstants.EMPTY_STRING;
         String[] dataUserSplit = defaultUser.split(",");
         switch (dataUserSplit.length) {
             case 1 :    // Only contains password

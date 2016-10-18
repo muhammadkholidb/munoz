@@ -23,7 +23,7 @@
                                  ajax="false" />
             </h:panelGroup>
 
-            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="#{userGroupBean.userGroups.size() == 0}" 
+            <p:dataTable var="group" value="#{userGroupBean.userGroups}" reflow="#{userGroupBean.userGroups.size() == 0}" sortBy="#{group.name}"
                 rows="10" paginator="true" paginatorPosition="bottom" styleClass="tusergroup" emptyMessage="#{lang['message.NoRecords']}" >
 
                 <p:ajax event="page" oncomplete="redrawFootableUserGroup()" />
@@ -34,9 +34,9 @@
 
                 <p:columnGroup type="header">
                     <p:row>
-                        <p:column headerText="#{lang['label.Name']}" styleClass="tusergroup-name" ></p:column>
-                        <p:column headerText="#{lang['label.Active']}" styleClass="tusergroup-active" ></p:column>
-                        <p:column headerText="#{lang['label.Action']}" styleClass="tusergroup-action" ></p:column>
+                        <p:column headerText="#{lang['label.Name']}" styleClass="tusergroup-name" sortBy="#{group.name}" />
+                        <p:column headerText="#{lang['label.Active']}" styleClass="tusergroup-active" sortBy="#{group.active}" />
+                        <p:column headerText="#{lang['label.Action']}" styleClass="tusergroup-action" />
                     </p:row>
                 </p:columnGroup>
 
