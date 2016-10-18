@@ -1,4 +1,4 @@
-package hu.pe.munoz.commondata.test.bo;
+package hu.pe.munoz.commondata.bo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import hu.pe.munoz.commondata.AbstractTestDataImport;
 import hu.pe.munoz.commondata.bo.UserGroupMenuPermissionBo;
 import hu.pe.munoz.commondata.helper.Dto;
-import hu.pe.munoz.commondata.test.AbstractTestDataImport;
 
 @ContextConfiguration(locations = "classpath:munoz-common-data-context-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)

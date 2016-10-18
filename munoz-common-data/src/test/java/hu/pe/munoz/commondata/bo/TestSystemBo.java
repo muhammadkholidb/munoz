@@ -1,4 +1,4 @@
-package hu.pe.munoz.commondata.test.bo;
+package hu.pe.munoz.commondata.bo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -18,10 +18,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import hu.pe.munoz.common.exception.DataException;
 import hu.pe.munoz.common.exception.ExceptionCode;
 import hu.pe.munoz.common.helper.CommonConstants;
+import hu.pe.munoz.commondata.AbstractTestDataImport;
 import hu.pe.munoz.commondata.ErrorMessageConstants;
 import hu.pe.munoz.commondata.bo.SystemBo;
 import hu.pe.munoz.commondata.helper.Dto;
-import hu.pe.munoz.commondata.test.AbstractTestDataImport;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

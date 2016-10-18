@@ -1,4 +1,4 @@
-package hu.pe.munoz.commondata.test.helper;
+package hu.pe.munoz.commondata.helper;
 
 import hu.pe.munoz.commondata.helper.DataImporter;
 import java.io.File;

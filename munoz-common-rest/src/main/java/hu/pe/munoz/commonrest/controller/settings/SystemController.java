@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.pe.munoz.common.helper.CommonConstants;
 import hu.pe.munoz.commondata.bo.SystemBo;
-import hu.pe.munoz.commondata.bo.SystemBoImpl;
 import hu.pe.munoz.commondata.helper.DataImporter;
 import hu.pe.munoz.commondata.helper.Dto;
 import hu.pe.munoz.commondata.helper.DtoUtils;
@@ -48,7 +47,7 @@ public class SystemController extends BaseController {
         if ((list == null) || list.isEmpty()) {
 
             LOG.debug("System data is empty, load initial data ...");
-            InputStream is = SystemBoImpl.class.getClassLoader().getResourceAsStream("dataset/system.xml");
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("dataset/system.xml");
             importer.addStreamDataSet(is);
             importer.importAll();
             
