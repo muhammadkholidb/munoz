@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>hu.pe.munoz</groupId>
     <artifactId>munoz</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.1</version>
     <name>Munoz</name>
     <description>Munoz Top Level Project</description>
     <packaging>pom</packaging>
