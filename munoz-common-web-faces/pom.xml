@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>munoz-common-web-faces</artifactId>
     <packaging>war</packaging>
-    <name>Munoz Common Web Faces</name>
+    <name>${project.artifactId}</name>
     <description>Munoz Common Web Faces</description>
 
     <dependencies>

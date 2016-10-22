@@ -1,0 +1,83 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    
+    <context:property-placeholder location="classpath:${parentArtifactId}-data-datasource.properties"/>
+    
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${symbol_dollar}{jdbc.driver}" />
+        <property name="jdbcUrl" value="${symbol_dollar}{jdbc.url}" />
+        <property name="user" value="${symbol_dollar}{jdbc.username}" />
+        <property name="password" value="${symbol_dollar}{jdbc.password}" />
+        <property name="minPoolSize" value="${symbol_dollar}{c3p0.minPoolSize}"/>
+        <property name="maxPoolSize" value="${symbol_dollar}{c3p0.maxPoolSize}"/>
+        <property name="maxStatements" value="${symbol_dollar}{c3p0.maxStatements}" />
+    </bean>
+    
+    <!-- Source: http://howtodoinjava.com/jpa/spring-hibernate-jpa-configuration-example/ -->
+    <!-- 
+    This produces a container-managed EntityManagerFactory; 
+    rather than application-managed EntityManagerFactory as in case of LocalEntityManagerFactoryBean
+    -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        
+        <property name="dataSource" ref="dataSource" />
+        
+        <!-- This makes /META-INF/persistence.xml is no longer necessary -->
+        <property name="packagesToScan" >
+            <list>
+                <value>hu.pe.munoz.commondata.entity</value>
+            </list>
+        </property>
+        
+        <!-- 
+        JpaVendorAdapter implementation for Hibernate EntityManager.
+        Exposes Hibernate's persistence provider and EntityManager extension interface 
+        -->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+        
+        <!-- 
+        Source: http://stackoverflow.com/questions/18077327
+        
+        Possible options for hibernate.hbm2ddl.auto property:
+        validate    : validate that the schema matches, make no changes to the schema of the database, 
+                      you probably want this for production.
+        update      : update the schema to reflect the entities being persisted.
+        create      : creates the schema necessary for your entities, destroying any previous data.
+        create-drop : create the schema as in create above, but also drop the schema at the end of the session. 
+                      This is great in early development or for testing.
+        -->
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">${symbol_dollar}{hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${symbol_dollar}{hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props> 
+        </property>
+    </bean>
+    
+    <!-- Transaction Manager is defined -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    
+    <!-- Enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <context:component-scan base-package="hu.pe.munoz.commondata" />
+
+</beans>

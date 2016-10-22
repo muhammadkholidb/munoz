@@ -4,7 +4,7 @@
     <groupId>hu.pe.munoz</groupId>
     <artifactId>munoz</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>Munoz</name>
+    <name>${project.artifactId}</name>
     <description>Munoz Top Level Project</description>
     <packaging>pom</packaging>
 

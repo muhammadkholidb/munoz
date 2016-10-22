@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>munoz-common</artifactId>
-    <name>Munoz Common</name>
+    <name>${project.artifactId}</name>
     <description>Munoz Common</description>
 
     <dependencies>

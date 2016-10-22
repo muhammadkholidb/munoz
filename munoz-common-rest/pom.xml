@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>munoz-common-rest</artifactId>
     <packaging>war</packaging>
-    <name>Munoz Common REST</name>
+    <name>${project.artifactId}</name>
     <description>Munoz Common REST</description>
 
     <dependencies>
