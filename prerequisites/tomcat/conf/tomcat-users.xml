@@ -34,7 +34,4 @@
   <role rolename="manager-status"/>
   <user username="tomcat" password="tomcat" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
 
-  <role rolename="superadmin"/>
-  <user username="superadmin" password="ae6d580ce51d4c06ec660d3efee847a915840dcd" roles="superadmin"/>
-
 </tomcat-users>
