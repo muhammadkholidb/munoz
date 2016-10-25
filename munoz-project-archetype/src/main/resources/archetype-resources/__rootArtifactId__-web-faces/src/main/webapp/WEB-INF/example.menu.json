@@ -1,0 +1,11 @@
+[
+    {
+        "name": "Menu Example",
+        "description": "",
+        "code": "menu.example",
+        "label": {
+            "in": "Contoh",
+            "en": "Example"
+        }
+    }
+]

@@ -14,7 +14,7 @@
         <!-- Munoz -->
         <dependency>
             <groupId>hu.pe.munoz</groupId>
-            <artifactId>munoz-common-data</artifactId>
+            <artifactId>munoz-common-data</artifactId> 
         </dependency>
         
     </dependencies>
@@ -30,14 +30,14 @@
     
     <properties>
         <jdbc.driver>org.postgresql.Driver</jdbc.driver> 
-        <jdbc.url>jdbc:postgresql://localhost:5432/munozdb</jdbc.url> 
+        <jdbc.url>jdbc:postgresql://localhost:5432/exampledb</jdbc.url> 
         <jdbc.username>postgres</jdbc.username> 
         <jdbc.password>postgres</jdbc.password> 
         <hibernate.dialect>org.hibernate.dialect.PostgreSQL9Dialect</hibernate.dialect> 
         <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto> 
         <!--        
         <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-        <jdbc.url>jdbc:mysql://localhost:3306/munozdb</jdbc.url>
+        <jdbc.url>jdbc:mysql://localhost:3306/exampledb</jdbc.url>
         <jdbc.username>root</jdbc.username>
         <jdbc.password></jdbc.password>
         <hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</hibernate.dialect>
@@ -53,7 +53,7 @@
             <id>openshift</id>
             <properties>
                 <jdbc.driver>org.postgresql.Driver</jdbc.driver>
-                <jdbc.url>jdbc:postgresql://localhost:5432/munozdb</jdbc.url>
+                <jdbc.url>jdbc:postgresql://localhost:5432/exampledb</jdbc.url>
                 <jdbc.username>postgres</jdbc.username>
                 <jdbc.password>postgres</jdbc.password>
             </properties>

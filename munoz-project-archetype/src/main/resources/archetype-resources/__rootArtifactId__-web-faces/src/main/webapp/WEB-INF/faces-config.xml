@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,6 +15,10 @@
         <resource-bundle>
             <base-name>hu.pe.munoz.commonwebfaces.languages</base-name>
             <var>lang</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>${package}.webfaces.languages</base-name>
+            <var>text</var>
         </resource-bundle>
     </application>
 

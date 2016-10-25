@@ -36,6 +36,7 @@
         <property name="packagesToScan" >
             <list>
                 <value>hu.pe.munoz.commondata.entity</value>
+                <value>${package}.data.entity</value>
             </list>
         </property>
         
@@ -78,6 +79,6 @@
     <!-- Enable the configuration of transactional behavior based on annotations -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
-    <context:component-scan base-package="hu.pe.munoz.commondata" />
+    <context:component-scan base-package="hu.pe.munoz.commondata,${package}.data" />
 
 </beans>

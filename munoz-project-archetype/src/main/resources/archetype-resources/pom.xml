@@ -64,6 +64,12 @@
                 <artifactId>munoz-common-rest</artifactId>
                 <version>${version.munoz}</version>
                 <type>war</type>
+                <exclusions>
+                    <exclusion>
+                        <groupId>hu.pe.munoz</groupId>
+                        <artifactId>munoz-common-data</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
     
             <dependency>
@@ -129,5 +135,5 @@
         </repository>
 
     </repositories>
-
+    
 </project>

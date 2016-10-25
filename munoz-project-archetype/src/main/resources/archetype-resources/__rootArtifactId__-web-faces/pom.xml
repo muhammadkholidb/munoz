@@ -29,7 +29,7 @@
     </dependencies>
     
     <build>
-        <finalName>${rootArtifactId}-web-faces</finalName>
+        <finalName>${artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -46,7 +46,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>tomcat-local</server>
-                    <path>/${rootArtifactId}-web-faces</path>
+                    <path>/${artifactId}</path>
                 </configuration>
             </plugin>
         </plugins>
@@ -59,7 +59,7 @@
     </build>
     
     <properties>
-        <rest.HostUrl>localhost:8080/${rootArtifactId}-rest</rest.HostUrl>
+        <rest.HostUrl>localhost:8080/example-project-rest</rest.HostUrl>
         <directory.path.Images>${user.home}/Server/images</directory.path.Images>
         <directory.path.Logs>${user.home}/Server/logs</directory.path.Logs>
     </properties>
@@ -68,7 +68,7 @@
         <profile>
             <id>openshift</id>
             <properties>
-                <rest.HostUrl>tomcat7-eatonmunoz.rhcloud.com/${rootArtifactId}-rest</rest.HostUrl>
+                <rest.HostUrl>tomcat7-eatonmunoz.rhcloud.com/example-project-rest</rest.HostUrl>
                 <directory.path.Images>/var/lib/openshift/579434267628e1a67100012e/app-root/data/images</directory.path.Images>
                 <directory.path.Logs>/var/lib/openshift/579434267628e1a67100012e/app-root/data/logs</directory.path.Logs>
             </properties>

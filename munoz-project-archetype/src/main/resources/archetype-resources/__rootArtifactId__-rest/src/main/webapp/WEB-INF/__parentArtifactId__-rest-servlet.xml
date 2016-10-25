@@ -20,7 +20,7 @@
         </property>
     </bean>
 
-    <context:component-scan base-package="hu.pe.munoz.commonrest" />
+    <context:component-scan base-package="hu.pe.munoz.commonrest,${package}.rest" />
 
     <!-- Enables the Spring MVC @Controller programming model --> 
     <mvc:annotation-driven/> 
