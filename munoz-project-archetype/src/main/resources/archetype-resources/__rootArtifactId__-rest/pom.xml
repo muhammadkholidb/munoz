@@ -34,7 +34,7 @@
     </dependencies>
     
     <build>
-        <finalName>${artifactId}</finalName>
+        <finalName>${rootArtifactId}-rest</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,7 +51,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>tomcat-local</server>
-                    <path>/${artifactId}</path>
+                    <path>/${rootArtifactId}-rest</path>
                 </configuration>
             </plugin>
         </plugins>
