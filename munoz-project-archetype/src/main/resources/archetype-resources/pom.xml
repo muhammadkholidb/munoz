@@ -17,6 +17,7 @@
         
         <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
         <version.maven-war-plugin>2.6</version.maven-war-plugin>
+        <version.maven-jetty-plugin>9.2.11.v20150529</version.maven-jetty-plugin>
     </properties>
 
     <dependencyManagement>
