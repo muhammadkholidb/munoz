@@ -77,12 +77,6 @@
             <include>**/*.json</include>
           </includes>
         </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory></directory>
-          <includes>
-            <include>faces-config.NavData</include>
-          </includes>
-        </fileSet>
       </fileSets>
     </module>
   </modules>
