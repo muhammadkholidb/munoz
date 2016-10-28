@@ -15,6 +15,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ManagedBean
 @SessionScoped
@@ -25,6 +27,8 @@ public class MenuBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOG = LoggerFactory.getLogger(MenuBean.class);
+    
     private static final String POSTFIX_FILE_MENU = ".menu.json";
 
     private static final String POSTFIX_FILE_SUBMENU = ".submenu.json";
@@ -65,23 +69,23 @@ public class MenuBean implements Serializable {
                 JSONArray array = (JSONArray) parser.parse(new FileReader(file));
                 menus.addAll(array);
             }
-
             JSONArray submenus = new JSONArray();
             for (File file : submenuFiles) {
                 JSONArray array = (JSONArray) parser.parse(new FileReader(file));
                 submenus.addAll(array);
             }
-
-            for (int i = 0; i < menus.size(); i++) {
-                JSONObject json = (JSONObject) menus.get(i);
+            for (Object menu : menus) {
+                JSONObject json = (JSONObject) menu;
                 String parentCode = (String) json.get("code");
                 JSONArray children = getChildren(submenus, parentCode);
                 json.put("submenus", children);
                 flatMenus.add(json);
                 flatMenus.addAll(children);
             }
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        } catch (ParseException e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 

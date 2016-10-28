@@ -128,14 +128,13 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
                     .setParameters(jsonUser)
                     .post();
             if (response != null) {
-                if (null != response.getStatus()) {
-                    switch (response.getStatus()) {
-                        case CommonConstants.SUCCESS:
-                            Messages.addFlashGlobalInfo(response.getMessage());
-                            break;
-                        case CommonConstants.FAIL:
-                            Messages.addGlobalError(response.getMessage());
-                            return "";
+                String responseStatus = response.getStatus();
+                if (null != responseStatus) {
+                    if (CommonConstants.SUCCESS.equals(responseStatus)) {
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                    } else if (CommonConstants.FAIL.equals(responseStatus)) {
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
                     }
                 }
             }
@@ -232,18 +231,17 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
             httpClient.setParameters(editUser);
             HttpClientResponse response = httpClient.post();
             if (response != null) {
-                if (null != response.getStatus()) {
-                    switch (response.getStatus()) {
-                        case CommonConstants.SUCCESS:
-                            Messages.addFlashGlobalInfo(response.getMessage());
-                            JSONObject updated = (JSONObject) response.getData();
-                            if (loginBean.getUser().get("id").equals(updated.get("id")) && CommonConstants.NO.equals(updated.get("active"))) {
-                                return loginBean.doLogout();
-                            }
-                            break;
-                        case CommonConstants.FAIL:
-                            Messages.addGlobalError(response.getMessage());
-                            return "";
+                String responseStatus = response.getStatus();
+                if (null != responseStatus) {
+                    if (CommonConstants.SUCCESS.equals(responseStatus)) {
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        JSONObject updated = (JSONObject) response.getData();
+                        if (loginBean.getUser().get("id").equals(updated.get("id")) && CommonConstants.NO.equals(updated.get("active"))) {
+                            return loginBean.doLogout();
+                        }
+                    } else if (CommonConstants.FAIL.equals(responseStatus)) {
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
                     }
                 }
             }

@@ -60,14 +60,12 @@ public class HttpClient {
 //    }
 
     public HttpClientResponse request() throws IOException {
-        switch (method) {
-            case POST:
-                return post();
-            case GET:
-                return get();
-            default:
-                throw new UnsupportedOperationException("Unsupported request method: " + method );
-        }
+        if (POST.equals(method)) {
+            return post();
+        } else if (GET.equals(method)) {
+            return get();
+        } 
+        throw new UnsupportedOperationException("Unsupported request method: " + method );
     }
     
     private String buildQueryStrings(JSONObject parameters) {

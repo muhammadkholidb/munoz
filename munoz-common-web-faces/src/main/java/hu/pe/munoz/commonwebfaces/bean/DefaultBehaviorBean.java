@@ -32,7 +32,7 @@ public abstract class DefaultBehaviorBean extends HttpClientBean {
 
     public DefaultBehaviorBean() {
         if (Faces.getFlash().get("mode") != null) {
-            mode = (int) Faces.getFlash().get("mode");
+            mode = (Integer) Faces.getFlash().get("mode");
         }
     }
 

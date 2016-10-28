@@ -78,24 +78,15 @@ public class ApplicationBean implements Serializable {
             String key = (String) json.get("dataKey");
             String value = (String) json.get("dataValue");
 
-            switch (key) {
-                case SYSTEM_KEY_LANGUAGE_CODE:
-                    languageCode = value;
-                    locale = new Locale(languageCode);
-                    break;
-
-                case SYSTEM_KEY_TEMPLATE_CODE:
-                    templateCode = value;
-                    break;
-
-                case SYSTEM_KEY_ONLINE:
-                    online = value;
-                    break;
-
-                case SYSTEM_KEY_IMAGE:
-                    image = value;
-                    break;
-
+            if (SYSTEM_KEY_LANGUAGE_CODE.equals(key)) {
+                languageCode = value;
+                locale = new Locale(languageCode);
+            } else if (SYSTEM_KEY_TEMPLATE_CODE.equals(key)) {
+                templateCode = value;
+            } else if (SYSTEM_KEY_ONLINE.equals(key)) {
+                online = value;
+            } else if (SYSTEM_KEY_IMAGE.equals(key)) {
+                image = value;
             }
         }
     }

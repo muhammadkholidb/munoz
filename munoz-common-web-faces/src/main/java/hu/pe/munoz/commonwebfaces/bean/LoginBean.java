@@ -155,23 +155,20 @@ public class LoginBean extends HttpClientBean implements Serializable {
         if (Objects.equals((Long) userGroup.get("id"), DefaultUser.USER_GROUP_ID)) {
             return true;
         }
-        switch (type) {
-            case "view":
-                for (Object menuPermission : menuPermissions) {
-                    JSONObject permission = (JSONObject) menuPermission;
-                    if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("view"))) {
-                        return true;
-                    }
+        if ("view".equals(type)) {
+            for (Object menuPermission : menuPermissions) {
+                JSONObject permission = (JSONObject) menuPermission;
+                if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("view"))) {
+                    return true;
                 }
-                break;
-            case "modify":
-                for (Object menuPermission : menuPermissions) {
-                    JSONObject permission = (JSONObject) menuPermission;
-                    if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("modify"))) {
-                        return true;
-                    }
+            }
+        } else if ("modify".equals(type)) {
+            for (Object menuPermission : menuPermissions) {
+                JSONObject permission = (JSONObject) menuPermission;
+                if (permission.get("menuCode").equals(menuCode) && CommonConstants.YES.equals(permission.get("modify"))) {
+                    return true;
                 }
-                break;
+            }
         }
         return false;
     }
@@ -211,10 +208,6 @@ public class LoginBean extends HttpClientBean implements Serializable {
 
     public JSONArray getMenuPermissions() {
         return menuPermissions;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(DigestUtils.sha1Hex("pwd!@#A"));
     }
 
 }

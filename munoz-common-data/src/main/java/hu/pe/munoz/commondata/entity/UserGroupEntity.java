@@ -34,6 +34,9 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
     @Column(name = "lower_name", length = 128, nullable = false)
     private String lowerName;
 
+    @Column(name = "user_group_description", length = 512)
+    private String userGroupDescription;
+
     @Column(name = "active", length = 1, nullable = false)
     private String active;
 
@@ -51,6 +54,14 @@ public class UserGroupEntity extends BaseEntity implements Serializable {
 
     public void setLowerName(String lowerName) {
         this.lowerName = lowerName;
+    }
+
+    public String getUserGroupDescription() {
+        return userGroupDescription;
+    }
+
+    public void setUserGroupDescription(String userGroupDescription) {
+        this.userGroupDescription = userGroupDescription;
     }
 
     public String getActive() {

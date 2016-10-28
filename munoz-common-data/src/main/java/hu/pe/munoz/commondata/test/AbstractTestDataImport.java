@@ -30,7 +30,7 @@ public abstract class AbstractTestDataImport {
      * @throws java.lang.Exception
      */
     protected void processDataSets(String... paths) throws Exception {
-        dataSets = new ArrayList<>();
+        dataSets = new ArrayList<File>();
         for (String path : paths) {
             URL url = AbstractTestDataImport.class.getClassLoader().getResource(path);
             File file = new File(url.getFile());

@@ -142,18 +142,12 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
         for (Object object : systems) {
             JSONObject system = (JSONObject) object;
             String key = (String) system.get("dataKey");
-            switch (key) {
-            case SYSTEM_KEY_LANGUAGE_CODE:
+            if (SYSTEM_KEY_LANGUAGE_CODE.equals(key)) {
                 system.put("dataValue", languageCode);
-                break;
-            case SYSTEM_KEY_ONLINE:
+            } else if (SYSTEM_KEY_ONLINE.equals(key)) {
                 system.put("dataValue", online);
-                break;
-            case SYSTEM_KEY_IMAGE:
+            } else if (SYSTEM_KEY_IMAGE.equals(key)) {
                 system.put("dataValue", uploaded ? resizedFileName : image);
-                break;
-            default:
-                break;
             }
         }
 
@@ -173,13 +167,12 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
             HttpClientResponse response = httpClient.post();
 
             if (response != null) {
-                if (null != response.getStatus()) {
-                    switch (response.getStatus()) {
-                    case CommonConstants.SUCCESS:
+                String responseStatus = response.getStatus();
+                if (null != responseStatus) {
+                    if (CommonConstants.SUCCESS.equals(responseStatus)) {
                         applicationBean.setSystems((JSONArray) response.getData());
                         Messages.addFlashGlobalInfo(response.getMessage());
-                        break;
-                    case CommonConstants.FAIL:
+                    } else if (CommonConstants.FAIL.equals(responseStatus)) {
                         Messages.addGlobalError(response.getMessage());
                         return "";
                     }

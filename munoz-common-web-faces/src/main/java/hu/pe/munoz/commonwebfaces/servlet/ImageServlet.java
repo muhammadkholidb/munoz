@@ -39,7 +39,6 @@ public class ImageServlet extends HttpServlet {
             Files.copy(file.toPath(), resp.getOutputStream());
         } catch (Exception e) {
             LOG.error(e.toString(), e);
-            throw e;
         }
     }
 

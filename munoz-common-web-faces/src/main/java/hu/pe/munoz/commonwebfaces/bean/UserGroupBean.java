@@ -85,7 +85,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             JSONObject menu = (JSONObject) object;
             if (menuCode.equals(menu.get("code"))) {
                 selectedParentCode = (String) menu.get("parentCode");
-                viewBoolean = (boolean) menu.get("viewBoolean");
+                viewBoolean = (Boolean) menu.get("viewBoolean");
                 menu.put("modifyBoolean", false);
                 break;
             }
@@ -100,8 +100,8 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
                 menu.put("modifyBoolean", false);
             }
             if (selectedParentCode != null && selectedParentCode.equals(parentCode)) {
-                boolean currentViewBoolean = (boolean) menu.get("viewBoolean");
-                boolean currentModifyBoolean = (boolean) menu.get("modifyBoolean");
+                boolean currentViewBoolean = (Boolean) menu.get("viewBoolean");
+                boolean currentModifyBoolean = (Boolean) menu.get("modifyBoolean");
                 checkParentView = checkParentView && currentViewBoolean;
                 checkParentModify = checkParentModify && currentModifyBoolean;
             }
@@ -126,7 +126,7 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             JSONObject menu = (JSONObject) object;
             if (menuCode.equals(menu.get("code"))) {
                 selectedParentCode = (String) menu.get("parentCode");
-                modifyBoolean = (boolean) menu.get("modifyBoolean");
+                modifyBoolean = (Boolean) menu.get("modifyBoolean");
                 menu.put("viewBoolean", true);
                 break;
             }
@@ -141,8 +141,8 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
                 menu.put("modifyBoolean", modifyBoolean);
             }
             if (selectedParentCode != null && selectedParentCode.equals(parentCode)) {
-                boolean currentModifyBoolean = (boolean) menu.get("modifyBoolean");
-                boolean currentViewBoolean = (boolean) menu.get("viewBoolean");
+                boolean currentModifyBoolean = (Boolean) menu.get("modifyBoolean");
+                boolean currentViewBoolean = (Boolean) menu.get("viewBoolean");
                 checkParentModify = checkParentModify && currentModifyBoolean;
                 checkParentView = checkParentView && currentViewBoolean;
             }
@@ -184,8 +184,8 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             JSONObject menu = (JSONObject) inputMenus.get(i);
             JSONObject jsonMenuPermission = new JSONObject();
             jsonMenuPermission.put("menuCode", menu.get("code"));
-            jsonMenuPermission.put("view", (boolean) menu.get("viewBoolean") ? CommonConstants.YES : CommonConstants.NO);
-            jsonMenuPermission.put("modify", (boolean) menu.get("modifyBoolean") ? CommonConstants.YES : CommonConstants.NO);
+            jsonMenuPermission.put("view", (Boolean) menu.get("viewBoolean") ? CommonConstants.YES : CommonConstants.NO);
+            jsonMenuPermission.put("modify", (Boolean) menu.get("modifyBoolean") ? CommonConstants.YES : CommonConstants.NO);
             arrMenuPermission.add(jsonMenuPermission);
         }
 
@@ -198,14 +198,13 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             httpClient.setParameters(parameters);
             HttpClientResponse response = httpClient.post();
             if (response != null) {
-                if (null != response.getStatus()) {
-                    switch (response.getStatus()) {
-                        case CommonConstants.SUCCESS:
-                            Messages.addFlashGlobalInfo(response.getMessage());
-                            break;
-                        case CommonConstants.FAIL:
-                            Messages.addGlobalError(response.getMessage());
-                            return "";
+                String responseStatus = response.getStatus();
+                if (null != responseStatus) {
+                    if (CommonConstants.SUCCESS.equals(responseStatus)) {
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                    } else if (CommonConstants.FAIL.equals(responseStatus)) {
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
                     }
                 }
             }
@@ -283,8 +282,8 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
             JSONObject menu = (JSONObject) inputMenus.get(i);
             JSONObject jsonMenuPermission = new JSONObject();
             jsonMenuPermission.put("menuCode", menu.get("code"));
-            jsonMenuPermission.put("view", (boolean) menu.get("viewBoolean") ? CommonConstants.YES : CommonConstants.NO);
-            jsonMenuPermission.put("modify", (boolean) menu.get("modifyBoolean") ? CommonConstants.YES : CommonConstants.NO);
+            jsonMenuPermission.put("view", (Boolean) menu.get("viewBoolean") ? CommonConstants.YES : CommonConstants.NO);
+            jsonMenuPermission.put("modify", (Boolean) menu.get("modifyBoolean") ? CommonConstants.YES : CommonConstants.NO);
             arrMenuPermission.add(jsonMenuPermission);
         }
 
@@ -295,18 +294,17 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/edit", parameters).post();
             if (response != null) {
-                if (null != response.getStatus()) {
-                    switch (response.getStatus()) {
-                        case CommonConstants.SUCCESS:
-                            Messages.addFlashGlobalInfo(response.getMessage());
-                            JSONObject updated = (JSONObject) response.getData();
-                            if (loginBean.getUserGroup().get("id").equals(updated.get("id")) && CommonConstants.NO.equals(updated.get("active"))) {
-                                return loginBean.doLogout();
-                            }
-                            break;
-                        case CommonConstants.FAIL:
-                            Messages.addGlobalError(response.getMessage());
-                            return "";
+                String responseStatus = response.getStatus();
+                if (null != responseStatus) {
+                    if (CommonConstants.SUCCESS.equals(responseStatus)) {
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                        JSONObject updated = (JSONObject) response.getData();
+                        if (loginBean.getUserGroup().get("id").equals(updated.get("id")) && CommonConstants.NO.equals(updated.get("active"))) {
+                            return loginBean.doLogout();
+                        }
+                    } else if (CommonConstants.FAIL.equals(responseStatus)) {
+                        Messages.addGlobalError(response.getMessage());
+                        return "";
                     }
                 }
             }
@@ -331,14 +329,12 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
         try {
             HttpClientResponse response = getHttpClient(hostUrl, "/settings/user-group/remove", parameters).post();
             if (response != null) {
-                if (null != response.getStatus()) {
-                    switch (response.getStatus()) {
-                        case CommonConstants.SUCCESS:
-                            Messages.addFlashGlobalInfo(response.getMessage());
-                            break;
-                        case CommonConstants.FAIL:
-                            Messages.addFlashGlobalError(response.getMessage());
-                            break;
+                String responseStatus = response.getStatus();
+                if (null != responseStatus) {
+                    if (CommonConstants.SUCCESS.equals(responseStatus)) {
+                        Messages.addFlashGlobalInfo(response.getMessage());
+                    } else if (CommonConstants.FAIL.equals(responseStatus)) {
+                        Messages.addFlashGlobalError(response.getMessage());
                     }
                 }
             }
