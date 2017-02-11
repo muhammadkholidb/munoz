@@ -5,6 +5,8 @@
  */
 package hu.pe.munoz.commondata.helper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -37,9 +39,34 @@ public class DtoUtils {
         return dto;
     }
     
+    public static List<Dto> toDtoList(List<?> list) {
+        if (list == null) return null;
+        List<Dto> listDto = new ArrayList<Dto>();
+        for (Object o : list) {
+            if (o == null) continue;
+            listDto.add(MAPPER.map(o, Dto.class));
+        }
+        return listDto;
+    }
+    
+    public static List<Dto> toDtoList(List<?> list, String... excludeKeys) {
+        if (list == null) return null;
+        List<Dto> listDto = new ArrayList<Dto>();
+        for (Object o : list) {
+            if (o == null) continue;
+            listDto.add(omit(MAPPER.map(o, Dto.class), excludeKeys));
+        }
+        return listDto;
+    }
+    
     public static Dto toDto(Object object) {
         if (object == null) return null;
         return MAPPER.map(object, Dto.class);
+    }
+    
+    public static Dto toDto(Object object, String... excludeKeys) {
+        if (object == null) return null;
+        return omit(MAPPER.map(object, Dto.class), excludeKeys);
     }
     
     public static <T> T toObject(Dto dto, Class<T> t) {
