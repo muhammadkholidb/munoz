@@ -59,8 +59,6 @@ public class SystemBean extends DefaultBehaviorBean implements Serializable {
 
     @Override
     protected void postConstruct() {
-        super.postConstruct();
-        LOG.info("Post construct SystemBean ...");
         load();
     }
 

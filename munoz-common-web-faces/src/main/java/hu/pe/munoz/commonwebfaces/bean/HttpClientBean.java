@@ -7,9 +7,13 @@ import javax.faces.bean.ManagedProperty;
 
 import java.util.ResourceBundle;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class HttpClientBean {
 
+    private static final Logger LOG = LoggerFactory.getLogger(HttpClientBean.class);
+    
     protected ResourceBundle applicationBundle = ResourceBundle.getBundle("application");
     protected String hostUrl;
 
@@ -21,10 +25,14 @@ public abstract class HttpClientBean {
     }
 
     @PostConstruct
-    protected void postConstruct() {
+    protected void initialize() {
+        LOG.debug("Initialize {} ...", getClass()); 
         hostUrl = applicationBundle.getString("rest.HostUrl");
+        postConstruct();
     }
 
+    abstract protected void postConstruct();
+    
     protected HttpClient getHttpClient() {
         return new HttpClient().setHeader("Accept-Language", applicationBean.getLanguageCode());
     }

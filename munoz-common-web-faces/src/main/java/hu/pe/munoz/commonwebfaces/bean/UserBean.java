@@ -47,8 +47,6 @@ public class UserBean extends DefaultBehaviorBean implements Serializable {
 
     @Override
     protected void postConstruct() {
-        super.postConstruct();
-        LOG.debug("Post construct UserBean ...");
         switch (mode) {
             case INDEX:
                 loadUsers();

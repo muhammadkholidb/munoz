@@ -16,10 +16,10 @@ public abstract class DefaultBehaviorBean extends HttpClientBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBehaviorBean.class);
 
-    private final List<String> LIST_PATH_FOR_VIEW = Arrays.asList("/index.xhtml", "/index", "/view.xhtml", "/view");
-    private final List<String> LIST_PATH_FOR_MODIFY = Arrays.asList("/edit.xhtml", "/edit", "/add.xhtml", "/add");
+    private static final List<String> LIST_PATH_FOR_VIEW = Arrays.asList("/index.xhtml", "/index", "/view.xhtml", "/view");
+    private static final List<String> LIST_PATH_FOR_MODIFY = Arrays.asList("/edit.xhtml", "/edit", "/add.xhtml", "/add");
 
-    private final List<String> PATH_INDEX = Arrays.asList("/index.xhtml", "/index");
+    private static final List<String> PATH_INDEX = Arrays.asList("/index.xhtml", "/index");
 
     @ManagedProperty(value = "#{loginBean}")
     protected LoginBean loginBean;

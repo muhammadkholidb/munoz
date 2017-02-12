@@ -43,10 +43,7 @@ public class LoginBean extends HttpClientBean implements Serializable {
     private JSONArray menuPermissions;
 
     @Override
-    protected void postConstruct() {
-        super.postConstruct();
-        LOG.info("Post construct LoginBean ...");
-    }
+    protected void postConstruct() {}
 
     public void doLogin() {
 

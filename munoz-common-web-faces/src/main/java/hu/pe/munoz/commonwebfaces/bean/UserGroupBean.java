@@ -47,8 +47,6 @@ public class UserGroupBean extends DefaultBehaviorBean implements Serializable {
 
     @Override
     protected void postConstruct() {
-        super.postConstruct();
-        LOG.debug("Post construct UserGroupBean ...");
         switch (mode) {
             case INDEX:
                 loadUserGroups();
