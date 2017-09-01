@@ -13,7 +13,6 @@
         <module>munoz-common-data</module>
         <module>munoz-common-rest</module>
         <module>munoz-common-web-faces</module>
-        <module>munoz-project-archetype</module>
     </modules>
 
     <properties>
