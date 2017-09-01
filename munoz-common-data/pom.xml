@@ -187,17 +187,4 @@
         <c3p0.minPoolSize>10</c3p0.minPoolSize>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>openshift</id>
-            <properties>
-                <jdbc.driver>org.postgresql.Driver</jdbc.driver>
-                <jdbc.url>jdbc:postgresql://localhost:5432/munozdb</jdbc.url>
-                <jdbc.username>postgres</jdbc.username>
-                <jdbc.password>postgres</jdbc.password>
-            </properties>
-        </profile>
-    </profiles>
-
-
 </project>
