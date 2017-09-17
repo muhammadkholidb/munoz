@@ -32,18 +32,18 @@
             </style>
             <p:outputPanel>
                 <div class="ui-grid ui-grid-responsive">
-                    <ui:include src="/WEB-INF/templates/common/top.xhtml" />
+                    <ui:include src="/WEB-INF/templates/includes/top.xhtml" />
                     <div class="ui-grid-row sidebar-main" >
                         <div class="ui-grid-col-2 sidebar" >
                             <p:inputText style="margin-bottom: 10px; display: none;" placeholder="Search..." />
-                            <ui:include src="/WEB-INF/templates/common/left.xhtml" />
+                            <ui:include src="/WEB-INF/templates/includes/left.xhtml" />
                         </div>
                         <div class="ui-grid-col-10 main-content">
                             <h1 class="page-title"><ui:insert name="title"></ui:insert></h1>
                             <ui:insert name="main"></ui:insert>
                         </div>
                     </div>
-                    <ui:include src="/WEB-INF/templates/common/bottom.xhtml" />
+                    <ui:include src="/WEB-INF/templates/includes/bottom.xhtml" />
                 </div>
             </p:outputPanel>
             <ui:insert name="bottoms"></ui:insert>
